@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StreetLink – Vendor Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    :root {
+      --bg-page:      #F4F6F9;
+      --bg-white:     #FFFFFF;
+      --bg-surface:   #EEF1F6;
+      --bg-blue-tint: #EBF3FD;
+      --accent:       #1D6AE5;
+      --accent-hover: #155BC2;
+      --sidebar-bg:   #111827;
+      --sidebar-text: #9CA3AF;
+      --sidebar-active-bg: #1D6AE5;
+      --sidebar-active-text: #FFFFFF;
+      --text-primary: #111827;
+      --text-secondary: #5B6370;
+      --text-hint:    #9CA3AF;
+      --border:       rgba(0,0,0,0.08);
+      --border-med:   rgba(0,0,0,0.13);
+      --green:        #16A34A;
+      --red:          #DC2626;
+      --star:         #F59E0B;
+      --radius-sm:    8px;
+      --radius-md:    12px;
+      --radius-lg:    16px;
+    }
+ 
+    html, body { height: 100%; }
+ 
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      display: flex;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+ 
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 220px;
+      min-height: 100vh;
+      background: var(--sidebar-bg);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 200;
+    }
+ 
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 1.1rem 1.25rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: #fff;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+ 
+    .logo-icon {
+      width: 28px; height: 28px;
+      background: var(--accent);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+ 
+    .sidebar-nav {
+      flex: 1;
+      padding: 0.75rem 0.75rem 0;
+    }
+ 
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 13.5px;
+      color: var(--sidebar-text);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      margin-bottom: 2px;
+    }
+ 
+    .nav-item:hover { background: rgba(255,255,255,0.07); color: #fff; }
+ 
+    .nav-item.active {
+      background: var(--sidebar-active-bg);
+      color: var(--sidebar-active-text);
+    }
+ 
+    .nav-item svg { flex-shrink: 0; }
+ 
+    .sidebar-bottom {
+      padding: 0.75rem;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+ 
+    .nav-item-bottom {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      color: var(--sidebar-text);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      margin-bottom: 2px;
+    }
+ 
+    .nav-item-bottom:hover { background: rgba(255,255,255,0.07); color: #fff; }
+ 
+    .user-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 12px 4px;
+    }
+ 
+    .user-avatar {
+      width: 32px; height: 32px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+      flex-shrink: 0;
+    }
+ 
+    .user-info { min-width: 0; }
+ 
+    .user-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+ 
+    .user-email {
+      font-size: 11px;
+      color: var(--sidebar-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+ 
+    /* ── MAIN ── */
+    .main {
+      margin-left: 220px;
+      flex: 1;
+      padding: 1.75rem 2rem 3rem;
+      min-height: 100vh;
+    }
+ 
+    .page-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+ 
+    .page-subtitle {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+ 
+    /* ── STAT CARDS ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+ 
+    .stat-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+ 
+    .stat-icon {
+      width: 44px; height: 44px;
+      background: var(--bg-blue-tint);
+      border-radius: var(--radius-md);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+ 
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+ 
+    .stat-value {
+      font-family: 'Syne', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+ 
+    .stat-sub {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+ 
+    .status-open {
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: #DCFCE7;
+      color: #15803D;
+      border: 1px solid #BBF7D0;
+    }
+ 
+    /* ── ACTION BUTTONS ── */
+    .actions-row {
+      display: flex;
+      gap: 0.6rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+ 
+    .btn {
+      height: 36px;
+      padding: 0 14px;
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+ 
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+ 
+    .btn-outline {
+      background: var(--bg-white);
+      color: var(--text-primary);
+      border: 1px solid var(--border-med);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+ 
+    /* ── TABLE SECTION ── */
+    .section-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+ 
+    .section-header {
+      padding: 1.1rem 1.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+ 
+    .section-header h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+ 
+    .section-header p {
+      font-size: 12.5px;
+      color: var(--text-secondary);
+    }
+ 
+    /* ── TABLE ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+ 
+    thead th {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-align: left;
+      padding: 10px 1.5rem;
+      background: var(--bg-page);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+ 
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.12s;
+    }
+ 
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--bg-page); }
+ 
+    tbody td {
+      padding: 11px 1.5rem;
+      font-size: 13.5px;
+      color: var(--text-primary);
+      vertical-align: middle;
+    }
+ 
+    .food-thumb {
+      width: 36px; height: 36px;
+      background: var(--bg-surface);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-hint);
+      font-size: 16px;
+    }
+ 
+    .food-name {
+      font-weight: 500;
+      font-size: 13.5px;
+    }
+ 
+    .cat-badge {
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: var(--bg-blue-tint);
+      color: var(--accent);
+      border: 1px solid rgba(29,106,229,0.15);
+      white-space: nowrap;
+    }
+ 
+    .cat-badge.orange {
+      background: #FEF3C7;
+      color: #B45309;
+      border-color: rgba(180,83,9,0.15);
+    }
+ 
+    .cat-badge.green {
+      background: #DCFCE7;
+      color: #15803D;
+      border-color: rgba(21,128,61,0.15);
+    }
+ 
+    .cat-badge.red {
+      background: #FEF2F2;
+      color: #B91C1C;
+      border-color: rgba(185,28,28,0.15);
+    }
+ 
+    .veg-dot {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+    }
+ 
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+ 
+    .rating-cell {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+ 
+    .star { color: var(--star); font-size: 13px; }
+ 
+    .action-btns {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+ 
+    .icon-btn {
+      width: 30px; height: 30px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-med);
+      background: var(--bg-white);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      color: var(--text-secondary);
+    }
+ 
+    .icon-btn:hover { background: var(--bg-blue-tint); border-color: var(--accent); color: var(--accent); }
+ 
+    .icon-btn.del:hover { background: #FEF2F2; border-color: #FECACA; color: var(--red); }
+ 
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+    }
+ 
+    .modal-overlay.open { display: flex; }
+ 
+    .modal {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      width: 100%;
+      max-width: 420px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+ 
+    .modal h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+    }
+ 
+    .form-group { margin-bottom: 1rem; }
+ 
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+ 
+    .form-input, .form-select {
+      width: 100%;
+      height: 40px;
+      border: 1px solid var(--border-med);
+      border-radius: var(--radius-sm);
+      padding: 0 0.875rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      color: var(--text-primary);
+      background: var(--bg-white);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+ 
+    .form-input:focus, .form-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(29,106,229,0.1);
+    }
+ 
+    .form-select {
+      appearance: none;
+      background: var(--bg-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;
+      padding-right: 2rem;
+      cursor: pointer;
+    }
+ 
+    .modal-footer {
+      display: flex;
+      gap: 0.6rem;
+      justify-content: flex-end;
+      margin-top: 1.25rem;
+    }
+  </style>
+</head>
+<body>
+ 
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <a href="vendors-dashboard.html" class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="15" height="15" viewBox="0 0 17 17" fill="none">
+          <path d="M8.5 1.5C5.74 1.5 3.5 3.74 3.5 6.5c0 1.85 1 3.46 2.5 4.33L5.25 15.5h6.5l-.75-4.67A5.01 5.01 0 0013.5 6.5c0-2.76-2.24-5-5-5z" fill="white"/>
+        </svg>
+      </div>
+      StreetLink
+    </a>
+ 
+    <nav class="sidebar-nav">
+      <a href="vendors-dashboard.html" class="nav-item active" onclick="setNav(this)">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="vendors_menu.html" class="nav-item" onclick="setNav(this)">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        My Menu
+      </a>
+      <a href="vendors_add_item.html" class="nav-item" onclick="setNav(this); openModal()">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Add Menu Item
+      </a>
+      <a href="vendors_profile.html" class="nav-item" onclick="setNav(this)">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        My Profile
+      </a>
+    </nav>
+ 
+    <div class="sidebar-bottom">
+      <a href="#" class="nav-item-bottom">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </a>
+      <a href="home_page.html" class="nav-item-bottom">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Sign out
+      </a>
+      <div class="user-row">
+        <div class="user-avatar">JD</div>
+        <div class="user-info">
+          <div class="user-name">John Doe</div>
+          <div class="user-email">john@streetlink.com</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+ 
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-subtitle">Manage your stall and menu items</p>
+ 
+    <!-- STAT CARDS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        </div>
+        <div>
+          <div class="stat-label">Total Menu Items</div>
+          <div class="stat-value" id="menuCount">8</div>
+        </div>
+      </div>
+ 
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#F59E0B" stroke-width="1.8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div>
+          <div class="stat-label">Current Rating</div>
+          <div class="stat-value">4.8 <span class="stat-sub">(234 reviews)</span></div>
+        </div>
+      </div>
+ 
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#16A34A" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="stat-label">Stall Status</div>
+          <div class="stat-value" style="font-size:14px;margin-top:4px;">
+            <span class="status-open">Open</span>
+          </div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- ACTION BUTTONS -->
+    <div class="actions-row">
+      <button class="btn btn-primary" onclick="openModal()">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Food Item
+      </button>
+      <button class="btn btn-outline">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Edit Menu
+      </button>
+      <button class="btn btn-outline">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Edit Profile
+      </button>
+    </div>
+ 
+    <!-- MENU TABLE -->
+    <div class="section-card">
+      <div class="section-header">
+        <h2>Menu Items</h2>
+        <p>Manage your food items, prices, and availability</p>
+      </div>
+ 
+      <table id="menuTable">
+        <thead>
+          <tr>
+            <th style="width:60px;">Image</th>
+            <th>Food Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Veg/Non-Veg</th>
+            <th>Rating</th>
+            <th style="text-align:right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="menuBody"></tbody>
+      </table>
+    </div>
+  </main>
+ 
+  <!-- ADD ITEM MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+    <div class="modal">
+      <h3>Add Food Item</h3>
+      <div class="form-group">
+        <label class="form-label">Food Name</label>
+        <input class="form-input" type="text" id="newName" placeholder="e.g., Samosa" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Price (Rs.)</label>
+        <input class="form-input" type="number" id="newPrice" placeholder="e.g., 40" min="0" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="form-select" id="newCategory">
+          <option value="Chaat">Chaat</option>
+          <option value="Main Course">Main Course</option>
+          <option value="Snacks">Snacks</option>
+          <option value="Rolls">Rolls</option>
+          <option value="Beverages">Beverages</option>
+          <option value="Sweets">Sweets</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-select" id="newType">
+          <option value="Veg">Veg</option>
+          <option value="Non-Veg">Non-Veg</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Rating</label>
+        <input class="form-input" type="number" id="newRating" placeholder="e.g., 4.5" min="0" max="5" step="0.1" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="addItem()">Add Item</button>
+      </div>
+    </div>
+  </div>
+ 
+  <script>
+    const catColors = {
+      'Chaat': '',
+      'Main Course': 'orange',
+      'Snacks': 'green',
+      'Rolls': 'red',
+      'Beverages': 'orange',
+      'Sweets': 'green'
+    };
+ 
+    let menuItems = [
+      { id: 1, name: 'Pani Puri',      price: 40, category: 'Chaat',       isVeg: true,  rating: 4.9 },
+      { id: 2, name: 'Aloo Tikki',     price: 50, category: 'Chaat',       isVeg: true,  rating: 4.7 },
+      { id: 3, name: 'Samosa Chaat',   price: 60, category: 'Chaat',       isVeg: true,  rating: 4.8 },
+      { id: 4, name: 'Chole Bhature',  price: 80, category: 'Main Course', isVeg: true,  rating: 4.9 },
+      { id: 5, name: 'Chicken Momos',  price: 70, category: 'Snacks',      isVeg: false, rating: 4.6 },
+      { id: 6, name: 'Egg Roll',       price: 50, category: 'Rolls',       isVeg: false, rating: 4.5 },
+    ];
+ 
+    let nextId = 7;
+ 
+    function catClass(cat) {
+      return catColors[cat] || '';
+    }
+ 
+    function renderTable() {
+      const tbody = document.getElementById('menuBody');
+      tbody.innerHTML = menuItems.map(item => `
+        <tr id="row-${item.id}">
+          <td>
+            <div class="food-thumb">🍽</div>
+          </td>
+          <td><span class="food-name">${item.name}</span></td>
+          <td>Rs. ${item.price}</td>
+          <td><span class="cat-badge ${catClass(item.category)}">${item.category}</span></td>
+          <td>
+            <div class="veg-dot">
+              <span class="dot" style="background:${item.isVeg ? '#16A34A' : '#DC2626'}"></span>
+              ${item.isVeg ? 'Veg' : 'Non-Veg'}
+            </div>
+          </td>
+          <td>
+            <div class="rating-cell">
+              <span class="star">★</span> ${item.rating.toFixed(1)}
+            </div>
+          </td>
+          <td>
+            <div class="action-btns" style="justify-content:flex-end;">
+              <button class="icon-btn" title="Edit" onclick="editItem(${item.id})">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+              <button class="icon-btn del" title="Delete" onclick="deleteItem(${item.id})">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+ 
+      document.getElementById('menuCount').textContent = menuItems.length;
+    }
+ 
+    function deleteItem(id) {
+      const row = document.getElementById(`row-${id}`);
+      if (row) {
+        row.style.opacity = '0';
+        row.style.transition = 'opacity 0.2s';
+        setTimeout(() => {
+          menuItems = menuItems.filter(i => i.id !== id);
+          renderTable();
+        }, 200);
+      }
+    }
+ 
+    function editItem(id) {
+      const item = menuItems.find(i => i.id === id);
+      if (!item) return;
+      document.getElementById('newName').value = item.name;
+      document.getElementById('newPrice').value = item.price;
+      document.getElementById('newCategory').value = item.category;
+      document.getElementById('newType').value = item.isVeg ? 'Veg' : 'Non-Veg';
+      document.getElementById('newRating').value = item.rating;
+      document.querySelector('.modal h3').textContent = 'Edit Food Item';
+      document.querySelector('.modal-footer .btn-primary').textContent = 'Save Changes';
+      document.querySelector('.modal-footer .btn-primary').onclick = () => saveEdit(id);
+      openModal();
+    }
+ 
+    function saveEdit(id) {
+      const item = menuItems.find(i => i.id === id);
+      if (!item) return;
+      const name = document.getElementById('newName').value.trim();
+      const price = parseInt(document.getElementById('newPrice').value);
+      const cat = document.getElementById('newCategory').value;
+      const type = document.getElementById('newType').value;
+      const rating = parseFloat(document.getElementById('newRating').value);
+      if (!name || !price) return;
+      item.name = name;
+      item.price = price;
+      item.category = cat;
+      item.isVeg = type === 'Veg';
+      item.rating = rating || item.rating;
+      closeModal();
+      renderTable();
+    }
+ 
+    function addItem() {
+      const name = document.getElementById('newName').value.trim();
+      const price = parseInt(document.getElementById('newPrice').value);
+      const cat = document.getElementById('newCategory').value;
+      const type = document.getElementById('newType').value;
+      const rating = parseFloat(document.getElementById('newRating').value) || 4.5;
+      if (!name || !price) return;
+      menuItems.push({ id: nextId++, name, price, category: cat, isVeg: type === 'Veg', rating });
+      closeModal();
+      renderTable();
+    }
+ 
+    function openModal() {
+      document.getElementById('newName').value = '';
+      document.getElementById('newPrice').value = '';
+      document.getElementById('newRating').value = '';
+      document.querySelector('.modal h3').textContent = 'Add Food Item';
+      const addBtn = document.querySelector('.modal-footer .btn-primary');
+      addBtn.textContent = 'Add Item';
+      addBtn.onclick = addItem;
+      document.getElementById('modalOverlay').classList.add('open');
+    }
+ 
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('open');
+    }
+ 
+    function closeModalOutside(e) {
+      if (e.target === document.getElementById('modalOverlay')) closeModal();
+    }
+ 
+    function setNav(el) {
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      el.classList.add('active');
+    }
+ 
+    renderTable();
+  </script>
+ 
+</body>
+</html>

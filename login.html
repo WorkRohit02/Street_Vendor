@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StreetLink – Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    :root {
+      --bg-page:      #F4F6F9;
+      --bg-white:     #FFFFFF;
+      --bg-surface:   #EEF1F6;
+      --bg-blue-tint: #EBF3FD;
+      --accent:       #1D6AE5;
+      --accent-hover: #155BC2;
+      --text-primary: #111827;
+      --text-secondary: #5B6370;
+      --text-hint:    #9CA3AF;
+      --border:       rgba(0,0,0,0.09);
+      --border-med:   rgba(0,0,0,0.15);
+      --red:          #DC2626;
+      --green:        #16A34A;
+      --radius-sm:    8px;
+      --radius-md:    12px;
+      --radius-lg:    16px;
+    }
+ 
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+ 
+    /* ── NAV ── */
+    nav {
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border);
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+ 
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 17px;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+ 
+    .logo-icon {
+      width: 30px; height: 30px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+ 
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      font-size: 14px;
+    }
+ 
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      display: flex; align-items: center; gap: 5px;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text-primary); }
+ 
+    .nav-toggle {
+      width: 28px; height: 28px;
+      border: 1px solid var(--border-med);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 14px; color: var(--text-secondary);
+    }
+ 
+    /* ── PAGE ── */
+    .page {
+      min-height: calc(100vh - 54px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+ 
+    /* ── CARD ── */
+    .card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem 2rem 2rem;
+      width: 100%;
+      max-width: 420px;
+    }
+ 
+    /* ── HEADER ── */
+    .card-header {
+      text-align: center;
+      margin-bottom: 1.85rem;
+    }
+ 
+    .header-icon {
+      width: 52px; height: 52px;
+      background: var(--bg-blue-tint);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+    }
+ 
+    .card-header h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 5px;
+    }
+ 
+    .card-header p {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+    }
+ 
+    /* ── ROLE TABS ── */
+    .role-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      background: var(--bg-surface);
+      padding: 4px;
+      border-radius: var(--radius-md);
+    }
+ 
+    .role-tab {
+      padding: 8px 0;
+      border: none;
+      border-radius: calc(var(--radius-md) - 3px);
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+    }
+ 
+    .role-tab.active {
+      background: var(--bg-white);
+      color: var(--accent);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+ 
+    /* ── FORM ── */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+ 
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+ 
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+ 
+    .input-icon {
+      position: absolute;
+      left: 11px;
+      color: var(--text-hint);
+      display: flex; align-items: center;
+      pointer-events: none;
+    }
+ 
+    .input-right {
+      position: absolute;
+      right: 11px;
+      color: var(--text-hint);
+      display: flex; align-items: center;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      transition: color 0.15s;
+    }
+    .input-right:hover { color: var(--text-secondary); }
+ 
+    .form-input {
+      width: 100%;
+      height: 42px;
+      border: 1px solid var(--border-med);
+      border-radius: var(--radius-sm);
+      padding: 0 2.5rem 0 2.25rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      color: var(--text-primary);
+      background: var(--bg-white);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+ 
+    .form-input::placeholder { color: var(--text-hint); }
+ 
+    .form-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(29,106,229,0.1);
+    }
+ 
+    .form-input.error {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(220,38,38,0.1);
+    }
+ 
+    .error-msg {
+      font-size: 11.5px;
+      color: var(--red);
+      margin-top: 4px;
+      display: none;
+    }
+ 
+    /* ── REMEMBER / FORGOT ── */
+    .form-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+ 
+    .remember-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+    }
+ 
+    .remember-label input[type="checkbox"] {
+      width: 14px; height: 14px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+ 
+    .forgot-link {
+      font-size: 13px;
+      color: var(--accent);
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .forgot-link:hover { opacity: 0.75; }
+ 
+    /* ── SUBMIT BTN ── */
+    .submit-btn {
+      width: 100%;
+      height: 44px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14.5px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.15s, transform 0.1s;
+      margin-bottom: 1rem;
+    }
+    .submit-btn:hover { background: var(--accent-hover); }
+    .submit-btn:active { transform: scale(0.985); }
+    .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+ 
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      color: var(--text-hint);
+      font-size: 12px;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-med);
+    }
+ 
+    /* ── GOOGLE BTN ── */
+    .google-btn {
+      width: 100%;
+      height: 42px;
+      background: var(--bg-white);
+      color: var(--text-primary);
+      border: 1px solid var(--border-med);
+      border-radius: var(--radius-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      transition: background 0.15s, border-color 0.15s;
+      margin-bottom: 1.25rem;
+    }
+    .google-btn:hover { background: var(--bg-surface); border-color: var(--border-med); }
+ 
+    /* ── FOOTER LINK ── */
+    .card-footer {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+    .card-footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .card-footer a:hover { text-decoration: underline; }
+ 
+    /* ── ALERT ── */
+    .alert {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: #FEF2F2;
+      border: 1px solid #FECACA;
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #B91C1C;
+      margin-bottom: 1rem;
+    }
+ 
+    .alert.success {
+      background: #DCFCE7;
+      border-color: #BBF7D0;
+      color: #15803D;
+    }
+ 
+    /* ── SPINNER ── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+  </style>
+</head>
+<body>
+ 
+  <!-- NAV -->
+  <nav>
+    <a href="home_page.html" class="logo">
+      <div class="logo-icon">
+        <svg width="16" height="16" viewBox="0 0 17 17" fill="none">
+          <path d="M8.5 1.5C5.74 1.5 3.5 3.74 3.5 6.5c0 1.85 1 3.46 2.5 4.33L5.25 15.5h6.5l-.75-4.67A5.01 5.01 0 0013.5 6.5c0-2.76-2.24-5-5-5z" fill="white"/>
+        </svg>
+      </div>
+      StreetLink
+    </a>
+    <div class="nav-links">
+      <a href="home_page.html">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
+        Home
+      </a>
+      
+      <div class="nav-toggle">&#9788;</div>
+    </div>
+  </nav>
+ 
+  <!-- PAGE -->
+  <div class="page">
+    <div class="card">
+ 
+      <!-- HEADER -->
+      <div class="card-header">
+        <div class="header-icon">
+          <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="1.8">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <h1>Welcome Back</h1>
+        <p>Sign in to your StreetLink account</p>
+      </div>
+ 
+      <!-- ROLE TABS -->
+      <div class="role-tabs">
+        <button class="role-tab active" id="tabCustomer" onclick="setRole('customer')">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Customer
+        </button>
+        <button class="role-tab" id="tabVendor" onclick="setRole('vendor')">
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path d="M9 22V12h6v10"/></svg>
+          Vendor
+        </button>
+      </div>
+ 
+      <!-- ALERT -->
+      <div class="alert" id="alertBox">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="alertText"></span>
+      </div>
+ 
+      <!-- FORM -->
+      <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
+ 
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label">Email address</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </span>
+            <input class="form-input" type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+          </div>
+          <div class="error-msg" id="emailErr">Please enter a valid email address.</div>
+        </div>
+ 
+        <!-- Password -->
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </span>
+            <input class="form-input" type="password" id="password" placeholder="Enter your password" autocomplete="current-password" />
+            <button type="button" class="input-right" id="togglePwd" onclick="togglePassword()" title="Show/hide password">
+              <svg id="eyeIcon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div class="error-msg" id="pwdErr">Password must be at least 6 characters.</div>
+        </div>
+ 
+        <!-- Remember / Forgot -->
+        <div class="form-row">
+          <label class="remember-label">
+            <input type="checkbox" id="remember" />
+            Remember me
+          </label>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+ 
+        <!-- Submit -->
+        <button type="submit" class="submit-btn" id="submitBtn">
+          Sign In
+        </button>
+ 
+      </form>
+ 
+      <!-- DIVIDER -->
+      <div class="divider">or continue with</div>
+ 
+      <!-- GOOGLE -->
+      <button class="google-btn" onclick="googleLogin()">
+        <svg width="17" height="17" viewBox="0 0 24 24">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+        </svg>
+        Continue with Google
+      </button>
+ 
+      <!-- FOOTER -->
+      <div class="card-footer">
+        Don't have an account? <a href="#">Sign up</a>
+        &nbsp;&middot;&nbsp;
+        Register as <a href="#">Vendor</a>
+      </div>
+
+
+      <!-- temporry -->
+
+      <a href="vendors-dashboard.html">
+            <button class="submit-btn" id="submitBtn">
+            Vendor Dashboard
+            </button>
+      </a>
+
+
+    </div>
+  </div>
+ 
+  <script>
+    let currentRole = 'customer';
+    let pwdVisible = false;
+ 
+    function setRole(role) {
+      currentRole = role;
+      document.getElementById('tabCustomer').classList.toggle('active', role === 'customer');
+      document.getElementById('tabVendor').classList.toggle('active', role === 'vendor');
+      hideAlert();
+    }
+ 
+    function togglePassword() {
+      pwdVisible = !pwdVisible;
+      const input = document.getElementById('password');
+      input.type = pwdVisible ? 'text' : 'password';
+      document.getElementById('eyeIcon').innerHTML = pwdVisible
+        ? `<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`
+        : `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+    }
+ 
+    function showAlert(msg, type = 'error') {
+      const box = document.getElementById('alertBox');
+      box.textContent = '';
+      box.className = `alert${type === 'success' ? ' success' : ''}`;
+      const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      icon.setAttribute('width', '14'); icon.setAttribute('height', '14');
+      icon.setAttribute('fill', 'none'); icon.setAttribute('viewBox', '0 0 24 24');
+      icon.setAttribute('stroke', 'currentColor'); icon.setAttribute('stroke-width', '2.5');
+      icon.innerHTML = type === 'success'
+        ? `<polyline points="20 6 9 17 4 12"/>`
+        : `<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>`;
+      const span = document.createElement('span');
+      span.textContent = msg;
+      box.appendChild(icon);
+      box.appendChild(span);
+      box.style.display = 'flex';
+    }
+ 
+    function hideAlert() {
+      document.getElementById('alertBox').style.display = 'none';
+    }
+ 
+    function setFieldError(id, errId, show) {
+      const input = document.getElementById(id);
+      const err = document.getElementById(errId);
+      if (show) {
+        input.classList.add('error');
+        err.style.display = 'block';
+      } else {
+        input.classList.remove('error');
+        err.style.display = 'none';
+      }
+    }
+ 
+    function handleLogin(e) {
+      e.preventDefault();
+      hideAlert();
+ 
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      let valid = true;
+ 
+      const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      setFieldError('email', 'emailErr', !emailValid);
+      if (!emailValid) valid = false;
+ 
+      const pwdValid = password.length >= 6;
+      setFieldError('password', 'pwdErr', !pwdValid);
+      if (!pwdValid) valid = false;
+ 
+      if (!valid) return;
+ 
+      const btn = document.getElementById('submitBtn');
+      btn.innerHTML = '<div class="spinner"></div>';
+      btn.disabled = true;
+ 
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = 'Sign In';
+ 
+        // Simulate wrong credentials for demo
+        if (email !== 'demo@streetlink.in') {
+          showAlert('Invalid email or password. Try demo@streetlink.in');
+        } else {
+          showAlert('Logged in successfully! Redirecting…', 'success');
+        }
+      }, 1400);
+ 
+      // Clear errors on input
+      ['email', 'password'].forEach(id => {
+        document.getElementById(id).addEventListener('input', () => {
+          document.getElementById(id).classList.remove('error');
+          document.getElementById(id === 'email' ? 'emailErr' : 'pwdErr').style.display = 'none';
+        }, { once: true });
+      });
+    }
+ 
+    function googleLogin() {
+      showAlert('Google sign-in coming soon!', 'success');
+    }
+  </script>
+ 
+</body>
+</html>

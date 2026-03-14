@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StreetLink – Map View</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+    :root {
+      --bg-page:      #F4F6F9;
+      --bg-white:     #FFFFFF;
+      --bg-surface:   #EEF1F6;
+      --bg-blue-tint: #EBF3FD;
+      --accent:       #1D6AE5;
+      --accent-hover: #155BC2;
+      --text-primary: #111827;
+      --text-secondary: #5B6370;
+      --text-hint:    #9CA3AF;
+      --border:       rgba(0,0,0,0.08);
+      --border-med:   rgba(0,0,0,0.14);
+      --green:        #16A34A;
+      --red:          #DC2626;
+      --star:         #F59E0B;
+      --radius-sm:    8px;
+      --radius-md:    12px;
+      --radius-lg:    16px;
+    }
+ 
+    html, body {
+      height: 100%;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+    }
+ 
+    /* ── TOP BAR ── */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 50px;
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0 1rem;
+      z-index: 1000;
+    }
+ 
+    .back-btn {
+      width: 30px; height: 30px;
+      border: 1px solid var(--border-med);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      background: var(--bg-white);
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .back-btn:hover { background: var(--bg-surface); }
+ 
+    .search-wrap {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+ 
+    .search-wrap svg {
+      position: absolute;
+      left: 10px;
+      color: var(--text-hint);
+      pointer-events: none;
+    }
+ 
+    .search-wrap input {
+      width: 100%;
+      height: 36px;
+      border: 1px solid var(--border-med);
+      border-radius: var(--radius-sm);
+      padding: 0 1rem 0 2.25rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px;
+      color: var(--text-primary);
+      background: var(--bg-surface);
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .search-wrap input::placeholder { color: var(--text-hint); }
+    .search-wrap input:focus {
+      border-color: var(--accent);
+      background: var(--bg-white);
+      box-shadow: 0 0 0 3px rgba(29,106,229,0.1);
+    }
+ 
+    .topbar-icon {
+      width: 30px; height: 30px;
+      border: 1px solid var(--border-med);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .topbar-icon:hover { background: var(--bg-surface); }
+ 
+    /* ── MAP ── */
+    #map {
+      position: fixed;
+      top: 50px;
+      left: 0; right: 0;
+      height: calc(55vh);
+      z-index: 1;
+    }
+ 
+    /* ── PANEL (bottom sheet) ── */
+    .panel {
+      position: fixed;
+      left: 0; right: 0;
+      bottom: 0;
+      top: calc(50px + 55vh);
+      background: var(--bg-white);
+      border-top: 1px solid var(--border);
+      border-radius: 16px 16px 0 0;
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+ 
+    .panel-handle {
+      width: 36px; height: 4px;
+      background: var(--border-med);
+      border-radius: 2px;
+      margin: 10px auto 0;
+      flex-shrink: 0;
+    }
+ 
+    .panel-header {
+      padding: 0.75rem 1rem 0.5rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+ 
+    .vendor-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 0.75rem 1rem;
+    }
+ 
+    .vendor-list::-webkit-scrollbar { width: 4px; }
+    .vendor-list::-webkit-scrollbar-track { background: transparent; }
+    .vendor-list::-webkit-scrollbar-thumb { background: var(--border-med); border-radius: 2px; }
+ 
+    /* ── VENDOR ROW ── */
+    .vendor-row {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+ 
+    .vendor-row:hover, .vendor-row.active {
+      border-color: rgba(29,106,229,0.4);
+      box-shadow: 0 2px 12px rgba(29,106,229,0.08);
+    }
+ 
+    .vendor-row.active {
+      background: var(--bg-blue-tint);
+    }
+ 
+    .row-info { flex: 1; min-width: 0; }
+ 
+    .row-name-line {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 3px;
+    }
+ 
+    .row-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+ 
+    .status-badge {
+      font-size: 10.5px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+ 
+    .status-open  { background: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; }
+    .status-closed{ background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
+ 
+    .row-address {
+      font-size: 12px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+ 
+    .row-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+ 
+    .row-category { color: var(--text-secondary); }
+ 
+    .row-rating {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+ 
+    .star { color: #F59E0B; }
+ 
+    .row-dist {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+ 
+    .view-btn {
+      padding: 6px 14px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .view-btn:hover { background: var(--accent-hover); }
+ 
+    /* ── Leaflet custom marker ── */
+    .custom-marker {
+      width: 34px;
+      height: 40px;
+      position: relative;
+    }
+ 
+    .leaflet-popup-content-wrapper {
+      border-radius: var(--radius-md) !important;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12) !important;
+      font-family: 'DM Sans', sans-serif !important;
+      padding: 0 !important;
+      overflow: hidden;
+    }
+ 
+    .leaflet-popup-content {
+      margin: 0 !important;
+      width: 200px !important;
+    }
+ 
+    .popup-body {
+      padding: 12px 14px;
+    }
+ 
+    .popup-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: #111827;
+      margin-bottom: 3px;
+    }
+ 
+    .popup-cat {
+      font-size: 11.5px;
+      color: #5B6370;
+      margin-bottom: 6px;
+    }
+ 
+    .popup-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11.5px;
+      color: #5B6370;
+    }
+ 
+    .popup-btn {
+      display: block;
+      width: 100%;
+      padding: 8px;
+      background: #1D6AE5;
+      color: #fff;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.15s;
+    }
+    .popup-btn:hover { background: #155BC2; }
+ 
+    .leaflet-popup-tip-container { display: none; }
+    .leaflet-popup-close-button { color: #5B6370 !important; font-size: 16px !important; padding: 6px 8px !important; }
+  </style>
+</head>
+<body>
+ 
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="back-btn" onclick="history.back()">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path d="M19 12H5M12 19l-7-7 7-7"/>
+      </svg>
+    </div>
+    <div class="search-wrap">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input type="text" placeholder="Search vendors on map..." id="searchInput" oninput="filterVendors()" />
+    </div>
+    <div class="topbar-icon">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/><path d="M12 1v3m0 16v3M4.22 4.22l2.12 2.12m11.32 11.32l2.12 2.12M1 12h3m16 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/>
+      </svg>
+    </div>
+  </div>
+ 
+  <!-- MAP -->
+  <div id="map"></div>
+ 
+  <!-- BOTTOM PANEL -->
+  <div class="panel">
+    <div class="panel-handle"></div>
+    <div class="panel-header" id="panelHeader">4 vendors nearby</div>
+    <div class="vendor-list" id="vendorList"></div>
+  </div>
+ 
+  <script>
+    const vendors = [
+      {
+        id: 1,
+        name: "Sharma Ji Chaat Corner",
+        address: "123 Main Street, Near Central Park",
+        category: "Indian",
+        isOpen: true,
+        rating: 4.8,
+        distance: 0.3,
+        lat: 28.638,
+        lng: 77.218
+      },
+      {
+        id: 2,
+        name: "Wong's Noodle Cart",
+        address: "456 Oak Avenue, Food Court Area",
+        category: "Chinese",
+        isOpen: true,
+        rating: 4.6,
+        distance: 0.5,
+        lat: 28.6355,
+        lng: 77.2265
+      },
+      {
+        id: 3,
+        name: "Taco Street MX",
+        address: "789 Elm Road, Market Square",
+        category: "Mexican",
+        isOpen: false,
+        rating: 4.7,
+        distance: 0.8,
+        lat: 28.6415,
+        lng: 77.2235
+      },
+      {
+        id: 4,
+        name: "Dosa Express",
+        address: "22 Temple Road, South Block",
+        category: "South Indian",
+        isOpen: true,
+        rating: 4.5,
+        distance: 1.1,
+        lat: 28.6325,
+        lng: 77.2195
+      }
+    ];
+ 
+    // USER LOCATION (center)
+    const userLat = 28.6363;
+    const userLng = 77.2215;
+ 
+    // Init map
+    const map = L.map('map', {
+      center: [userLat, userLng],
+      zoom: 15,
+      zoomControl: false,
+      attributionControl: false
+    });
+ 
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+ 
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+ 
+    // User dot
+    L.circleMarker([userLat, userLng], {
+      radius: 7,
+      color: '#fff',
+      weight: 2.5,
+      fillColor: '#1D6AE5',
+      fillOpacity: 1
+    }).addTo(map).bindTooltip('You are here', { direction: 'top' });
+ 
+    // Custom marker icon
+    function makeIcon(active = false) {
+      const color = active ? '#0F4FB5' : '#1D6AE5';
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="34" height="44" viewBox="0 0 34 44">
+        <path d="M17 0C7.6 0 0 7.6 0 17c0 12.75 17 27 17 27S34 29.75 34 17C34 7.6 26.4 0 17 0z" fill="${color}"/>
+        <rect x="9" y="9" width="16" height="16" rx="4" fill="white" opacity="0.95"/>
+        <path d="M13 13h8M13 17h6M13 21h4" stroke="${color}" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>`;
+      return L.divIcon({
+        html: svg,
+        iconSize: [34, 44],
+        iconAnchor: [17, 44],
+        popupAnchor: [0, -46],
+        className: ''
+      });
+    }
+ 
+    const markers = {};
+    let activeId = null;
+ 
+    function popupHtml(v) {
+      return `
+        <div class="popup-body">
+          <div class="popup-name">${v.name}</div>
+          <div class="popup-cat">${v.category} &middot; ${v.isOpen ? '<span style="color:#16A34A">Open</span>' : '<span style="color:#DC2626">Closed</span>'}</div>
+          <div class="popup-meta">
+            <span>&#9733; ${v.rating}</span>
+            <span>&#9737; ${v.distance} km</span>
+          </div>
+        </div>
+        <button class="popup-btn" onclick="highlightRow(${v.id})">View Vendor &rsaquo;</button>
+      `;
+    }
+ 
+    vendors.forEach(v => {
+      const marker = L.marker([v.lat, v.lng], { icon: makeIcon(false) })
+        .addTo(map)
+        .bindPopup(popupHtml(v), { maxWidth: 200, minWidth: 200 });
+ 
+      marker.on('click', () => {
+        setActive(v.id);
+        scrollToRow(v.id);
+      });
+ 
+      markers[v.id] = marker;
+    });
+ 
+    function setActive(id) {
+      if (activeId && markers[activeId]) markers[activeId].setIcon(makeIcon(false));
+      activeId = id;
+      if (markers[id]) markers[id].setIcon(makeIcon(true));
+      document.querySelectorAll('.vendor-row').forEach(r => r.classList.remove('active'));
+      const row = document.getElementById(`row-${id}`);
+      if (row) row.classList.add('active');
+    }
+ 
+    function scrollToRow(id) {
+      const row = document.getElementById(`row-${id}`);
+      if (row) row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+ 
+    function highlightRow(id) {
+      setActive(id);
+      scrollToRow(id);
+    }
+ 
+    // Render list
+    let filteredVendors = [...vendors];
+ 
+    function filterVendors() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      filteredVendors = vendors.filter(v =>
+        v.name.toLowerCase().includes(q) ||
+        v.category.toLowerCase().includes(q) ||
+        v.address.toLowerCase().includes(q)
+      );
+      renderList();
+ 
+      vendors.forEach(v => {
+        if (filteredVendors.find(f => f.id === v.id)) {
+          map.addLayer(markers[v.id]);
+        } else {
+          map.removeLayer(markers[v.id]);
+        }
+      });
+    }
+ 
+    function renderList() {
+      const list = document.getElementById('vendorList');
+      const header = document.getElementById('panelHeader');
+      header.textContent = `${filteredVendors.length} vendor${filteredVendors.length !== 1 ? 's' : ''} nearby`;
+ 
+      if (!filteredVendors.length) {
+        list.innerHTML = `<div style="text-align:center;padding:2rem;color:var(--text-secondary);font-size:13.5px;">No vendors found.</div>`;
+        return;
+      }
+ 
+      list.innerHTML = filteredVendors.map(v => `
+        <div class="vendor-row" id="row-${v.id}" onclick="rowClick(${v.id})">
+          <div class="row-info">
+            <div class="row-name-line">
+              <span class="row-name">${v.name}</span>
+              <span class="status-badge ${v.isOpen ? 'status-open' : 'status-closed'}">${v.isOpen ? 'Open' : 'Closed'}</span>
+            </div>
+            <div class="row-address">${v.address}</div>
+            <div class="row-meta">
+              <span class="row-category">${v.category}</span>
+              <span class="row-rating"><span class="star">&#9733;</span> ${v.rating}</span>
+              <span class="row-dist">
+                <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v3m0 16v3M4.22 4.22l2.12 2.12m11.32 11.32l2.12 2.12M1 12h3m16 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+                ${v.distance} km
+              </span>
+            </div>
+          </div>
+          <button class="view-btn" onclick="event.stopPropagation(); rowClick(${v.id})">View</button>
+        </div>
+      `).join('');
+    }
+ 
+    function rowClick(id) {
+      const v = vendors.find(v => v.id === id);
+      if (!v) return;
+      setActive(id);
+      map.setView([v.lat, v.lng], 16, { animate: true });
+      markers[id].openPopup();
+    }
+ 
+    renderList();
+  </script>
+</body>
+</html>
