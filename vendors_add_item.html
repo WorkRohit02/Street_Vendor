@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
     :root {
       --bg-page:      #F4F6F9;
       --bg-white:     #FFFFFF;
@@ -29,355 +28,99 @@
       --radius-md:    12px;
       --radius-lg:    16px;
     }
- 
     html, body { height: 100%; }
- 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg-page);
-      color: var(--text-primary);
-      display: flex;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
- 
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg-page); color: var(--text-primary); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
     /* ── SIDEBAR ── */
-    .sidebar {
-      width: 220px;
-      min-height: 100vh;
-      background: var(--sidebar-bg);
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 0; left: 0; bottom: 0;
-      z-index: 200;
-    }
- 
-    .sidebar-logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 1.1rem 1.25rem;
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 16px;
-      color: #fff;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
- 
-    .logo-icon {
-      width: 28px; height: 28px;
-      background: var(--accent);
-      border-radius: 7px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
- 
+    .sidebar { width: 220px; min-height: 100vh; background: var(--sidebar-bg); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 200; }
+    .sidebar-logo { display: flex; align-items: center; gap: 8px; padding: 1.1rem 1.25rem; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .logo-icon { width: 28px; height: 28px; background: var(--accent); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .sidebar-nav { flex: 1; padding: 0.75rem 0.75rem 0; }
- 
-    .nav-item {
-      display: flex; align-items: center; gap: 9px;
-      padding: 9px 12px;
-      border-radius: var(--radius-sm);
-      font-size: 13.5px;
-      color: var(--sidebar-text);
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.15s, color 0.15s;
-      margin-bottom: 2px;
-    }
+    .nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: var(--radius-sm); font-size: 13.5px; color: var(--sidebar-text); cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; margin-bottom: 2px; }
     .nav-item:hover { background: rgba(255,255,255,0.07); color: #fff; }
     .nav-item.active { background: var(--accent); color: #fff; }
     .nav-item svg { flex-shrink: 0; }
- 
-    .sidebar-bottom {
-      padding: 0.75rem;
-      border-top: 1px solid rgba(255,255,255,0.07);
-    }
- 
-    .nav-item-bottom {
-      display: flex; align-items: center; gap: 9px;
-      padding: 8px 12px;
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-      color: var(--sidebar-text);
-      cursor: pointer; text-decoration: none;
-      transition: background 0.15s, color 0.15s;
-      margin-bottom: 2px;
-    }
+    .sidebar-bottom { padding: 0.75rem; border-top: 1px solid rgba(255,255,255,0.07); }
+    .nav-item-bottom { display: flex; align-items: center; gap: 9px; padding: 8px 12px; border-radius: var(--radius-sm); font-size: 13px; color: var(--sidebar-text); cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; margin-bottom: 2px; }
     .nav-item-bottom:hover { background: rgba(255,255,255,0.07); color: #fff; }
- 
-    .user-row {
-      display: flex; align-items: center; gap: 9px;
-      padding: 10px 12px 4px;
-    }
-    .user-avatar {
-      width: 32px; height: 32px;
-      background: var(--accent);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 600; color: #fff; flex-shrink: 0;
-    }
+    .user-row { display: flex; align-items: center; gap: 9px; padding: 10px 12px 4px; }
+    .user-avatar { width: 32px; height: 32px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #fff; flex-shrink: 0; }
     .user-name { font-size: 13px; font-weight: 500; color: #fff; }
     .user-email { font-size: 11px; color: var(--sidebar-text); }
- 
+
     /* ── MAIN ── */
-    .main {
-      margin-left: 220px;
-      flex: 1;
-      padding: 1.75rem 2rem 3rem;
-      min-height: 100vh;
-    }
- 
-    .page-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 22px; font-weight: 800;
-      color: var(--text-primary);
-      margin-bottom: 3px;
-    }
- 
-    .page-subtitle {
-      font-size: 13px;
-      color: var(--text-secondary);
-      margin-bottom: 1.75rem;
-    }
- 
+    .main { margin-left: 220px; flex: 1; padding: 1.75rem 2rem 3rem; min-height: 100vh; }
+    .page-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text-primary); margin-bottom: 3px; }
+    .page-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 1.75rem; }
+
     /* ── LAYOUT GRID ── */
-    .form-layout {
-      display: grid;
-      grid-template-columns: 1fr 280px;
-      grid-template-rows: auto auto auto;
-      gap: 1rem;
-      align-items: start;
-    }
- 
+    .form-layout { display: grid; grid-template-columns: 1fr 280px; grid-template-rows: auto auto auto; gap: 1rem; align-items: start; }
+
     /* ── CARDS ── */
-    .card {
-      background: var(--bg-white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 1.25rem 1.5rem;
-    }
- 
-    .card-title {
-      display: flex; align-items: center; gap: 7px;
-      font-family: 'Syne', sans-serif;
-      font-size: 14px; font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 4px;
-    }
- 
-    .card-subtitle {
-      font-size: 12.5px;
-      color: var(--text-secondary);
-      margin-bottom: 1.1rem;
-    }
- 
+    .card { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; }
+    .card-title { display: flex; align-items: center; gap: 7px; font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+    .card-subtitle { font-size: 12.5px; color: var(--text-secondary); margin-bottom: 1.1rem; }
+
     /* ── FORM ELEMENTS ── */
     .form-group { margin-bottom: 1rem; }
     .form-group:last-child { margin-bottom: 0; }
- 
-    .form-label {
-      display: block;
-      font-size: 13px; font-weight: 500;
-      color: var(--text-primary);
-      margin-bottom: 6px;
-    }
- 
-    .form-input, .form-select, .form-textarea {
-      width: 100%;
-      border: 1px solid var(--border-med);
-      border-radius: var(--radius-sm);
-      padding: 0 0.875rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13.5px;
-      color: var(--text-primary);
-      background: var(--bg-white);
-      outline: none;
-      height: 40px;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
- 
+    .form-label { display: block; font-size: 13px; font-weight: 500; color: var(--text-primary); margin-bottom: 6px; }
+    .form-input, .form-select, .form-textarea { width: 100%; border: 1px solid var(--border-med); border-radius: var(--radius-sm); padding: 0 0.875rem; font-family: 'DM Sans', sans-serif; font-size: 13.5px; color: var(--text-primary); background: var(--bg-white); outline: none; height: 40px; transition: border-color 0.15s, box-shadow 0.15s; }
     .form-input::placeholder, .form-textarea::placeholder { color: var(--text-hint); }
- 
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(29,106,229,0.1);
-    }
- 
-    .form-textarea {
-      height: auto; min-height: 90px;
-      padding: 0.625rem 0.875rem;
-      resize: vertical; line-height: 1.55;
-    }
- 
-    .form-select {
-      appearance: none;
-      background: var(--bg-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;
-      padding-right: 2rem; cursor: pointer;
-    }
- 
-    /* price + category row */
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(29,106,229,0.1); }
+    .form-textarea { height: auto; min-height: 90px; padding: 0.625rem 0.875rem; resize: vertical; line-height: 1.55; }
+    .form-select { appearance: none; background: var(--bg-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center; padding-right: 2rem; cursor: pointer; }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
- 
     .price-input-wrap { position: relative; }
-    .price-prefix {
-      position: absolute; left: 11px; top: 50%;
-      transform: translateY(-50%);
-      font-size: 13.5px; color: var(--text-secondary);
-      pointer-events: none;
-    }
+    .price-prefix { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 13.5px; color: var(--text-secondary); pointer-events: none; }
     .price-input-wrap .form-input { padding-left: 1.75rem; }
- 
-    /* ── FOOD TYPE RADIO ── */
-    .food-type-row {
-      display: flex; align-items: center; gap: 1.25rem;
-      flex-wrap: wrap;
-    }
- 
-    .radio-label {
-      display: flex; align-items: center; gap: 6px;
-      font-size: 13.5px; color: var(--text-primary);
-      cursor: pointer; user-select: none;
-    }
-    .radio-label input[type="radio"] {
-      width: 15px; height: 15px;
-      accent-color: var(--accent); cursor: pointer;
-    }
+    .food-type-row { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
+    .radio-label { display: flex; align-items: center; gap: 6px; font-size: 13.5px; color: var(--text-primary); cursor: pointer; user-select: none; }
+    .radio-label input[type="radio"] { width: 15px; height: 15px; accent-color: var(--accent); cursor: pointer; }
     .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
- 
+
     /* ── ALLERGY CHIPS ── */
     .allergy-chips { display: flex; flex-wrap: wrap; gap: 8px; }
- 
-    .allergy-chip {
-      padding: 5px 14px;
-      border-radius: 20px;
-      font-size: 12.5px; font-weight: 500;
-      cursor: pointer; user-select: none;
-      border: 1px solid var(--border-med);
-      background: var(--bg-white);
-      color: var(--text-secondary);
-      transition: all 0.15s;
-    }
- 
-    .allergy-chip.selected {
-      background: #FEF2F2;
-      color: #B91C1C;
-      border-color: #FECACA;
-    }
- 
-    .allergy-hint {
-      font-size: 11.5px;
-      color: var(--text-hint);
-      margin-top: 0.75rem;
-    }
- 
+    .allergy-chip { padding: 5px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 500; cursor: pointer; user-select: none; border: 1px solid var(--border-med); background: var(--bg-white); color: var(--text-secondary); transition: all 0.15s; }
+    .allergy-chip.selected { background: #FEF2F2; color: #B91C1C; border-color: #FECACA; }
+    .allergy-hint { font-size: 11.5px; color: var(--text-hint); margin-top: 0.75rem; }
+
     /* ── UPLOAD ── */
-    .upload-zone {
-      border: 1.5px dashed var(--border-med);
-      border-radius: var(--radius-md);
-      padding: 1.5rem 1rem;
-      text-align: center;
-      cursor: pointer;
-      transition: border-color 0.15s, background 0.15s;
-      position: relative; overflow: hidden;
-    }
+    .upload-zone { border: 1.5px dashed var(--border-med); border-radius: var(--radius-md); padding: 1.5rem 1rem; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s; position: relative; overflow: hidden; }
     .upload-zone:hover { border-color: var(--accent); background: var(--bg-blue-tint); }
-    .upload-zone input[type="file"] {
-      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
-    }
- 
-    .upload-icon-wrap {
-      width: 48px; height: 48px;
-      background: var(--bg-blue-tint);
-      border-radius: var(--radius-md);
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 0.75rem;
-    }
- 
+    .upload-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .upload-icon-wrap { width: 48px; height: 48px; background: var(--bg-blue-tint); border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; }
     .upload-zone p { font-size: 13px; color: var(--text-secondary); margin-bottom: 2px; }
     .upload-zone small { font-size: 11.5px; color: var(--text-hint); }
- 
     .upload-preview { display: none; margin-top: 0.75rem; }
-    .upload-preview img {
-      width: 100%; max-height: 140px;
-      object-fit: cover;
-      border-radius: var(--radius-sm);
-    }
- 
+    .upload-preview img { width: 100%; max-height: 140px; object-fit: cover; border-radius: var(--radius-sm); }
+    .upload-progress { display: none; margin-top: 0.6rem; height: 4px; background: var(--bg-surface); border-radius: 2px; overflow: hidden; }
+    .upload-progress-bar { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; }
+
     /* ── PREVIEW CARD ── */
-    .preview-item {
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 0.875rem 1rem;
-      display: flex; align-items: center; gap: 0.75rem;
-      margin-bottom: 1rem;
-    }
- 
-    .preview-thumb {
-      width: 44px; height: 44px;
-      background: var(--bg-surface);
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; flex-shrink: 0;
-      overflow: hidden;
-    }
+    .preview-item { border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.875rem 1rem; display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+    .preview-thumb { width: 44px; height: 44px; background: var(--bg-surface); border-radius: var(--radius-sm); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; overflow: hidden; }
     .preview-thumb img { width: 100%; height: 100%; object-fit: cover; }
- 
-    .preview-name {
-      font-size: 14px; font-weight: 500;
-      color: var(--text-primary);
-    }
+    .preview-name { font-size: 14px; font-weight: 500; color: var(--text-primary); }
     .preview-price { font-size: 12.5px; color: var(--text-secondary); }
- 
+
     /* ── SAVE / CANCEL ── */
-    .save-btn {
-      width: 100%;
-      height: 42px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-md);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px; font-weight: 500;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-      transition: background 0.15s, transform 0.1s;
-      margin-bottom: 0.6rem;
-    }
+    .save-btn { width: 100%; height: 42px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius-md); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.15s, transform 0.1s; margin-bottom: 0.6rem; }
     .save-btn:hover { background: var(--accent-hover); }
     .save-btn:active { transform: scale(0.985); }
- 
-    .cancel-link {
-      display: block; text-align: center;
-      font-size: 13.5px; color: var(--text-secondary);
-      cursor: pointer; text-decoration: none;
-      transition: color 0.15s;
-    }
+    .save-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+    .cancel-link { display: block; text-align: center; font-size: 13.5px; color: var(--text-secondary); cursor: pointer; text-decoration: none; transition: color 0.15s; }
     .cancel-link:hover { color: var(--text-primary); }
- 
-    /* ── SUCCESS TOAST ── */
-    .toast {
-      position: fixed;
-      bottom: 1.5rem; right: 1.5rem;
-      background: #111827;
-      color: #fff;
-      font-size: 13.5px;
-      padding: 10px 16px;
-      border-radius: var(--radius-md);
-      display: flex; align-items: center; gap: 8px;
-      opacity: 0; pointer-events: none;
-      transform: translateY(8px);
-      transition: opacity 0.25s, transform 0.25s;
-      z-index: 999;
-    }
+
+    /* ── TOAST ── */
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #111827; color: #fff; font-size: 13.5px; padding: 10px 16px; border-radius: var(--radius-md); display: flex; align-items: center; gap: 8px; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity 0.25s, transform 0.25s; z-index: 999; }
     .toast.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
- 
+
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <a href="home_page.html" class="sidebar-logo">
@@ -388,68 +131,61 @@
       </div>
       StreetLink
     </a>
- 
     <nav class="sidebar-nav">
-      <a href="home_page.html" class="nav-item" onclick="setNav(this)">
+      <a href="vendors-dashboard.html" class="nav-item">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
         Dashboard
       </a>
-      <a href="vendors_menu.html" class="nav-item" onclick="setNav(this)">
+      <a href="vendors_menu.html" class="nav-item">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
         My Menu
       </a>
-      <a href="vendors_add_item.html" class="nav-item active" onclick="setNav(this)">
+      <a href="vendors_add_item.html" class="nav-item active">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
         Add Menu Item
-
       </a>
-      <a href="vendors_profile.html" class="nav-item" onclick="setNav(this)">
+      <a href="vendors_profile.html" class="nav-item">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         My Profile
       </a>
     </nav>
- 
     <div class="sidebar-bottom">
-      <a href="#" class="nav-item-bottom">
+      <a href="vendors_profile.html" class="nav-item-bottom">
         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         Settings
       </a>
-      <a href="home_page.html" class="nav-item-bottom">
+      <a href="#" class="nav-item-bottom" id="signOutBtn">
         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
         Sign out
       </a>
       <div class="user-row">
-        <div class="user-avatar">JD</div>
+        <div class="user-avatar" id="userAvatar">?</div>
         <div>
-          <div class="user-name">John Doe</div>
-          <div class="user-email">john@streetlink.com</div>
+          <div class="user-name" id="userName">Loading…</div>
+          <div class="user-email" id="userEmail"></div>
         </div>
       </div>
     </div>
   </aside>
- 
+
   <!-- MAIN -->
   <main class="main">
     <h1 class="page-title">Add Food Item</h1>
     <p class="page-subtitle">Add a new item to your menu</p>
- 
+
     <div class="form-layout">
- 
+
       <!-- LEFT COL -->
- 
-      <!-- Basic Information -->
       <div class="card" style="grid-column:1; grid-row:1;">
         <div class="card-title">
           <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
           Basic Information
         </div>
         <p class="card-subtitle">Enter the details of your food item</p>
- 
         <div class="form-group">
           <label class="form-label">Food Name</label>
           <input class="form-input" type="text" id="foodName" placeholder="e.g., Pani Puri" oninput="updatePreview()" />
         </div>
- 
         <div class="two-col form-group">
           <div>
             <label class="form-label">Price (Rs.)</label>
@@ -472,27 +208,16 @@
             </select>
           </div>
         </div>
- 
         <div class="form-group" style="margin-bottom:0;">
           <label class="form-label">Food Type</label>
           <div class="food-type-row">
-            <label class="radio-label">
-              <input type="radio" name="foodType" value="Veg" checked onchange="updatePreview()" />
-              <span class="dot" style="background:#16A34A;"></span> Veg
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="foodType" value="Non-Veg" onchange="updatePreview()" />
-              <span class="dot" style="background:#DC2626;"></span> Non-Veg
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="foodType" value="Vegan" onchange="updatePreview()" />
-              <span class="dot" style="background:#15803D;"></span> Vegan
-            </label>
+            <label class="radio-label"><input type="radio" name="foodType" value="Veg" checked onchange="updatePreview()" /><span class="dot" style="background:#16A34A;"></span> Veg</label>
+            <label class="radio-label"><input type="radio" name="foodType" value="Non-Veg" onchange="updatePreview()" /><span class="dot" style="background:#DC2626;"></span> Non-Veg</label>
+            <label class="radio-label"><input type="radio" name="foodType" value="Vegan" onchange="updatePreview()" /><span class="dot" style="background:#15803D;"></span> Vegan</label>
           </div>
         </div>
       </div>
- 
-      <!-- Ingredients -->
+
       <div class="card" style="grid-column:1; grid-row:2;">
         <div class="card-title">
           <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="2"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zM2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
@@ -500,11 +225,10 @@
         </div>
         <p class="card-subtitle">List the main ingredients in your dish</p>
         <div class="form-group" style="margin-bottom:0;">
-          <textarea class="form-textarea" id="foodIngredients" placeholder="e.g., Semolina puri, tangy tamarind water, spiced potato filling, coriander, chaat masala..."></textarea>
+          <textarea class="form-textarea" id="foodIngredients" placeholder="e.g., Semolina puri, tangy tamarind water, spiced potato filling..."></textarea>
         </div>
       </div>
- 
-      <!-- Allergy Information -->
+
       <div class="card" style="grid-column:1; grid-row:3;">
         <div class="card-title">
           <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#F59E0B" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -519,26 +243,19 @@
           <span class="allergy-chip" onclick="toggleAllergy(this)">Egg</span>
           <span class="allergy-chip" onclick="toggleAllergy(this)">Shellfish</span>
         </div>
-        <p class="allergy-hint">Click to toggle allergen warnings. This helps customers with dietary restrictions.</p>
+        <p class="allergy-hint">Click to toggle allergen warnings.</p>
       </div>
- 
+
       <!-- RIGHT COL -->
- 
-      <!-- Upload Photo -->
       <div class="card" style="grid-column:2; grid-row:1;">
         <div class="card-title">
           <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           Upload Photo
         </div>
- 
         <div class="upload-zone" id="uploadZone">
           <input type="file" accept="image/png,image/jpeg" id="photoInput" onchange="previewPhoto(event)" />
           <div class="upload-icon-wrap">
-            <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="1.8">
-              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-              <polyline points="17 8 12 3 7 8"/>
-              <line x1="12" y1="3" x2="12" y2="15"/>
-            </svg>
+            <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           </div>
           <p>Upload an image</p>
           <small>PNG, JPG up to 5MB</small>
@@ -546,15 +263,16 @@
             <img id="previewImg" src="" alt="Preview" />
           </div>
         </div>
+        <div class="upload-progress" id="uploadProgress">
+          <div class="upload-progress-bar" id="uploadProgressBar"></div>
+        </div>
       </div>
- 
-      <!-- Preview -->
+
       <div class="card" style="grid-column:2; grid-row:2;">
         <div class="card-title">
           <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           Preview
         </div>
- 
         <div class="preview-item">
           <div class="preview-thumb" id="previewThumb">🍽</div>
           <div>
@@ -565,113 +283,24 @@
             <span id="previewDot" style="width:8px;height:8px;border-radius:50%;background:#16A34A;display:inline-block;"></span>
           </div>
         </div>
- 
-        <button class="save-btn" onclick="saveItem()">
+        <button class="save-btn" id="saveBtn" onclick="saveItem()">
           <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           Save Item
         </button>
- 
         <a href="#" class="cancel-link" onclick="resetForm()">Cancel</a>
       </div>
- 
+
     </div>
   </main>
- 
+
   <!-- TOAST -->
   <div class="toast" id="toast">
     <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
     Item saved successfully!
   </div>
- 
-  <script>
-    const foodEmojis = { Chaat:'🥙', Momos:'🥟', 'Main Course':'🍛', Snacks:'🍟', Rolls:'🌯', Beverages:'☕', Sweets:'🍮' };
-    const typeColors  = { Veg:'#16A34A', 'Non-Veg':'#DC2626', Vegan:'#15803D' };
- 
-    function updatePreview() {
-      const name  = document.getElementById('foodName').value.trim() || 'Food Name';
-      const price = document.getElementById('foodPrice').value || '0';
-      const cat   = document.getElementById('foodCategory').value;
-      const type  = document.querySelector('input[name="foodType"]:checked')?.value || 'Veg';
- 
-      document.getElementById('previewName').textContent  = name;
-      document.getElementById('previewPrice').textContent = `Rs. ${price}`;
-      document.getElementById('previewDot').style.background = typeColors[type] || '#16A34A';
- 
-      const thumb = document.getElementById('previewThumb');
-      if (!thumb.querySelector('img')) {
-        thumb.textContent = foodEmojis[cat] || '🍽';
-      }
-    }
- 
-    function previewPhoto(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = ev => {
-        document.getElementById('previewImg').src = ev.target.result;
-        document.getElementById('uploadPreview').style.display = 'block';
- 
-        // update card preview thumb too
-        const thumb = document.getElementById('previewThumb');
-        thumb.innerHTML = `<img src="${ev.target.result}" alt="food" style="width:100%;height:100%;object-fit:cover;border-radius:6px;" />`;
-      };
-      reader.readAsDataURL(file);
-    }
- 
-    function toggleAllergy(el) {
-      el.classList.toggle('selected');
-    }
- 
-    function saveItem() {
-      const name = document.getElementById('foodName').value.trim();
-      const price = document.getElementById('foodPrice').value;
-      if (!name || !price) {
-        if (!name) document.getElementById('foodName').focus();
-        return;
-      }
-      const btn = document.querySelector('.save-btn');
-      btn.innerHTML = '<div style="width:16px;height:16px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;"></div>';
-      btn.disabled = true;
- 
-      setTimeout(() => {
-        btn.innerHTML = '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Save Item';
-        btn.disabled = false;
-        showToast();
-        resetForm();
-      }, 1200);
-    }
- 
-    function showToast() {
-      const toast = document.getElementById('toast');
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
-    }
- 
-    function resetForm() {
-      document.getElementById('foodName').value = '';
-      document.getElementById('foodPrice').value = '';
-      document.getElementById('foodCategory').selectedIndex = 0;
-      document.querySelector('input[name="foodType"][value="Veg"]').checked = true;
-      document.getElementById('foodIngredients').value = '';
-      document.getElementById('uploadPreview').style.display = 'none';
-      document.getElementById('previewImg').src = '';
-      document.getElementById('previewThumb').innerHTML = '🍽';
-      document.querySelectorAll('.allergy-chip').forEach(c => c.classList.remove('selected'));
-      updatePreview();
-    }
- 
-    function setNav(el) {
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      el.classList.add('active');
-    }
- 
-    // spinner keyframe
-    const style = document.createElement('style');
-    style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
-    document.head.appendChild(style);
- 
-    updatePreview();
-  </script>
- 
+
+  <!-- ── NON-MODULE: UI helpers (no Firebase needed) ── -->
+  <script type="module" src="./firebase-app.js"></script>
+
 </body>
 </html>

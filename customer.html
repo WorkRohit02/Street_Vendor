@@ -7,498 +7,130 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
     :root {
-      --bg-page:      #F4F6F9;
-      --bg-white:     #FFFFFF;
-      --bg-surface:   #EEF1F6;
-      --bg-blue-tint: #EBF3FD;
-      --accent:       #1D6AE5;
-      --accent-hover: #155BC2;
-      --text-primary: #111827;
-      --text-secondary: #5B6370;
-      --text-hint:    #9CA3AF;
-      --border:       rgba(0,0,0,0.08);
-      --border-med:   rgba(0,0,0,0.14);
-      --green:        #16A34A;
-      --red:          #DC2626;
-      --star:         #F59E0B;
-      --radius-sm:    8px;
-      --radius-md:    12px;
-      --radius-lg:    16px;
+      --bg-page:#F4F6F9; --bg-white:#FFFFFF; --bg-surface:#EEF1F6; --bg-blue-tint:#EBF3FD;
+      --accent:#1D6AE5; --accent-hover:#155BC2;
+      --text-primary:#111827; --text-secondary:#5B6370; --text-hint:#9CA3AF;
+      --border:rgba(0,0,0,0.08); --border-med:rgba(0,0,0,0.14);
+      --green:#16A34A; --red:#DC2626; --star:#F59E0B;
+      --radius-sm:8px; --radius-md:12px; --radius-lg:16px;
     }
- 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg-page);
-      color: var(--text-primary);
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
- 
+    body { font-family:'DM Sans',sans-serif; background:var(--bg-page); color:var(--text-primary); min-height:100vh; -webkit-font-smoothing:antialiased; }
+
     /* ── NAV ── */
-    nav {
-      background: var(--bg-white);
-      border-bottom: 1px solid var(--border);
-      height: 54px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1.5rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
- 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 17px;
-      color: var(--text-primary);
-      text-decoration: none;
-    }
- 
-    .logo-icon {
-      width: 30px;
-      height: 30px;
-      background: var(--accent);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
- 
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      font-size: 14px;
-      color: var(--text-secondary);
-    }
- 
-    .nav-links a {
-      text-decoration: none;
-      color: var(--text-secondary);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      transition: color 0.15s;
-    }
- 
-    .nav-links a:hover { color: var(--text-primary); }
-    .nav-login { color: var(--text-primary) !important; font-weight: 500; }
- 
-    .nav-toggle {
-      width: 28px; height: 28px;
-      border: 1px solid var(--border-med);
-      border-radius: var(--radius-sm);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; font-size: 14px; color: var(--text-secondary);
-    }
- 
-    /* ── MAIN LAYOUT ── */
-    .page {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1.25rem 1.5rem 3rem;
-    }
- 
-    /* ── SEARCH BAR ── */
-    .search-wrap {
-      position: relative;
-      margin-bottom: 0.75rem;
-    }
- 
-    .search-wrap svg {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-hint);
-    }
- 
-    .search-wrap input {
-      width: 100%;
-      height: 44px;
-      border: 1px solid var(--border-med);
-      border-radius: var(--radius-md);
-      background: var(--bg-white);
-      padding: 0 1rem 0 2.75rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      color: var(--text-primary);
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
- 
-    .search-wrap input::placeholder { color: var(--text-hint); }
-    .search-wrap input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(29,106,229,0.1);
-    }
- 
-    /* ── TAB TOGGLE ── */
-    .tab-row {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.25rem;
-    }
- 
-    .tab-btn {
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: 13.5px;
-      font-weight: 500;
-      cursor: pointer;
-      border: 1px solid var(--border-med);
-      background: var(--bg-white);
-      color: var(--text-secondary);
-      transition: all 0.15s;
-    }
- 
-    .tab-btn.active {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-    }
- 
-    .tab-btn:not(.active):hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
- 
-    /* ── FILTER BAR ── */
-    .filter-bar {
-      background: var(--bg-white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 0.85rem 1.25rem;
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-    }
- 
-    .filter-veg {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 13.5px;
-      cursor: pointer;
-      user-select: none;
-    }
- 
-    .filter-veg input[type="checkbox"] {
-      width: 15px; height: 15px;
-      accent-color: var(--green);
-      cursor: pointer;
-    }
- 
-    .dot-green {
-      width: 8px; height: 8px;
-      background: var(--green);
-      border-radius: 50%;
-    }
- 
-    .filter-sep {
-      width: 1px;
-      height: 20px;
-      background: var(--border-med);
-    }
- 
-    .filter-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13.5px;
-      color: var(--text-secondary);
-    }
- 
-    .filter-group label { font-weight: 500; color: var(--text-primary); }
- 
-    .filter-select {
-      border: 1px solid var(--border-med);
-      border-radius: var(--radius-sm);
-      padding: 4px 28px 4px 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      color: var(--text-primary);
-      background: var(--bg-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235B6370' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 8px center;
-      appearance: none;
-      cursor: pointer;
-      outline: none;
-    }
- 
-    /* ── CATEGORY CHIPS ── */
-    .chips-row {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-bottom: 1.5rem;
-    }
- 
-    .chip {
-      padding: 5px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      cursor: pointer;
-      border: 1px solid var(--border-med);
-      background: var(--bg-white);
-      color: var(--text-secondary);
-      transition: all 0.15s;
-      white-space: nowrap;
-    }
- 
-    .chip.active {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-    }
- 
-    .chip:not(.active):hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
- 
+    nav { background:var(--bg-white); border-bottom:1px solid var(--border); height:54px; display:flex; align-items:center; justify-content:space-between; padding:0 1.5rem; position:sticky; top:0; z-index:100; }
+    .logo { display:flex; align-items:center; gap:8px; font-family:'Syne',sans-serif; font-weight:800; font-size:17px; color:var(--text-primary); text-decoration:none; }
+    .logo-icon { width:30px; height:30px; background:var(--accent); border-radius:8px; display:flex; align-items:center; justify-content:center; }
+    .nav-links { display:flex; align-items:center; gap:1.25rem; font-size:14px; color:var(--text-secondary); }
+    .nav-links a { text-decoration:none; color:var(--text-secondary); display:flex; align-items:center; gap:5px; transition:color .15s; }
+    .nav-links a:hover { color:var(--text-primary); }
+    .nav-login { color:var(--text-primary) !important; font-weight:500; }
+    .nav-toggle { width:28px; height:28px; border:1px solid var(--border-med); border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; color:var(--text-secondary); }
+
+    /* ── PAGE ── */
+    .page { max-width:1200px; margin:0 auto; padding:1.25rem 1.5rem 3rem; }
+
+    /* ── SEARCH ── */
+    .search-wrap { position:relative; margin-bottom:0.75rem; }
+    .search-wrap svg { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text-hint); }
+    .search-wrap input { width:100%; height:44px; border:1px solid var(--border-med); border-radius:var(--radius-md); background:var(--bg-white); padding:0 1rem 0 2.75rem; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--text-primary); outline:none; transition:border-color .15s,box-shadow .15s; }
+    .search-wrap input::placeholder { color:var(--text-hint); }
+    .search-wrap input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(29,106,229,0.1); }
+
+    /* ── TABS ── */
+    .tab-row { display:flex; gap:0.5rem; margin-bottom:1.25rem; }
+    .tab-btn { padding:6px 16px; border-radius:20px; font-size:13.5px; font-weight:500; cursor:pointer; border:1px solid var(--border-med); background:var(--bg-white); color:var(--text-secondary); transition:all .15s; }
+    .tab-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .tab-btn:not(.active):hover { border-color:var(--accent); color:var(--accent); }
+
+    /* ── FILTERS ── */
+    .filter-bar { background:var(--bg-white); border:1px solid var(--border); border-radius:var(--radius-md); padding:0.85rem 1.25rem; display:flex; align-items:center; gap:1.25rem; margin-bottom:1rem; flex-wrap:wrap; }
+    .filter-veg { display:flex; align-items:center; gap:7px; font-size:13.5px; cursor:pointer; user-select:none; }
+    .filter-veg input[type="checkbox"] { width:15px; height:15px; accent-color:var(--green); cursor:pointer; }
+    .dot-green { width:8px; height:8px; background:var(--green); border-radius:50%; }
+    .filter-sep { width:1px; height:20px; background:var(--border-med); }
+    .filter-group { display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--text-secondary); }
+    .filter-group label { font-weight:500; color:var(--text-primary); }
+    .filter-select { border:1px solid var(--border-med); border-radius:var(--radius-sm); padding:4px 28px 4px 10px; font-family:'DM Sans',sans-serif; font-size:13px; color:var(--text-primary); background:var(--bg-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235B6370' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 8px center; appearance:none; cursor:pointer; outline:none; }
+
+    /* ── CHIPS ── */
+    .chips-row { display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+    .chip { padding:5px 14px; border-radius:20px; font-size:13px; cursor:pointer; border:1px solid var(--border-med); background:var(--bg-white); color:var(--text-secondary); transition:all .15s; white-space:nowrap; }
+    .chip.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+    .chip:not(.active):hover { border-color:var(--accent); color:var(--accent); }
+
     /* ── VENDORS HEADER ── */
-    .vendors-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
- 
-    .vendors-header h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: 17px;
-      font-weight: 700;
-    }
- 
-    .vendors-count {
-      font-size: 13px;
-      color: var(--text-secondary);
-    }
- 
+    .vendors-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:1rem; }
+    .vendors-header h2 { font-family:'Syne',sans-serif; font-size:17px; font-weight:700; }
+    .vendors-count { font-size:13px; color:var(--text-secondary); }
+
     /* ── VENDOR GRID ── */
-    .vendor-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-    }
- 
-    @media (max-width: 900px) { .vendor-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 580px) { .vendor-grid { grid-template-columns: 1fr; } }
- 
+    .vendor-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; }
+    @media (max-width:900px) { .vendor-grid { grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:580px) { .vendor-grid { grid-template-columns:1fr; } }
+
     /* ── VENDOR CARD ── */
-    .vendor-card {
-      background: var(--bg-white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
-      cursor: pointer;
-    }
- 
-    .vendor-card:hover {
-      border-color: rgba(29,106,229,0.3);
-      box-shadow: 0 4px 18px rgba(29,106,229,0.08);
-      transform: translateY(-2px);
-    }
- 
-    .card-top {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 0.5rem;
-    }
- 
-    .card-info {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-    }
- 
-    .vendor-avatar {
-      width: 38px;
-      height: 38px;
-      background: var(--bg-blue-tint);
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
- 
-    .vendor-name {
-      font-weight: 500;
-      font-size: 14px;
-      color: var(--text-primary);
-      margin-bottom: 3px;
-      line-height: 1.3;
-    }
- 
-    .vendor-category {
-      font-size: 12px;
-      color: var(--text-secondary);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
- 
-    .status-badge {
-      font-size: 11.5px;
-      font-weight: 500;
-      padding: 3px 9px;
-      border-radius: 20px;
-      flex-shrink: 0;
-    }
- 
-    .status-open {
-      background: #DCFCE7;
-      color: #15803D;
-      border: 1px solid #BBF7D0;
-    }
- 
-    .status-closed {
-      background: #FEF2F2;
-      color: #B91C1C;
-      border: 1px solid #FECACA;
-    }
- 
-    .card-meta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 13px;
-      color: var(--text-secondary);
-    }
- 
-    .rating {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-weight: 500;
-      color: var(--text-primary);
-    }
- 
-    .star { color: var(--star); font-size: 13px; }
- 
-    .rating-count {
-      font-weight: 400;
-      color: var(--text-secondary);
-      font-size: 12px;
-    }
- 
-    .distance {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 12.5px;
-      color: var(--text-secondary);
-    }
- 
-    .price-range {
-      font-size: 12.5px;
-      color: var(--text-secondary);
-    }
- 
-    .menu-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-    }
- 
-    .menu-tag {
-      font-size: 11.5px;
-      color: var(--text-secondary);
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 2px 9px;
-    }
- 
-    .view-menu-btn {
-      width: 100%;
-      height: 36px;
-      border: 1px solid var(--border-med);
-      border-radius: var(--radius-sm);
-      background: var(--bg-white);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      color: var(--text-primary);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: border-color 0.15s, background 0.15s, color 0.15s;
-      text-decoration: none;
-      margin-top: auto;
-    }
- 
-    .view-menu-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-      background: var(--bg-blue-tint);
-    }
+    .vendor-card { background:var(--bg-white); border:1px solid var(--border); border-radius:var(--radius-lg); padding:1.25rem; display:flex; flex-direction:column; gap:0.75rem; transition:border-color .15s,box-shadow .15s,transform .15s; cursor:pointer; }
+    .vendor-card:hover { border-color:rgba(29,106,229,0.3); box-shadow:0 4px 18px rgba(29,106,229,0.08); transform:translateY(-2px); }
+    .card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:0.5rem; }
+    .card-info { display:flex; align-items:flex-start; gap:10px; }
+    .vendor-avatar { width:38px; height:38px; background:var(--bg-blue-tint); border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; flex-shrink:0; overflow:hidden; }
+    .vendor-avatar img { width:100%; height:100%; object-fit:cover; border-radius:var(--radius-sm); }
+    .vendor-name { font-weight:500; font-size:14px; color:var(--text-primary); margin-bottom:3px; line-height:1.3; }
+    .vendor-category { font-size:12px; color:var(--text-secondary); display:flex; align-items:center; gap:5px; }
+    .status-badge { font-size:11.5px; font-weight:500; padding:3px 9px; border-radius:20px; flex-shrink:0; }
+    .status-open { background:#DCFCE7; color:#15803D; border:1px solid #BBF7D0; }
+    .status-closed { background:#FEF2F2; color:#B91C1C; border:1px solid #FECACA; }
+    .card-meta { display:flex; align-items:center; gap:12px; font-size:13px; color:var(--text-secondary); }
+    .rating { display:flex; align-items:center; gap:4px; font-weight:500; color:var(--text-primary); }
+    .star { color:var(--star); font-size:13px; }
+    .rating-count { font-weight:400; color:var(--text-secondary); font-size:12px; }
+    .price-range { font-size:12.5px; color:var(--text-secondary); }
+    .menu-tags { display:flex; flex-wrap:wrap; gap:5px; }
+    .menu-tag { font-size:11.5px; color:var(--text-secondary); background:var(--bg-surface); border:1px solid var(--border); border-radius:20px; padding:2px 9px; }
+    .view-menu-btn { width:100%; height:36px; border:1px solid var(--border-med); border-radius:var(--radius-sm); background:var(--bg-white); font-family:'DM Sans',sans-serif; font-size:13px; color:var(--text-primary); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; transition:border-color .15s,background .15s,color .15s; text-decoration:none; margin-top:auto; }
+    .view-menu-btn:hover { border-color:var(--accent); color:var(--accent); background:var(--bg-blue-tint); }
+
+    /* ── LOADING / EMPTY ── */
+    .state-msg { grid-column:1/-1; text-align:center; padding:3rem; color:var(--text-secondary); font-size:14px; }
+    .spinner-wrap { display:flex; justify-content:center; align-items:center; padding:3rem; grid-column:1/-1; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .spinner { width:24px; height:24px; border:3px solid var(--border-med); border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; }
   </style>
 </head>
 <body>
- 
+
   <!-- NAV -->
   <nav>
     <a href="home_page.html" class="logo">
-      <div class="logo-icon">
-        <svg width="16" height="16" viewBox="0 0 17 17" fill="none">
-          <path d="M8.5 1.5C5.74 1.5 3.5 3.74 3.5 6.5c0 1.85 1 3.46 2.5 4.33L5.25 15.5h6.5l-.75-4.67A5.01 5.01 0 0013.5 6.5c0-2.76-2.24-5-5-5z" fill="white"/>
-        </svg>
-      </div>
+      <div class="logo-icon"><svg width="16" height="16" viewBox="0 0 17 17" fill="none"><path d="M8.5 1.5C5.74 1.5 3.5 3.74 3.5 6.5c0 1.85 1 3.46 2.5 4.33L5.25 15.5h6.5l-.75-4.67A5.01 5.01 0 0013.5 6.5c0-2.76-2.24-5-5-5z" fill="white"/></svg></div>
       StreetLink
     </a>
     <div class="nav-links">
-      <a href="home_page.html">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
-        Home
-      </a>
-      <a href="customer_map.html">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v3m0 16v3M4.22 4.22l2.12 2.12m11.32 11.32l2.12 2.12M1 12h3m16 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-        Map View
-      </a>
+      <a href="home_page.html"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg> Home</a>
+      <a href="customer_map.html"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v3m0 16v3M4.22 4.22l2.12 2.12m11.32 11.32l2.12 2.12M1 12h3m16 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg> Map View</a>
       <a href="login.html" class="nav-login">Login</a>
       <div class="nav-toggle">&#9788;</div>
     </div>
   </nav>
- 
-  <!-- PAGE CONTENT -->
+
+  <!-- PAGE -->
   <div class="page">
- 
-    <!-- SEARCH -->
+
     <div class="search-wrap">
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
-      </svg>
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
       <input type="text" placeholder="Search food or vendors..." id="searchInput" oninput="filterVendors()" />
     </div>
- 
-    <!-- TABS -->
+
     <div class="tab-row">
-      <button class="tab-btn active" onclick="setTab(this, 'vendors')">Vendors</button>
-      <button class="tab-btn" onclick="setTab(this, 'food')">Food Items</button>
+      <button class="tab-btn active" onclick="setTab(this,'vendors')">Vendors</button>
+      <button class="tab-btn" onclick="setTab(this,'food')">Food Items</button>
     </div>
- 
-    <!-- FILTERS -->
+
     <div class="filter-bar">
       <label class="filter-veg">
         <input type="checkbox" id="vegOnly" onchange="filterVendors()" />
-        <span class="dot-green"></span>
-        Veg Only
+        <span class="dot-green"></span> Veg Only
       </label>
       <div class="filter-sep"></div>
       <div class="filter-group">
@@ -510,205 +142,39 @@
         </select>
       </div>
       <div class="filter-group">
-        <label>Distance:</label>
-        <select class="filter-select" id="distanceFilter" onchange="filterVendors()">
-          <option value="99">All</option>
-          <option value="0.5">0.5 km</option>
-          <option value="1">1 km</option>
-          <option value="2">2 km</option>
+        <label>Status:</label>
+        <select class="filter-select" id="statusFilter" onchange="filterVendors()">
+          <option value="all">All</option>
+          <option value="open">Open Now</option>
+          <option value="closed">Closed</option>
         </select>
       </div>
     </div>
- 
-    <!-- CATEGORY CHIPS -->
+
     <div class="chips-row" id="chipsRow">
-      <button class="chip active" onclick="setChip(this, 'All')">All</button>
-      <button class="chip" onclick="setChip(this, 'Chaat & Snacks')">Chaat &amp; Snacks</button>
-      <button class="chip" onclick="setChip(this, 'South Indian')">South Indian</button>
-      <button class="chip" onclick="setChip(this, 'Chinese')">Chinese</button>
-      <button class="chip" onclick="setChip(this, 'Momos')">Momos</button>
-      <button class="chip" onclick="setChip(this, 'Beverages')">Beverages</button>
-      <button class="chip" onclick="setChip(this, 'Sweets')">Sweets</button>
-      <button class="chip" onclick="setChip(this, 'Fast Food')">Fast Food</button>
+      <button class="chip active" onclick="setChip(this,'All')">All</button>
+      <button class="chip" onclick="setChip(this,'Chaat &amp; Snacks')">Chaat &amp; Snacks</button>
+      <button class="chip" onclick="setChip(this,'South Indian')">South Indian</button>
+      <button class="chip" onclick="setChip(this,'Chinese')">Chinese</button>
+      <button class="chip" onclick="setChip(this,'Momos')">Momos</button>
+      <button class="chip" onclick="setChip(this,'Beverages')">Beverages</button>
+      <button class="chip" onclick="setChip(this,'Sweets')">Sweets</button>
+      <button class="chip" onclick="setChip(this,'Fast Food')">Fast Food</button>
     </div>
- 
-    <!-- VENDORS HEADER -->
+
     <div class="vendors-header">
       <h2>All Vendors</h2>
-      <span class="vendors-count" id="vendorCount">6 vendors found</span>
+      <span class="vendors-count" id="vendorCount">Loading…</span>
     </div>
- 
-    <!-- VENDOR GRID -->
-    <div class="vendor-grid" id="vendorGrid"></div>
- 
+
+    <div class="vendor-grid" id="vendorGrid">
+      <div class="spinner-wrap"><div class="spinner"></div></div>
+    </div>
+
   </div>
- 
-  <script>
-    const vendors = [
-      {
-        name: "Sharma Ji Chaat Corner",
-        category: "Chaat & Snacks",
-        isVeg: true,
-        isOpen: true,
-        rating: 4.8,
-        reviews: 234,
-        distance: 0.3,
-        priceMin: 20,
-        priceMax: 80,
-        tags: ["Pani Puri", "Aloo Tikki", "Dahi Bhalla"]
-      },
-      {
-        name: "Wong's Noodle Cart",
-        category: "Chinese",
-        isVeg: false,
-        isOpen: true,
-        rating: 4.6,
-        reviews: 189,
-        distance: 0.5,
-        priceMin: 40,
-        priceMax: 120,
-        tags: ["Hakka Noodles", "Chicken Momos", "Spring Rolls"]
-      },
-      {
-        name: "Dosa Express",
-        category: "South Indian",
-        isVeg: true,
-        isOpen: false,
-        rating: 4.7,
-        reviews: 156,
-        distance: 0.8,
-        priceMin: 30,
-        priceMax: 100,
-        tags: ["Masala Dosa", "Idli Vada", "Uttapam"]
-      },
-      {
-        name: "Sweet Treats Cart",
-        category: "Sweets",
-        isVeg: true,
-        isOpen: true,
-        rating: 4.9,
-        reviews: 312,
-        distance: 1.2,
-        priceMin: 25,
-        priceMax: 70,
-        tags: ["Kulfi", "Falooda", "Rabri"]
-      },
-      {
-        name: "Momo King",
-        category: "Momos",
-        isVeg: false,
-        isOpen: true,
-        rating: 4.5,
-        reviews: 98,
-        distance: 1.5,
-        priceMin: 50,
-        priceMax: 100,
-        tags: ["Steamed Momos", "Fried Momos", "Tandoori Momos"]
-      },
-      {
-        name: "Chai Point Express",
-        category: "Beverages",
-        isVeg: true,
-        isOpen: true,
-        rating: 4.4,
-        reviews: 267,
-        distance: 0.2,
-        priceMin: 15,
-        priceMax: 50,
-        tags: ["Masala Chai", "Filter Coffee", "Lassi"]
-      }
-    ];
- 
-    let activeCategory = 'All';
- 
-    function vendorIcon() {
-      return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1D6AE5" stroke-width="1.8">
-        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
-        <path d="M9 22V12h6v10"/>
-      </svg>`;
-    }
- 
-    function renderCard(v) {
-      return `
-        <div class="vendor-card">
-          <div class="card-top">
-            <div class="card-info">
-              <div class="vendor-avatar">${vendorIcon()}</div>
-              <div>
-                <div class="vendor-name">${v.name}</div>
-                <div class="vendor-category">
-                  <span style="width:7px;height:7px;border-radius:50%;background:${v.isVeg ? '#16A34A' : '#DC2626'};display:inline-block;flex-shrink:0;"></span>
-                  ${v.category}
-                </div>
-              </div>
-            </div>
-            <span class="status-badge ${v.isOpen ? 'status-open' : 'status-closed'}">${v.isOpen ? 'Open' : 'Closed'}</span>
-          </div>
- 
-          <div class="card-meta">
-            <div class="rating">
-              <span class="star">★</span>
-              ${v.rating}
-              <span class="rating-count">(${v.reviews})</span>
-            </div>
-            <div class="distance">
-              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v3m0 16v3M4.22 4.22l2.12 2.12m11.32 11.32l2.12 2.12M1 12h3m16 0h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-              ${v.distance} km
-            </div>
-          </div>
- 
-          <div class="price-range">Rs. ${v.priceMin} – Rs. ${v.priceMax}</div>
- 
-          <div class="menu-tags">
-            ${v.tags.map(t => `<span class="menu-tag">${t}</span>`).join('')}
-          </div>
- 
-          <button class="view-menu-btn">
-            View Menu
-            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
-          </button>
-        </div>
-      `;
-    }
- 
-    function filterVendors() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const vegOnly = document.getElementById('vegOnly').checked;
-      const minRating = parseFloat(document.getElementById('ratingFilter').value);
-      const maxDist = parseFloat(document.getElementById('distanceFilter').value);
- 
-      const filtered = vendors.filter(v => {
-        const matchCat = activeCategory === 'All' || v.category === activeCategory;
-        const matchSearch = v.name.toLowerCase().includes(query) ||
-                            v.category.toLowerCase().includes(query) ||
-                            v.tags.some(t => t.toLowerCase().includes(query));
-        const matchVeg = !vegOnly || v.isVeg;
-        const matchRating = v.rating >= minRating;
-        const matchDist = v.distance <= maxDist;
-        return matchCat && matchSearch && matchVeg && matchRating && matchDist;
-      });
- 
-      document.getElementById('vendorGrid').innerHTML = filtered.length
-        ? filtered.map(renderCard).join('')
-        : `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-secondary);font-size:14px;">No vendors found matching your filters.</div>`;
- 
-      document.getElementById('vendorCount').textContent = `${filtered.length} vendor${filtered.length !== 1 ? 's' : ''} found`;
-    }
- 
-    function setChip(el, category) {
-      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-      activeCategory = category;
-      filterVendors();
-    }
- 
-    function setTab(el, tab) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      el.classList.add('active');
-    }
- 
-    filterVendors();
-  </script>
- 
+
+  <!-- ── MODULE: Firebase logic ── -->
+  <script type="module" src="./firebase-app.js"></script>
+
 </body>
 </html>

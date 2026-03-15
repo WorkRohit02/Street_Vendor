@@ -7,7 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
     :root {
       --bg-page:      #F4F6F9;
       --bg-white:     #FFFFFF;
@@ -29,452 +28,109 @@
       --radius-md:    12px;
       --radius-lg:    16px;
     }
- 
     html, body { height: 100%; }
- 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg-page);
-      color: var(--text-primary);
-      display: flex;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
-    }
- 
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg-page); color: var(--text-primary); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
     /* ── SIDEBAR ── */
-    .sidebar {
-      width: 220px;
-      min-height: 100vh;
-      background: var(--sidebar-bg);
-      display: flex;
-      flex-direction: column;
-      position: fixed;
-      top: 0; left: 0; bottom: 0;
-      z-index: 200;
-    }
- 
-    .sidebar-logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 1.1rem 1.25rem;
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 16px;
-      color: #fff;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
- 
-    .logo-icon {
-      width: 28px; height: 28px;
-      background: var(--accent);
-      border-radius: 7px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
- 
+    .sidebar { width: 220px; min-height: 100vh; background: var(--sidebar-bg); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 200; }
+    .sidebar-logo { display: flex; align-items: center; gap: 8px; padding: 1.1rem 1.25rem; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .logo-icon { width: 28px; height: 28px; background: var(--accent); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .sidebar-nav { flex: 1; padding: 0.75rem 0.75rem 0; }
- 
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 9px 12px;
-      border-radius: var(--radius-sm);
-      font-size: 13.5px;
-      color: var(--sidebar-text);
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.15s, color 0.15s;
-      margin-bottom: 2px;
-    }
+    .nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: var(--radius-sm); font-size: 13.5px; color: var(--sidebar-text); cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; margin-bottom: 2px; }
     .nav-item:hover { background: rgba(255,255,255,0.07); color: #fff; }
     .nav-item.active { background: var(--accent); color: #fff; }
     .nav-item svg { flex-shrink: 0; }
- 
-    .sidebar-bottom {
-      padding: 0.75rem;
-      border-top: 1px solid rgba(255,255,255,0.07);
-    }
- 
-    .nav-item-bottom {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 8px 12px;
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-      color: var(--sidebar-text);
-      cursor: pointer;
-      text-decoration: none;
-      transition: background 0.15s, color 0.15s;
-      margin-bottom: 2px;
-    }
+    .sidebar-bottom { padding: 0.75rem; border-top: 1px solid rgba(255,255,255,0.07); }
+    .nav-item-bottom { display: flex; align-items: center; gap: 9px; padding: 8px 12px; border-radius: var(--radius-sm); font-size: 13px; color: var(--sidebar-text); cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; margin-bottom: 2px; }
     .nav-item-bottom:hover { background: rgba(255,255,255,0.07); color: #fff; }
- 
-    .user-row {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      padding: 10px 12px 4px;
-    }
- 
-    .user-avatar {
-      width: 32px; height: 32px;
-      background: var(--accent);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: 600; color: #fff;
-      flex-shrink: 0;
-    }
- 
+    .user-row { display: flex; align-items: center; gap: 9px; padding: 10px 12px 4px; }
+    .user-avatar { width: 32px; height: 32px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #fff; flex-shrink: 0; }
     .user-name { font-size: 13px; font-weight: 500; color: #fff; }
     .user-email { font-size: 11px; color: var(--sidebar-text); }
- 
+
     /* ── MAIN ── */
-    .main {
-      margin-left: 220px;
-      flex: 1;
-      padding: 1.75rem 2rem 3rem;
-      min-height: 100vh;
-    }
- 
-    .page-toprow {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 1.25rem;
-    }
- 
-    .page-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 22px;
-      font-weight: 800;
-      color: var(--text-primary);
-      margin-bottom: 3px;
-    }
- 
-    .page-subtitle {
-      font-size: 13px;
-      color: var(--text-secondary);
-    }
- 
-    .btn-primary {
-      height: 36px;
-      padding: 0 14px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-sm);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.15s;
-      white-space: nowrap;
-    }
+    .main { margin-left: 220px; flex: 1; padding: 1.75rem 2rem 3rem; min-height: 100vh; }
+    .page-toprow { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.25rem; }
+    .page-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text-primary); margin-bottom: 3px; }
+    .page-subtitle { font-size: 13px; color: var(--text-secondary); }
+    .btn-primary { height: 36px; padding: 0 14px; background: var(--accent); color: #fff; border: none; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: background 0.15s; white-space: nowrap; }
     .btn-primary:hover { background: var(--accent-hover); }
- 
+    .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+
     /* ── SEARCH ── */
-    .search-wrap {
-      position: relative;
-      margin-bottom: 1.25rem;
-    }
-    .search-wrap svg {
-      position: absolute;
-      left: 11px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-hint);
-      pointer-events: none;
-    }
-    .search-wrap input {
-      width: 100%;
-      height: 40px;
-      border: 1px solid var(--border-med);
-      border-radius: var(--radius-md);
-      padding: 0 1rem 0 2.25rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13.5px;
-      color: var(--text-primary);
-      background: var(--bg-white);
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
+    .search-wrap { position: relative; margin-bottom: 1.25rem; }
+    .search-wrap svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--text-hint); pointer-events: none; }
+    .search-wrap input { width: 100%; height: 40px; border: 1px solid var(--border-med); border-radius: var(--radius-md); padding: 0 1rem 0 2.25rem; font-family: 'DM Sans', sans-serif; font-size: 13.5px; color: var(--text-primary); background: var(--bg-white); outline: none; transition: border-color 0.15s, box-shadow 0.15s; }
     .search-wrap input::placeholder { color: var(--text-hint); }
-    .search-wrap input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(29,106,229,0.1);
-    }
- 
-    /* ── SECTION CARD ── */
-    .section-card {
-      background: var(--bg-white);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-    }
- 
-    .section-header {
-      padding: 1rem 1.5rem 0.75rem;
-      border-bottom: 1px solid var(--border);
-    }
- 
-    .section-header h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 2px;
-    }
- 
-    .section-header p {
-      font-size: 12.5px;
-      color: var(--text-secondary);
-    }
- 
+    .search-wrap input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(29,106,229,0.1); }
+
     /* ── TABLE ── */
+    .section-card { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+    .section-header { padding: 1rem 1.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+    .section-header h2 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
+    .section-header p { font-size: 12.5px; color: var(--text-secondary); }
     .table-wrap { overflow-x: auto; }
- 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 900px;
-    }
- 
-    thead th {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      text-align: left;
-      padding: 9px 1rem;
-      background: var(--bg-page);
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-    }
- 
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background 0.12s;
-    }
+    table { width: 100%; border-collapse: collapse; min-width: 900px; }
+    thead th { font-size: 12px; font-weight: 500; color: var(--text-secondary); text-align: left; padding: 9px 1rem; background: var(--bg-page); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
     tbody tr:last-child { border-bottom: none; }
     tbody tr:hover { background: #FAFBFD; }
- 
-    tbody td {
-      padding: 10px 1rem;
-      font-size: 13px;
-      color: var(--text-primary);
-      vertical-align: middle;
-    }
- 
-    .food-thumb {
-      width: 36px; height: 36px;
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 17px;
-      flex-shrink: 0;
-    }
- 
+    tbody td { padding: 10px 1rem; font-size: 13px; color: var(--text-primary); vertical-align: middle; }
+    .food-thumb { width: 36px; height: 36px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; overflow: hidden; }
+    .food-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .food-name { font-weight: 500; font-size: 13.5px; }
- 
-    .cat-badge {
-      font-size: 11.5px;
-      font-weight: 500;
-      padding: 2px 9px;
-      border-radius: 20px;
-      white-space: nowrap;
-    }
-    .cat-chaat     { background: #EBF3FD; color: #1D6AE5; border: 1px solid rgba(29,106,229,0.15); }
-    .cat-momos     { background: #FEF3C7; color: #B45309; border: 1px solid rgba(180,83,9,0.15); }
-    .cat-main      { background: #DCFCE7; color: #15803D; border: 1px solid rgba(21,128,61,0.15); }
-    .cat-snacks    { background: #F3E8FF; color: #7C3AED; border: 1px solid rgba(124,58,237,0.15); }
-    .cat-rolls     { background: #FEF2F2; color: #B91C1C; border: 1px solid rgba(185,28,28,0.15); }
-    .cat-beverages { background: #E0F2FE; color: #0369A1; border: 1px solid rgba(3,105,161,0.15); }
- 
-    .veg-dot {
-      display: flex; align-items: center; gap: 6px; font-size: 13px;
-    }
+    .cat-badge { font-size: 11.5px; font-weight: 500; padding: 2px 9px; border-radius: 20px; white-space: nowrap; }
+    .cat-Chaat     { background: #EBF3FD; color: #1D6AE5; border: 1px solid rgba(29,106,229,0.15); }
+    .cat-Momos     { background: #FEF3C7; color: #B45309; border: 1px solid rgba(180,83,9,0.15); }
+    .cat-Main      { background: #DCFCE7; color: #15803D; border: 1px solid rgba(21,128,61,0.15); }
+    .cat-Snacks    { background: #F3E8FF; color: #7C3AED; border: 1px solid rgba(124,58,237,0.15); }
+    .cat-Rolls     { background: #FEF2F2; color: #B91C1C; border: 1px solid rgba(185,28,28,0.15); }
+    .cat-Beverages { background: #E0F2FE; color: #0369A1; border: 1px solid rgba(3,105,161,0.15); }
+    .veg-dot { display: flex; align-items: center; gap: 6px; font-size: 13px; }
     .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
- 
-    .ingredients-cell {
-      font-size: 12.5px;
-      color: var(--text-secondary);
-      max-width: 200px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
- 
+    .ingredients-cell { font-size: 12.5px; color: var(--text-secondary); max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .allergy-tags { display: flex; gap: 4px; flex-wrap: wrap; }
- 
-    .allergy-tag {
-      font-size: 11px;
-      font-weight: 500;
-      padding: 2px 7px;
-      border-radius: 4px;
-      background: #FEF2F2;
-      color: #B91C1C;
-      border: 1px solid #FECACA;
-      white-space: nowrap;
-    }
- 
-    .allergy-tag.dairy  { background: #FEF3C7; color: #B45309; border-color: #FDE68A; }
-    .allergy-tag.nuts   { background: #FEF3C7; color: #B45309; border-color: #FDE68A; }
-    .allergy-tag.gluten { background: #FEF2F2; color: #B91C1C; border-color: #FECACA; }
-    .allergy-tag.soy    { background: #EDE9FE; color: #6D28D9; border-color: #DDD6FE; }
- 
-    .rating-cell {
-      display: flex; align-items: center; gap: 4px;
-      font-size: 13px; font-weight: 500;
-    }
+    .allergy-tag { font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 4px; background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; white-space: nowrap; }
+    .allergy-tag.dairy  { background:#FEF3C7; color:#B45309; border-color:#FDE68A; }
+    .allergy-tag.nuts   { background:#FEF3C7; color:#B45309; border-color:#FDE68A; }
+    .allergy-tag.gluten { background:#FEF2F2; color:#B91C1C; border-color:#FECACA; }
+    .allergy-tag.soy    { background:#EDE9FE; color:#6D28D9; border-color:#DDD6FE; }
+    .rating-cell { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 500; }
     .star { color: var(--star); font-size: 13px; }
- 
     .action-cell { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
- 
-    .action-btn {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 12.5px; font-weight: 500;
-      padding: 5px 10px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      border: none;
-      font-family: 'DM Sans', sans-serif;
-      transition: background 0.15s, color 0.15s;
-    }
- 
-    .btn-edit {
-      background: transparent;
-      color: var(--text-secondary);
-    }
+    .action-btn { display: inline-flex; align-items: center; gap: 4px; font-size: 12.5px; font-weight: 500; padding: 5px 10px; border-radius: var(--radius-sm); cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; transition: background 0.15s, color 0.15s; }
+    .btn-edit { background: transparent; color: var(--text-secondary); }
     .btn-edit:hover { background: var(--bg-blue-tint); color: var(--accent); }
- 
-    .btn-delete {
-      background: transparent;
-      color: #B91C1C;
-    }
+    .btn-delete { background: transparent; color: #B91C1C; }
     .btn-delete:hover { background: #FEF2F2; color: var(--red); }
- 
-    /* empty state */
-    .empty-state {
-      display: none;
-      text-align: center;
-      padding: 3rem 1rem;
-      color: var(--text-secondary);
-      font-size: 13.5px;
-    }
- 
+    .empty-state { display: none; text-align: center; padding: 3rem 1rem; color: var(--text-secondary); font-size: 13.5px; }
+
     /* ── MODAL ── */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.35);
-      z-index: 500;
-      align-items: center;
-      justify-content: center;
-    }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 500; align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; }
- 
-    .modal {
-      background: var(--bg-white);
-      border-radius: var(--radius-lg);
-      padding: 1.75rem;
-      width: 100%;
-      max-width: 460px;
-      max-height: 92vh;
-      overflow-y: auto;
-    }
- 
-    .modal h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: 17px;
-      font-weight: 700;
-      margin-bottom: 1.25rem;
-    }
- 
+    .modal { background: var(--bg-white); border-radius: var(--radius-lg); padding: 1.75rem; width: 100%; max-width: 460px; max-height: 92vh; overflow-y: auto; }
+    .modal h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 1.25rem; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem; }
     .form-full { grid-column: 1 / -1; }
- 
     .form-group { display: flex; flex-direction: column; gap: 5px; }
- 
-    .form-label {
-      font-size: 12.5px;
-      font-weight: 500;
-      color: var(--text-primary);
-    }
- 
-    .form-input, .form-select, .form-textarea {
-      border: 1px solid var(--border-med);
-      border-radius: var(--radius-sm);
-      padding: 0 0.875rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px;
-      color: var(--text-primary);
-      background: var(--bg-white);
-      outline: none;
-      height: 38px;
-      transition: border-color 0.15s, box-shadow 0.15s;
-    }
- 
-    .form-textarea {
-      height: auto;
-      padding: 0.5rem 0.875rem;
-      resize: vertical;
-      min-height: 64px;
-    }
- 
-    .form-input:focus, .form-select:focus, .form-textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(29,106,229,0.1);
-    }
- 
-    .form-select {
-      appearance: none;
-      background: var(--bg-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center;
-      padding-right: 2rem;
-      cursor: pointer;
-    }
- 
-    .allergy-checkboxes {
-      display: flex; flex-wrap: wrap; gap: 8px;
-    }
- 
-    .allergy-check {
-      display: flex; align-items: center; gap: 5px;
-      font-size: 12.5px; color: var(--text-secondary);
-      cursor: pointer; user-select: none;
-    }
- 
+    .form-label { font-size: 12.5px; font-weight: 500; color: var(--text-primary); }
+    .form-input, .form-select, .form-textarea { border: 1px solid var(--border-med); border-radius: var(--radius-sm); padding: 0 0.875rem; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-primary); background: var(--bg-white); outline: none; height: 38px; transition: border-color 0.15s, box-shadow 0.15s; }
+    .form-textarea { height: auto; padding: 0.5rem 0.875rem; resize: vertical; min-height: 64px; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(29,106,229,0.1); }
+    .form-select { appearance: none; background: var(--bg-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center; padding-right: 2rem; cursor: pointer; }
+    .allergy-checkboxes { display: flex; flex-wrap: wrap; gap: 8px; }
+    .allergy-check { display: flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--text-secondary); cursor: pointer; user-select: none; }
     .allergy-check input { accent-color: var(--red); cursor: pointer; }
- 
-    .modal-footer {
-      display: flex; gap: 0.6rem; justify-content: flex-end;
-      margin-top: 1.25rem;
-    }
- 
-    .btn-outline {
-      height: 36px; padding: 0 14px;
-      background: var(--bg-white);
-      color: var(--text-primary);
-      border: 1px solid var(--border-med);
-      border-radius: var(--radius-sm);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 13px; font-weight: 500;
-      cursor: pointer;
-      display: inline-flex; align-items: center;
-      transition: border-color 0.15s, color 0.15s;
-    }
+    .modal-footer { display: flex; gap: 0.6rem; justify-content: flex-end; margin-top: 1.25rem; }
+    .btn-outline { height: 36px; padding: 0 14px; background: var(--bg-white); color: var(--text-primary); border: 1px solid var(--border-med); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; transition: border-color 0.15s, color 0.15s; }
     .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.35); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
   </style>
 </head>
 <body>
- 
+
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <a href="home_page.html" class="sidebar-logo">
@@ -485,45 +141,43 @@
       </div>
       StreetLink
     </a>
- 
     <nav class="sidebar-nav">
-      <a href="vendors-dashboard.html" class="nav-item" onclick="setNav(this)">
+      <a href="vendors-dashboard.html" class="nav-item">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
         Dashboard
       </a>
-      <a href="vendors_menu.html" class="nav-item active" onclick="setNav(this)">
+      <a href="vendors_menu.html" class="nav-item active">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
         My Menu
       </a>
-      <a href="vendors_add_item.html" class="nav-item" onclick="setNav(this); openModal()">
+      <a href="vendors_add_item.html" class="nav-item">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
         Add Menu Item
       </a>
-      <a href="vendors_profile.html" class="nav-item" onclick="setNav(this)">
+      <a href="vendors_profile.html" class="nav-item">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         My Profile
       </a>
     </nav>
- 
     <div class="sidebar-bottom">
-      <a href="#" class="nav-item-bottom">
+      <a href="vendors_profile.html" class="nav-item-bottom">
         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
         Settings
       </a>
-      <a href="home_page.html" class="nav-item-bottom">
+      <a href="#" class="nav-item-bottom" id="signOutBtn">
         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
         Sign out
       </a>
       <div class="user-row">
-        <div class="user-avatar">JD</div>
+        <div class="user-avatar" id="userAvatar">?</div>
         <div>
-          <div class="user-name">John Doe</div>
-          <div class="user-email">john@streetlink.com</div>
+          <div class="user-name" id="userName">Loading…</div>
+          <div class="user-email" id="userEmail"></div>
         </div>
       </div>
     </div>
   </aside>
- 
+
   <!-- MAIN -->
   <main class="main">
     <div class="page-toprow">
@@ -531,22 +185,20 @@
         <h1 class="page-title">My Menu</h1>
         <p class="page-subtitle">Manage your food items, prices, and details</p>
       </div>
-      <button class="btn-primary" onclick="openModal()">
+      <button class="btn-primary" id="openModalBtn">
         <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Add Food Item
       </button>
     </div>
- 
-    <!-- SEARCH -->
+
     <div class="search-wrap">
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      <input type="text" placeholder="Search menu items..." oninput="filterMenu(this.value)" />
+      <input type="text" id="searchInput" placeholder="Search menu items..." />
     </div>
- 
-    <!-- MENU TABLE -->
+
     <div class="section-card">
       <div class="section-header">
-        <h2 id="sectionTitle">Menu Items (6)</h2>
+        <h2 id="sectionTitle">Menu Items (0)</h2>
         <p>Click Edit to modify item details or Delete to remove items</p>
       </div>
       <div class="table-wrap">
@@ -570,9 +222,9 @@
       </div>
     </div>
   </main>
- 
+
   <!-- MODAL -->
-  <div class="modal-overlay" id="modalOverlay" onclick="outsideClose(event)">
+  <div class="modal-overlay" id="modalOverlay">
     <div class="modal">
       <h3 id="modalTitle">Add Food Item</h3>
       <div class="form-grid">
@@ -622,167 +274,16 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn-outline" onclick="closeModal()">Cancel</button>
-        <button class="btn-primary" id="modalSaveBtn" onclick="saveItem()">Add Item</button>
+        <button class="btn-outline" id="modalCancelBtn">Cancel</button>
+        <button class="btn-primary" id="modalSaveBtn">Add Item</button>
       </div>
     </div>
   </div>
- 
-  <script>
-    const catClass = { Chaat: 'cat-chaat', Momos: 'cat-momos', Main: 'cat-main', Snacks: 'cat-snacks', Rolls: 'cat-rolls', Beverages: 'cat-beverages' };
-    const allergyClass = { Gluten: 'gluten', Dairy: 'dairy', Nuts: 'nuts', Soy: 'soy', Egg: '' };
-    const foodEmoji = { Chaat: '🥙', Momos: '🥟', Main: '🍛', Snacks: '🍟', Rolls: '🌯', Beverages: '☕' };
- 
-    let menuItems = [
-      { id: 1, name: 'Pani Puri',      price: 40, category: 'Chaat', isVeg: true,  ingredients: 'Semolina puri, tangy tamarind water, chickpeas, spiced potato', allergies: ['Gluten'],         rating: 4.9 },
-      { id: 2, name: 'Aloo Tikki',     price: 50, category: 'Chaat', isVeg: true,  ingredients: 'Potato patty, green chutney, tamarind sauce, curd',              allergies: ['Dairy'],          rating: 4.7 },
-      { id: 3, name: 'Dahi Bhalla',    price: 60, category: 'Chaat', isVeg: true,  ingredients: 'Lentil dumplings, fresh yogurt, boondi, tamarind chutney',       allergies: ['Dairy','Gluten'], rating: 4.8 },
-      { id: 4, name: 'Samosa Chaat',   price: 55, category: 'Chaat', isVeg: true,  ingredients: 'Crushed samosa, chickpeas, curd, chutneys, sev',                 allergies: ['Dairy','Gluten'], rating: 4.8 },
-      { id: 5, name: 'Chicken Momos',  price: 70, category: 'Momos', isVeg: false, ingredients: 'Chicken filling, flour wrapper, spiced soy dipping sauce',       allergies: ['Gluten'],         rating: 4.6 },
-      { id: 6, name: 'Chole Bhature',  price: 80, category: 'Main',  isVeg: true,  ingredients: 'Spiced chickpeas, fluffy fried bread, pickle, onion salad',      allergies: ['Gluten'],         rating: 4.9 },
-    ];
- 
-    let nextId = 7;
-    let editingId = null;
-    let searchQuery = '';
- 
-    function renderTable() {
-      const filtered = menuItems.filter(i =>
-        i.name.toLowerCase().includes(searchQuery) ||
-        i.category.toLowerCase().includes(searchQuery) ||
-        i.ingredients.toLowerCase().includes(searchQuery)
-      );
- 
-      document.getElementById('sectionTitle').textContent = `Menu Items (${filtered.length})`;
-      const tbody = document.getElementById('menuBody');
-      const empty = document.getElementById('emptyState');
- 
-      if (!filtered.length) {
-        tbody.innerHTML = '';
-        empty.style.display = 'block';
-        return;
-      }
-      empty.style.display = 'none';
- 
-      tbody.innerHTML = filtered.map(item => `
-        <tr id="row-${item.id}">
-          <td><div class="food-thumb">${foodEmoji[item.category] || '🍽'}</div></td>
-          <td><span class="food-name">${item.name}</span></td>
-          <td>Rs. ${item.price}</td>
-          <td><span class="cat-badge ${catClass[item.category] || 'cat-chaat'}">${item.category}</span></td>
-          <td>
-            <div class="veg-dot">
-              <span class="dot" style="background:${item.isVeg ? '#16A34A' : '#DC2626'}"></span>
-              ${item.isVeg ? 'Veg' : 'Non-Veg'}
-            </div>
-          </td>
-          <td><div class="ingredients-cell" title="${item.ingredients}">${item.ingredients}</div></td>
-          <td>
-            <div class="allergy-tags">
-              ${item.allergies.map(a => `<span class="allergy-tag ${allergyClass[a] || ''}">${a}</span>`).join('')}
-            </div>
-          </td>
-          <td>
-            <div class="rating-cell"><span class="star">★</span> ${item.rating.toFixed(1)}</div>
-          </td>
-          <td>
-            <div class="action-cell">
-              <button class="action-btn btn-edit" onclick="editItem(${item.id})">
-                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                Edit
-              </button>
-              <button class="action-btn btn-delete" onclick="deleteItem(${item.id})">
-                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
-                Delete
-              </button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
-    }
- 
-    function filterMenu(q) {
-      searchQuery = q.toLowerCase();
-      renderTable();
-    }
- 
-    function deleteItem(id) {
-      const row = document.getElementById(`row-${id}`);
-      if (row) { row.style.opacity = '0'; row.style.transition = 'opacity 0.2s'; }
-      setTimeout(() => {
-        menuItems = menuItems.filter(i => i.id !== id);
-        renderTable();
-      }, 200);
-    }
- 
-    function editItem(id) {
-      const item = menuItems.find(i => i.id === id);
-      if (!item) return;
-      editingId = id;
-      document.getElementById('fName').value = item.name;
-      document.getElementById('fPrice').value = item.price;
-      document.getElementById('fCategory').value = item.category;
-      document.getElementById('fType').value = item.isVeg ? 'Veg' : 'Non-Veg';
-      document.getElementById('fRating').value = item.rating;
-      document.getElementById('fIngredients').value = item.ingredients;
-      document.querySelectorAll('.allergy-checkboxes input').forEach(cb => {
-        cb.checked = item.allergies.includes(cb.value);
-      });
-      document.getElementById('modalTitle').textContent = 'Edit Food Item';
-      document.getElementById('modalSaveBtn').textContent = 'Save Changes';
-      openModal();
-    }
- 
-    function saveItem() {
-      const name = document.getElementById('fName').value.trim();
-      const price = parseInt(document.getElementById('fPrice').value);
-      const category = document.getElementById('fCategory').value;
-      const isVeg = document.getElementById('fType').value === 'Veg';
-      const rating = parseFloat(document.getElementById('fRating').value) || 4.5;
-      const ingredients = document.getElementById('fIngredients').value.trim();
-      const allergies = [...document.querySelectorAll('.allergy-checkboxes input:checked')].map(cb => cb.value);
- 
-      if (!name || !price) return;
- 
-      if (editingId) {
-        const item = menuItems.find(i => i.id === editingId);
-        if (item) Object.assign(item, { name, price, category, isVeg, rating, ingredients, allergies });
-      } else {
-        menuItems.push({ id: nextId++, name, price, category, isVeg, rating, ingredients, allergies });
-      }
-      closeModal();
-      renderTable();
-    }
- 
-    function openModal() {
-      if (!editingId) {
-        document.getElementById('fName').value = '';
-        document.getElementById('fPrice').value = '';
-        document.getElementById('fRating').value = '';
-        document.getElementById('fIngredients').value = '';
-        document.querySelectorAll('.allergy-checkboxes input').forEach(cb => cb.checked = false);
-        document.getElementById('modalTitle').textContent = 'Add Food Item';
-        document.getElementById('modalSaveBtn').textContent = 'Add Item';
-      }
-      document.getElementById('modalOverlay').classList.add('open');
-    }
- 
-    function closeModal() {
-      editingId = null;
-      document.getElementById('modalOverlay').classList.remove('open');
-    }
- 
-    function outsideClose(e) {
-      if (e.target === document.getElementById('modalOverlay')) closeModal();
-    }
- 
-    function setNav(el) {
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      el.classList.add('active');
-    }
- 
-    renderTable();
-  </script>
- 
+
+  <!-- =====================================================
+       FIREBASE
+  ====================================================== -->
+  <script type="module" src="./firebase-app.js"></script>
+
 </body>
 </html>
