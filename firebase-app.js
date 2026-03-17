@@ -91,8 +91,8 @@ window.addEventListener('DOMContentLoaded', () => {
   if (page === 'vendors_menu.html')      initMenuPage();
   if (page === 'vendors_add_item.html')  initAddItemPage();
   if (page === 'vendors_profile.html')   initProfilePage();
-  if (page === 'customer.html')          initCustomerPage();
-  if (page === 'customer_map.html')      initMapPage();
+  // if (page === 'customer.html')          initCustomerPage();
+  // if (page === 'customer_map.html')      initMapPage();
 
   // Sign out on all sidebar pages
   document.querySelectorAll('#signOutBtn').forEach(btn => {
@@ -271,6 +271,7 @@ function initVendorRegisterPage() {
       await setDoc(doc(db, 'vendors', uid), {
         uid, vendorName, stallName, location, phone, email,
         category, foodType, imageUrl,
+        upiId: document.getElementById('upiId')?.value.trim() || '',
         rating: 0, isOpen: true, createdAt: serverTimestamp()
       });
 
@@ -529,12 +530,26 @@ async function initAddItemPage() {
   const user = await requireAuth();
   await loadSidebarUser(user.uid);
 
+  // Load stock for ingredient picker
+try {
+  const stockSnap = await getDocs(collection(db, 'vendors', user.uid, 'stock'));
+  const stockItems = stockSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  if (typeof window.initStockIngredients === 'function') {
+    window.initStockIngredients(stockItems);
+  }
+} catch (e) {
+  console.warn('Could not load stock:', e.message);
+}
+
   window.saveItem = async function() {
     const name        = document.getElementById('foodName').value.trim();
     const price       = document.getElementById('foodPrice').value;
     const category    = document.getElementById('foodCategory').value;
     const type        = document.querySelector('input[name="foodType"]:checked')?.value || 'Veg';
-    const ingredients = document.getElementById('foodIngredients').value.trim();
+    const description       = document.getElementById('foodDescription')?.value.trim() || '';
+    const pickedIngredients = window.getPickedIngredients ? window.getPickedIngredients() : [];
+    const manualIngredients = document.getElementById('foodIngredients')?.value.trim() || '';
+    const ingredients       = [...pickedIngredients, ...(manualIngredients ? [manualIngredients] : [])].join(', ');
     const allergies   = [...document.querySelectorAll('.allergy-chip.selected')].map(el => el.textContent.trim());
     const imageFile   = document.getElementById('photoInput')?.files[0];
     if (!name || !price) { if (!name) document.getElementById('foodName').focus(); return; }
@@ -547,9 +562,9 @@ async function initAddItemPage() {
       let imageUrl = '';
       if (imageFile) imageUrl = await uploadImage(`vendors/${user.uid}/menu/${Date.now()}.jpg`, imageFile);
       await addDoc(collection(db, 'vendors', user.uid, 'menu'), {
-        name, price: parseInt(price), category,
+        name, price: parseInt(price), category, description,
         isVeg: type === 'Veg' || type === 'Vegan',
-        foodType: type, ingredients, allergies, imageUrl,
+        foodType: type, ingredients, allergies, imageUrl, description,
         rating: 4.5, createdAt: serverTimestamp()
       });
       btn.innerHTML = '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Save Item';
@@ -626,91 +641,4 @@ async function initProfilePage() {
     } catch (err) { alert('Error: ' + err.message); }
     finally { if (btn) btn.disabled = false; }
   };
-}
-
-
-// ================================================================
-//  7. CUSTOMER
-// ================================================================
-async function initCustomerPage() {
-  let allVendors = [], activeCategory = 'All';
-  const snap = await getDocs(collection(db, 'vendors'));
-  allVendors  = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-  window.filterVendors = function() {
-    const query     = (document.getElementById('searchInput')?.value  || '').toLowerCase();
-    const vegOnly   =  document.getElementById('vegOnly')?.checked    || false;
-    const minRating = parseFloat(document.getElementById('ratingFilter')?.value || '0');
-    const status    =  document.getElementById('statusFilter')?.value || 'all';
-
-    const filtered = allVendors.filter(v => {
-      const name   = (v.stallName || v.name || '').toLowerCase();
-      const cat    = (v.category  || '').toLowerCase();
-      const isVeg  = v.foodType === 'veg' || v.isVeg;
-      const isOpen = v.isOpen !== false;
-      return (activeCategory === 'All' || v.category === activeCategory) &&
-             (name.includes(query) || cat.includes(query)) &&
-             (!vegOnly || isVeg) &&
-             Number(v.rating || 0) >= minRating &&
-             (status === 'all' || (status === 'open' && isOpen) || (status === 'closed' && !isOpen));
-    });
-
-    const grid = document.getElementById('vendorGrid');
-    if (grid) grid.innerHTML = filtered.length
-      ? filtered.map(v => {
-          const isVeg  = v.foodType === 'veg' || v.isVeg;
-          const isOpen = v.isOpen !== false;
-          const name   = v.stallName || v.name || 'Vendor';
-          return `
-            <div class="vendor-card">
-              <div class="card-top">
-                <div class="card-info">
-                  <div class="vendor-avatar">
-                    ${v.imageUrl
-                      ? `<img src="${v.imageUrl}" alt="${name}" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-sm);">`
-                      : '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1D6AE5" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path d="M9 22V12h6v10"/></svg>'}
-                  </div>
-                  <div>
-                    <div class="vendor-name">${name}</div>
-                    <div class="vendor-category">
-                      <span style="width:7px;height:7px;border-radius:50%;background:${isVeg ? '#16A34A' : '#DC2626'};display:inline-block;"></span>
-                      ${v.category || ''}
-                    </div>
-                  </div>
-                </div>
-                <span class="status-badge ${isOpen ? 'status-open' : 'status-closed'}">${isOpen ? 'Open' : 'Closed'}</span>
-              </div>
-              <div class="card-meta">
-                <div class="rating"><span class="star">★</span> ${Number(v.rating || 0).toFixed(1)}</div>
-              </div>
-              <div class="price-range">${v.location || ''}</div>
-              <button class="view-menu-btn">View Menu</button>
-            </div>`;
-        }).join('')
-      : `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-secondary);font-size:14px;">No vendors found.</div>`;
-
-    const countEl = document.getElementById('vendorCount');
-    if (countEl) countEl.textContent = `${filtered.length} vendor${filtered.length !== 1 ? 's' : ''} found`;
-  };
-
-  window.setChip = function(el, category) {
-    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    activeCategory = category;
-    window.filterVendors();
-  };
-
-  window.filterVendors();
-}
-
-
-// ================================================================
-//  8. MAP
-// ================================================================
-async function initMapPage() {
-  setTimeout(async () => {
-    const snap    = await getDocs(collection(db, 'vendors'));
-    const vendors = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    if (typeof window.initMapVendors === 'function') window.initMapVendors(vendors);
-  }, 300);
 }

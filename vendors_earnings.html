@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StreetLink – Earnings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg-page:        #F4F6F9;
+      --bg-white:       #FFFFFF;
+      --bg-surface:     #EEF1F6;
+      --bg-blue-tint:   #EBF3FD;
+      --accent:         #1D6AE5;
+      --accent-hover:   #155BC2;
+      --sidebar-bg:     #111827;
+      --sidebar-text:   #9CA3AF;
+      --text-primary:   #111827;
+      --text-secondary: #5B6370;
+      --text-hint:      #9CA3AF;
+      --border:         rgba(0,0,0,0.08);
+      --border-med:     rgba(0,0,0,0.13);
+      --green:          #16A34A;
+      --red:            #DC2626;
+      --star:           #F59E0B;
+      --radius-sm:      8px;
+      --radius-md:      12px;
+      --radius-lg:      16px;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      display: flex;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar { width: 220px; min-height: 100vh; background: var(--sidebar-bg); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 200; }
+    .sidebar-logo { display: flex; align-items: center; gap: 8px; padding: 1.1rem 1.25rem; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .logo-icon { width: 28px; height: 28px; background: var(--accent); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sidebar-nav { flex: 1; padding: 0.75rem 0.75rem 0; }
+    .nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: var(--radius-sm); font-size: 13.5px; color: var(--sidebar-text); cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; margin-bottom: 2px; }
+    .nav-item:hover { background: rgba(255,255,255,0.07); color: #fff; }
+    .nav-item.active { background: var(--accent); color: #fff; }
+    .nav-item svg { flex-shrink: 0; }
+    .sidebar-bottom { padding: 0.75rem; border-top: 1px solid rgba(255,255,255,0.07); }
+    .nav-item-bottom { display: flex; align-items: center; gap: 9px; padding: 8px 12px; border-radius: var(--radius-sm); font-size: 13px; color: var(--sidebar-text); cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; margin-bottom: 2px; }
+    .nav-item-bottom:hover { background: rgba(255,255,255,0.07); color: #fff; }
+    .user-row { display: flex; align-items: center; gap: 9px; padding: 10px 12px 4px; }
+    .user-avatar { width: 32px; height: 32px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #fff; flex-shrink: 0; }
+    .user-info { min-width: 0; }
+    .user-name  { font-size: 13px; font-weight: 500; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-email { font-size: 11px; color: var(--sidebar-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ── MAIN ── */
+    .main { margin-left: 220px; flex: 1; padding: 1.75rem 2rem 3rem; min-height: 100vh; }
+    .page-title    { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 3px; }
+    .page-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 1.75rem; }
+
+    /* ── STAT CARDS ── */
+    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    @media (max-width:1000px) { .stats-row { grid-template-columns: repeat(2,1fr); } }
+    .stat-card { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem 1.4rem; display: flex; align-items: center; gap: 1rem; animation: fadeUp 0.4s ease both; }
+    .stat-card:nth-child(1) { animation-delay: 0.05s; }
+    .stat-card:nth-child(2) { animation-delay: 0.10s; }
+    .stat-card:nth-child(3) { animation-delay: 0.15s; }
+    .stat-card:nth-child(4) { animation-delay: 0.20s; }
+    .stat-icon { width: 44px; height: 44px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .stat-icon.green  { background: #F0FDF4; }
+    .stat-icon.blue   { background: var(--bg-blue-tint); }
+    .stat-icon.yellow { background: #FFFBEB; }
+    .stat-icon.purple { background: #F5F3FF; }
+    .stat-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+    .stat-value { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; }
+    .stat-sub   { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+    /* ── CHART ROW ── */
+    .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    @media (max-width:860px) { .chart-row { grid-template-columns: 1fr; } }
+    .chart-card { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem 1.4rem; animation: fadeUp 0.4s ease 0.25s both; }
+    .chart-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+    .chart-sub   { font-size: 12px; color: var(--text-secondary); margin-bottom: 1.25rem; }
+
+    /* Bar chart */
+    .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 110px; }
+    .bar-wrap  { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
+    .bar       { width: 100%; background: var(--bg-blue-tint); border-radius: 4px 4px 0 0; min-height: 4px; cursor: pointer; transition: background 0.15s, height 0.5s ease; }
+    .bar:hover { background: var(--accent); }
+    .bar-label { font-size: 10.5px; color: var(--text-hint); }
+    .bar-val   { font-size: 10px; color: var(--text-secondary); font-weight: 500; }
+    .bar-today { background: rgba(29,106,229,0.35) !important; }
+
+    /* Method split */
+    .method-split   { display: flex; flex-direction: column; gap: 14px; margin-top: 4px; }
+    .method-row     { display: flex; align-items: center; gap: 10px; }
+    .method-label   { width: 38px; font-size: 12px; color: var(--text-secondary); }
+    .method-bar-bg  { flex: 1; height: 9px; background: var(--bg-surface); border-radius: 20px; overflow: hidden; }
+    .method-bar-fill{ height: 100%; border-radius: 20px; transition: width 0.6s ease; }
+    .method-pct     { width: 36px; text-align: right; font-size: 12px; font-weight: 600; }
+    .method-amt     { font-size: 12px; color: var(--text-secondary); margin-top: 10px; }
+
+    /* ── TOOLBAR ── */
+    .toolbar       { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .toolbar-left  { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+    .toolbar-right { display: flex; align-items: center; gap: 0.6rem; }
+
+    .filter-select {
+      height: 36px; padding: 0 28px 0 10px; border: 1px solid var(--border-med);
+      border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13px;
+      color: var(--text-primary); appearance: none; outline: none; cursor: pointer;
+      background: var(--bg-white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239CA3AF' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 8px center;
+    }
+    .filter-select:focus { border-color: var(--accent); }
+
+    .search-wrap { position: relative; }
+    .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-hint); pointer-events: none; }
+    .search-input { height: 36px; padding: 0 10px 0 32px; border: 1px solid var(--border-med); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text-primary); background: var(--bg-white); outline: none; width: 200px; transition: border-color 0.15s; }
+    .search-input:focus { border-color: var(--accent); }
+    .search-input::placeholder { color: var(--text-hint); }
+
+    .btn { height: 36px; padding: 0 14px; border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; border: none; white-space: nowrap; }
+    .btn-outline { background: var(--bg-white); color: var(--text-primary); border: 1px solid var(--border-med); }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── TABLE CARD ── */
+    .section-card { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; animation: fadeUp 0.4s ease 0.3s both; }
+    .section-header { padding: 1rem 1.5rem 0.8rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .section-header h2 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
+    .section-header p  { font-size: 12.5px; color: var(--text-secondary); margin-top: 2px; }
+    .tx-count { font-size: 12.5px; color: var(--text-secondary); white-space: nowrap; }
+
+    table { width: 100%; border-collapse: collapse; }
+    thead th { font-size: 12px; font-weight: 500; color: var(--text-secondary); text-align: left; padding: 10px 1.5rem; background: var(--bg-page); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.12s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #FAFBFD; }
+    tbody td { padding: 12px 1.5rem; font-size: 13.5px; vertical-align: middle; }
+
+    .tx-id     { font-size: 11.5px; color: var(--text-hint); font-family: monospace; }
+    .tx-amount { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; }
+    .tx-method { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 500; padding: 3px 9px; border-radius: 20px; }
+    .tx-method.upi  { background: #EDE9FE; color: #6D28D9; border: 1px solid #DDD6FE; }
+    .tx-method.cash { background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
+    .tx-status { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; padding: 3px 9px; border-radius: 20px; background: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; }
+    .tx-note   { font-size: 12.5px; color: var(--text-secondary); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .tx-date   { font-size: 12.5px; color: var(--text-secondary); white-space: nowrap; }
+
+    /* State / empty */
+    .state-box { text-align: center; padding: 3.5rem 1rem; color: var(--text-secondary); font-size: 13.5px; }
+    .state-box .ico { font-size: 42px; margin-bottom: 10px; }
+    .state-box p    { font-size: 13px; color: var(--text-hint); margin-top: 6px; }
+
+    /* ── PAGINATION ── */
+    .pagination { display: flex; align-items: center; justify-content: space-between; padding: 12px 1.5rem; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-secondary); }
+    .page-btns  { display: flex; gap: 4px; }
+    .page-btn   { width: 30px; height: 30px; border-radius: var(--radius-sm); border: 1px solid var(--border-med); background: var(--bg-white); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.12s; }
+    .page-btn:hover    { border-color: var(--accent); color: var(--accent); }
+    .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    @keyframes spin    { to { transform: rotate(360deg); } }
+    .spinner-sm { width: 18px; height: 18px; border: 2px solid var(--border-med); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; display: inline-block; }
+    @keyframes fadeUp  { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: translateY(0); } }
+    .fade-row { animation: fadeUp 0.25s ease both; }
+  </style>
+</head>
+<body>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <a href="vendors-dashboard.html" class="sidebar-logo">
+    <div class="logo-icon">
+      <svg width="15" height="15" viewBox="0 0 17 17" fill="none">
+        <path d="M8.5 1.5C5.74 1.5 3.5 3.74 3.5 6.5c0 1.85 1 3.46 2.5 4.33L5.25 15.5h6.5l-.75-4.67A5.01 5.01 0 0013.5 6.5c0-2.76-2.24-5-5-5z" fill="white"/>
+      </svg>
+    </div>
+    StreetLink
+  </a>
+  <nav class="sidebar-nav">
+    <a href="vendors-dashboard.html" class="nav-item">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </a>
+    <a href="vendors_menu.html" class="nav-item">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+      My Menu
+    </a>
+    <a href="vendors_add_item.html" class="nav-item">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      Add Menu Item
+    </a>
+    <a href="vendors_profile.html" class="nav-item">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      My Profile
+    </a>
+    <a href="vendors_payment.html" class="nav-item">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Payments
+    </a>
+    <a href="vendors_earnings.html" class="nav-item active">
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      Earnings
+    </a>
+    <a href="vendors_stock.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+    <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+    <line x1="12" y1="22.08" x2="12" y2="12"/>
+        </svg>
+        Stock Management
+      </a>
+    
+  </nav>
+  <div class="sidebar-bottom">
+    <a href="vendors_profile.html" class="nav-item-bottom">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Settings
+    </a>
+    <a href="#" class="nav-item-bottom" id="signOutBtn">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+      Sign out
+    </a>
+    <div class="user-row">
+      <div class="user-avatar" id="userAvatar">?</div>
+      <div class="user-info">
+        <div class="user-name"  id="userName">Loading…</div>
+        <div class="user-email" id="userEmail"></div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="main">
+  <h1 class="page-title">Earnings</h1>
+  <p class="page-subtitle">Track all transactions and total revenue</p>
+
+  <!-- STAT CARDS -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon green">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#16A34A" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      </div>
+      <div>
+        <div class="stat-label">Total Earnings</div>
+        <div class="stat-value">₹<span id="statTotal">—</span></div>
+        <div class="stat-sub">All time</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon blue">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="1.8"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      </div>
+      <div>
+        <div class="stat-label">Transactions</div>
+        <div class="stat-value"><span id="statCount">—</span></div>
+        <div class="stat-sub">Total orders</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon yellow">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#B45309" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div>
+        <div class="stat-label">Today's Earnings</div>
+        <div class="stat-value">₹<span id="statToday">—</span></div>
+        <div class="stat-sub">Since midnight</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon purple">
+        <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#6D28D9" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div>
+        <div class="stat-label">Avg. Order Value</div>
+        <div class="stat-value">₹<span id="statAvg">—</span></div>
+        <div class="stat-sub">Per transaction</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="chart-row">
+    <div class="chart-card">
+      <div class="chart-title">This Week</div>
+      <div class="chart-sub">Daily earnings (₹)</div>
+      <div class="bar-chart" id="weeklyChart">
+        <div style="margin:auto;"><span class="spinner-sm"></span></div>
+      </div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Payment Methods</div>
+      <div class="chart-sub">UPI vs Cash breakdown</div>
+      <div class="method-split" id="methodSplit">
+        <div style="text-align:center;"><span class="spinner-sm"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <div class="toolbar-left">
+      <div class="search-wrap">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input class="search-input" type="text" id="searchInput" placeholder="Search note or amount…" oninput="applyFilters()" />
+      </div>
+      <select class="filter-select" id="methodFilter" onchange="applyFilters()">
+        <option value="all">All Methods</option>
+        <option value="upi">UPI</option>
+        <option value="cash">Cash</option>
+      </select>
+      <select class="filter-select" id="periodFilter" onchange="applyFilters()">
+        <option value="all">All Time</option>
+        <option value="today">Today</option>
+        <option value="week">This Week</option>
+        <option value="month">This Month</option>
+      </select>
+    </div>
+    <div class="toolbar-right">
+      <button class="btn btn-outline" onclick="exportCSV()">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export CSV
+      </button>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="section-card">
+    <div class="section-header">
+      <div>
+        <h2>Transaction History</h2>
+        <p>All payments received at your stall</p>
+      </div>
+      <span class="tx-count" id="txCount">—</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Amount</th>
+          <th>Method</th>
+          <th>Note</th>
+          <th>Status</th>
+          <th>Date &amp; Time</th>
+        </tr>
+      </thead>
+      <tbody id="txBody"></tbody>
+    </table>
+    <div id="txState" class="state-box">
+      <span class="spinner-sm"></span>
+      <p>Loading transactions…</p>
+    </div>
+    <div class="pagination" id="paginationRow" style="display:none;">
+      <span id="pageInfo">Showing 1–10</span>
+      <div class="page-btns">
+        <button class="page-btn" id="prevBtn" onclick="changePage(-1)">‹</button>
+        <span id="pageNum" style="font-size:13px;padding:0 6px;display:flex;align-items:center;"></span>
+        <button class="page-btn" id="nextBtn" onclick="changePage(1)">›</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ── FIREBASE ── -->
+<script type="module">
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore, doc, getDoc, collection, getDocs }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyAHAaqmBH73l-bwfsghYc2jaR_pdS7aFvg",
+    authDomain:        "street-vendor-5162e.firebaseapp.com",
+    projectId:         "street-vendor-5162e",
+    storageBucket:     "street-vendor-5162e.firebasestorage.app",
+    messagingSenderId: "387560067719",
+    appId:             "1:387560067719:web:9280a2d12e8fbfbe411e22"
+  };
+
+  const app  = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) { window.location.href = 'login.html'; return; }
+
+    // Sidebar
+    try {
+      const vSnap = await getDoc(doc(db, 'vendors', user.uid));
+      if (vSnap.exists()) {
+        const d = vSnap.data();
+        const initials = (d.stallName || d.vendorName || 'V')
+          .split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+        document.getElementById('userAvatar').textContent = initials;
+        document.getElementById('userName').textContent   = d.vendorName || d.stallName || 'Vendor';
+        document.getElementById('userEmail').textContent  = d.email || '';
+      }
+    } catch (_) {}
+
+    // Load transactions
+    try {
+      const snap = await getDocs(collection(db, 'vendors', user.uid, 'transactions'));
+      const txs  = snap.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => {
+          const da = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+          const db2 = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+          return db2 - da;
+        });
+      window._allTx = txs;
+      initPage(txs);
+    } catch (e) {
+      console.warn('Error loading transactions:', e.message);
+      window._allTx = [];
+      initPage([]);
+    }
+  });
+
+  document.getElementById('signOutBtn').addEventListener('click', e => {
+    e.preventDefault();
+    signOut(auth).then(() => window.location.href = 'login.html');
+  });
+</script>
+</script>
+
+<script>
+  const PER_PAGE = 10;
+  let filtered = [], currentPage = 1;
+
+  function initPage(txs) {
+    computeStats(txs);
+    renderWeeklyChart(txs);
+    renderMethodSplit(txs);
+    filtered = txs;
+    currentPage = 1;
+    renderTable();
+  }
+
+  function computeStats(txs) {
+    const total    = txs.reduce((s, t) => s + (t.amount || 0), 0);
+    const count    = txs.length;
+    const avg      = count ? Math.round(total / count) : 0;
+    const todayStr = new Date().toDateString();
+    const today    = txs.filter(t => toDate(t).toDateString() === todayStr)
+                        .reduce((s, t) => s + (t.amount || 0), 0);
+    document.getElementById('statTotal').textContent = total.toLocaleString('en-IN');
+    document.getElementById('statCount').textContent = count;
+    document.getElementById('statToday').textContent = today.toLocaleString('en-IN');
+    document.getElementById('statAvg').textContent   = avg.toLocaleString('en-IN');
+  }
+
+  function renderWeeklyChart(txs) {
+    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const now  = new Date();
+    const week = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(now);
+      d.setDate(now.getDate() - (6 - i));
+      return { label: days[d.getDay()], dateStr: d.toDateString(), total: 0, isToday: i === 6 };
+    });
+    txs.forEach(t => {
+      const entry = week.find(w => w.dateStr === toDate(t).toDateString());
+      if (entry) entry.total += (t.amount || 0);
+    });
+    const maxVal = Math.max(...week.map(w => w.total), 1);
+    document.getElementById('weeklyChart').innerHTML = week.map(w => `
+      <div class="bar-wrap">
+        <div class="bar-val">${w.total > 999 ? (w.total/1000).toFixed(1)+'k' : w.total || ''}</div>
+        <div class="bar ${w.isToday ? 'bar-today' : ''}" style="height:${Math.max((w.total/maxVal)*95,4)}px" title="₹${w.total}"></div>
+        <div class="bar-label" style="${w.isToday ? 'color:var(--accent);font-weight:600;' : ''}">${w.label}</div>
+      </div>`).join('');
+  }
+
+  function renderMethodSplit(txs) {
+    const upiAmt  = txs.filter(t => t.method === 'upi').reduce((s,t) => s+(t.amount||0), 0);
+    const cashAmt = txs.filter(t => t.method === 'cash').reduce((s,t) => s+(t.amount||0), 0);
+    const total   = upiAmt + cashAmt || 1;
+    const upiPct  = Math.round((upiAmt/total)*100);
+    const cashPct = Math.round((cashAmt/total)*100);
+    document.getElementById('methodSplit').innerHTML = `
+      <div class="method-row">
+        <span class="method-label" style="color:#6D28D9;">UPI</span>
+        <div class="method-bar-bg"><div class="method-bar-fill" style="width:${upiPct}%;background:#6D28D9;"></div></div>
+        <span class="method-pct" style="color:#6D28D9;">${upiPct}%</span>
+      </div>
+      <div class="method-row">
+        <span class="method-label" style="color:#16A34A;">Cash</span>
+        <div class="method-bar-bg"><div class="method-bar-fill" style="width:${cashPct}%;background:#16A34A;"></div></div>
+        <span class="method-pct" style="color:#16A34A;">${cashPct}%</span>
+      </div>
+      <div class="method-amt">UPI: ₹${upiAmt.toLocaleString('en-IN')} &nbsp;·&nbsp; Cash: ₹${cashAmt.toLocaleString('en-IN')}</div>`;
+  }
+
+  function applyFilters() {
+    const q      = document.getElementById('searchInput').value.toLowerCase();
+    const method = document.getElementById('methodFilter').value;
+    const period = document.getElementById('periodFilter').value;
+    const now    = new Date();
+    filtered = (window._allTx || []).filter(t => {
+      const d           = toDate(t);
+      const matchSearch = String(t.amount||'').includes(q) || (t.note||'').toLowerCase().includes(q);
+      const matchMethod = method === 'all' || t.method === method;
+      let   matchPeriod = true;
+      if (period === 'today') matchPeriod = d.toDateString() === now.toDateString();
+      if (period === 'week')  matchPeriod = (now - d) < 7 * 86400000;
+      if (period === 'month') matchPeriod = d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      return matchSearch && matchMethod && matchPeriod;
+    });
+    currentPage = 1;
+    renderTable();
+  }
+
+  function renderTable() {
+    const tbody  = document.getElementById('txBody');
+    const state  = document.getElementById('txState');
+    const pagRow = document.getElementById('paginationRow');
+    const cnt    = document.getElementById('txCount');
+    cnt.textContent = `${filtered.length} transaction${filtered.length !== 1 ? 's' : ''}`;
+    if (!filtered.length) {
+      tbody.innerHTML = '';
+      state.style.display = 'block';
+      state.innerHTML = `<div class="ico">💸</div><b>No transactions yet</b><p>Payments you generate will appear here.</p>`;
+      pagRow.style.display = 'none';
+      return;
+    }
+    state.style.display  = 'none';
+    pagRow.style.display = 'flex';
+    const start = (currentPage - 1) * PER_PAGE;
+    const slice = filtered.slice(start, start + PER_PAGE);
+    const pages = Math.ceil(filtered.length / PER_PAGE);
+    tbody.innerHTML = slice.map((t, i) => {
+      const d    = toDate(t);
+      const date = d.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+      const time = d.toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
+      return `<tr class="fade-row">
+        <td><span class="tx-id">#${String(start+i+1).padStart(3,'0')}</span></td>
+        <td><span class="tx-amount">₹${(t.amount||0).toLocaleString('en-IN')}</span></td>
+        <td><span class="tx-method ${t.method==='upi'?'upi':'cash'}">${t.method==='upi'?'📲 UPI':'💵 Cash'}</span></td>
+        <td><span class="tx-note">${t.note||'—'}</span></td>
+        <td><span class="tx-status">✓ Paid</span></td>
+        <td><span class="tx-date">${date}, ${time}</span></td>
+      </tr>`;
+    }).join('');
+    document.getElementById('pageInfo').textContent = `Showing ${start+1}–${Math.min(start+PER_PAGE, filtered.length)} of ${filtered.length}`;
+    document.getElementById('pageNum').textContent  = `${currentPage} / ${pages}`;
+    document.getElementById('prevBtn').disabled     = currentPage === 1;
+    document.getElementById('nextBtn').disabled     = currentPage === pages;
+  }
+
+  function changePage(dir) {
+    currentPage = Math.min(Math.max(currentPage + dir, 1), Math.ceil(filtered.length / PER_PAGE));
+    renderTable();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function exportCSV() {
+    const rows = [['#','Amount (₹)','Method','Note','Status','Date','Time']];
+    filtered.forEach((t, i) => {
+      const d = toDate(t);
+      rows.push([i+1, t.amount||0, t.method||'', t.note||'', 'Paid', d.toLocaleDateString('en-IN'), d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})]);
+    });
+    const csv  = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const a    = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `earnings-${new Date().toISOString().slice(0,10)}.csv` });
+    a.click();
+  }
+
+  function toDate(t) {
+    return t.createdAt?.toDate ? t.createdAt.toDate() : new Date(t.createdAt || 0);
+  }
+
+  window.applyFilters = applyFilters;
+  window.changePage   = changePage;
+  window.exportCSV    = exportCSV;
+</script>
+
+</body>
+</body>
+
+</body>
+</html>
