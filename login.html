@@ -1,86 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>StreetLink – Login</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--bg-page:#F4F6F9;--bg-white:#FFFFFF;--bg-surface:#EEF1F6;--bg-blue-tint:#EBF3FD;--accent:#1D6AE5;--accent-hover:#155BC2;--text-primary:#111827;--text-secondary:#5B6370;--text-hint:#9CA3AF;--border:rgba(0,0,0,0.09);--border-med:rgba(0,0,0,0.15);--red:#DC2626;--green:#16A34A;--radius-sm:8px;--radius-md:12px;--radius-lg:16px}
-    body{font-family:'DM Sans',sans-serif;background:var(--bg-page);color:var(--text-primary);min-height:100vh;-webkit-font-smoothing:antialiased}
-    nav{background:var(--bg-white);border-bottom:1px solid var(--border);height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;position:sticky;top:0;z-index:100}
-    .logo{display:flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--text-primary);text-decoration:none}
-    .logo-icon{width:30px;height:30px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center}
-    .nav-links{display:flex;align-items:center;gap:1.25rem;font-size:14px}
-    .nav-links a{text-decoration:none;color:var(--text-secondary);display:flex;align-items:center;gap:5px;transition:color 0.15s}
-    .nav-links a:hover{color:var(--text-primary)}
-    .nav-toggle{width:28px;height:28px;border:1px solid var(--border-med);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--text-secondary)}
-    .page{min-height:calc(100vh - 54px);display:flex;align-items:center;justify-content:center;padding:2rem 1.5rem}
-    .card{background:var(--bg-white);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2.25rem 2rem 2rem;width:100%;max-width:420px}
-    .card-header{text-align:center;margin-bottom:1.85rem}
-    .header-icon{width:52px;height:52px;background:var(--bg-blue-tint);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem}
-    .card-header h1{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text-primary);margin-bottom:5px}
-    .card-header p{font-size:13.5px;color:var(--text-secondary)}
-    .role-tabs{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:1.5rem;background:var(--bg-surface);padding:4px;border-radius:var(--radius-md)}
-    .role-tab{padding:8px 0;border:none;border-radius:calc(var(--radius-md) - 3px);background:transparent;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:500;color:var(--text-secondary);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background 0.15s,color 0.15s,box-shadow 0.15s}
-    .role-tab.active{background:var(--bg-white);color:var(--accent);box-shadow:0 1px 4px rgba(0,0,0,0.08)}
-    .form-group{margin-bottom:1rem}
-    .form-label{display:block;font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:6px}
-    .input-wrap{position:relative;display:flex;align-items:center}
-    .input-icon{position:absolute;left:11px;color:var(--text-hint);display:flex;align-items:center;pointer-events:none}
-    .input-right{position:absolute;right:11px;color:var(--text-hint);display:flex;align-items:center;cursor:pointer;background:none;border:none;padding:0;transition:color 0.15s}
-    .input-right:hover{color:var(--text-secondary)}
-    .form-input{width:100%;height:42px;border:1px solid var(--border-med);border-radius:var(--radius-sm);padding:0 2.5rem 0 2.25rem;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text-primary);background:var(--bg-white);outline:none;transition:border-color 0.15s,box-shadow 0.15s}
-    .form-input::placeholder{color:var(--text-hint)}
-    .form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(29,106,229,0.1)}
-    .form-input.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(220,38,38,0.1)}
-    .error-msg{font-size:11.5px;color:var(--red);margin-top:4px;display:none}
-    .form-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
-    .remember-label{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text-secondary);cursor:pointer;user-select:none}
-    .remember-label input[type="checkbox"]{width:14px;height:14px;accent-color:var(--accent);cursor:pointer}
-    .forgot-link{font-size:13px;color:var(--accent);text-decoration:none;transition:opacity 0.15s}
-    .forgot-link:hover{opacity:0.75}
-    .submit-btn{width:100%;height:44px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-md);font-family:'DM Sans',sans-serif;font-size:14.5px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background 0.15s,transform 0.1s;margin-bottom:1rem}
-    .submit-btn:hover{background:var(--accent-hover)}
-    .submit-btn:active{transform:scale(0.985)}
-    .submit-btn:disabled{opacity:0.7;cursor:not-allowed}
-    .divider{display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;color:var(--text-hint);font-size:12px}
-    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border-med)}
-    .google-btn{width:100%;height:42px;background:var(--bg-white);color:var(--text-primary);border:1px solid var(--border-med);border-radius:var(--radius-md);font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;transition:background 0.15s,border-color 0.15s;margin-bottom:1.25rem}
-    .google-btn:hover{background:var(--bg-surface)}
-    .card-footer{text-align:center;font-size:13px;color:var(--text-secondary)}
-    .card-footer a{color:var(--accent);text-decoration:none;font-weight:500}
-    .card-footer a:hover{text-decoration:underline}
-    .alert{display:none;align-items:center;gap:8px;border-radius:var(--radius-sm);padding:10px 12px;font-size:13px;margin-bottom:1rem}
-    .alert.error{background:#FEF2F2;border:1px solid #FECACA;color:#B91C1C}
-    .alert.success{background:#DCFCE7;border:1px solid #BBF7D0;color:#15803D}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.35);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite}
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --page-bg: #F4F6F9;
+      --white: #FFFFFF;
+      --surface: #EEF1F6;
+      --blue-light: #EBF3FD;
+      --brand: #1D6AE5;
+      --brand-dark: #155BC2;
+      --text: #111827;
+      --text-sub: #5B6370;
+      --muted: #9CA3AF;
+      --line: rgba(0,0,0,0.09);
+      --line-md: rgba(0,0,0,0.15);
+      --red: #DC2626;
+      --green: #16A34A;
+      --r-sm: 8px;
+      --r-md: 12px;
+      --r-lg: 16px;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+      height: 54px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .logo { display: flex; align-items: center; gap: 8px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 17px; color: var(--text); text-decoration: none; }
+    .logo-icon { width: 30px; height: 30px; background: var(--brand); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .nav-links { display: flex; align-items: center; gap: 1.25rem; font-size: 14px; }
+    .nav-links a { text-decoration: none; color: var(--text-sub); display: flex; align-items: center; gap: 5px; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--text); }
+
+    .page { min-height: calc(100vh - 54px); display: flex; align-items: center; justify-content: center; padding: 2rem 1.5rem; }
+
+    .card { background: var(--white); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 2.25rem 2rem 2rem; width: 100%; max-width: 420px; }
+    .card-header { text-align: center; margin-bottom: 1.85rem; }
+    .header-icon { width: 52px; height: 52px; background: var(--blue-light); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+    .card-header h1 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 5px; }
+    .card-header p { font-size: 13.5px; color: var(--text-sub); }
+
+    .alert { display: none; align-items: center; gap: 8px; border-radius: var(--r-sm); padding: 10px 12px; font-size: 13px; margin-bottom: 1rem; }
+    .alert.error   { background: #FEF2F2; border: 1px solid #FECACA; color: #B91C1C; }
+    .alert.success { background: #DCFCE7; border: 1px solid #BBF7D0; color: #15803D; }
+
+    .form-group { margin-bottom: 1rem; }
+    .form-label { display: block; font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+
+    .input-wrap { position: relative; display: flex; align-items: center; }
+    .input-icon  { position: absolute; left: 11px; color: var(--muted); display: flex; align-items: center; pointer-events: none; }
+    .input-right { position: absolute; right: 11px; color: var(--muted); display: flex; align-items: center; cursor: pointer; background: none; border: none; padding: 0; transition: color 0.15s; }
+    .input-right:hover { color: var(--text-sub); }
+
+    .form-input {
+      width: 100%; height: 42px;
+      border: 1px solid var(--line-md);
+      border-radius: var(--r-sm);
+      padding: 0 2.5rem 0 2.25rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px; color: var(--text);
+      background: var(--white); outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .form-input::placeholder { color: var(--muted); }
+    .form-input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(29,106,229,0.1); }
+    .form-input.error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
+
+    .error-msg { font-size: 11.5px; color: var(--red); margin-top: 4px; display: none; }
+
+    .form-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+    .remember-label { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-sub); cursor: pointer; user-select: none; }
+    .remember-label input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--brand); cursor: pointer; }
+    .forgot-link { font-size: 13px; color: var(--brand); text-decoration: none; transition: opacity 0.15s; }
+    .forgot-link:hover { opacity: 0.75; }
+
+    .submit-btn {
+      width: 100%; height: 44px;
+      background: var(--brand); color: #fff;
+      border: none; border-radius: var(--r-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14.5px; font-weight: 500;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background 0.15s, transform 0.1s;
+      margin-bottom: 1rem;
+    }
+    .submit-btn:hover   { background: var(--brand-dark); }
+    .submit-btn:active  { transform: scale(0.985); }
+    .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    .card-footer { text-align: center; font-size: 13px; color: var(--text-sub); margin-top: 1.25rem; }
+    .card-footer a { color: var(--brand); text-decoration: none; font-weight: 500; }
+    .card-footer a:hover { text-decoration: underline; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.35); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
   </style>
 </head>
 <body>
+
   <nav>
     <a href="home_page.html" class="logo">
-      <div class="logo-icon"><svg width="16" height="16" viewBox="0 0 17 17" fill="none"><path d="M8.5 1.5C5.74 1.5 3.5 3.74 3.5 6.5c0 1.85 1 3.46 2.5 4.33L5.25 15.5h6.5l-.75-4.67A5.01 5.01 0 0013.5 6.5c0-2.76-2.24-5-5-5z" fill="white"/></svg></div>
+      <div class="logo-icon">
+        <svg width="16" height="16" viewBox="0 0 17 17" fill="none">
+          <path d="M8.5 1.5C5.74 1.5 3.5 3.74 3.5 6.5c0 1.85 1 3.46 2.5 4.33L5.25 15.5h6.5l-.75-4.67A5.01 5.01 0 0013.5 6.5c0-2.76-2.24-5-5-5z" fill="white"/>
+        </svg>
+      </div>
       StreetLink
     </a>
     <div class="nav-links">
-      <a href="home_page.html"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg> Home</a>
-      <div class="nav-toggle">&#9788;</div>
+      <a href="home_page.html">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
+        Home
+      </a>
     </div>
   </nav>
+
   <div class="page">
     <div class="card">
       <div class="card-header">
-        <div class="header-icon"><svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <div class="header-icon">
+          <svg width="26" height="26" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
         <h1>Welcome Back</h1>
         <p>Sign in to your StreetLink account</p>
       </div>
-      <div class="role-tabs">
-        <!-- <button class="role-tab active" id="tabCustomer" onclick="setRole('customer')"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Customer</button> -->
-        <!-- <button class="role-tab" id="tabVendor" onclick="setRole('vendor')"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path d="M9 22V12h6v10"/></svg> Vendor</button> -->
+
+      <div class="alert" id="alertBox">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="alertText"></span>
       </div>
-      <div class="alert" id="alertBox"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="alertText"></span></div>
+
       <form id="loginForm" novalidate>
         <div class="form-group">
           <label class="form-label">Email address</label>
@@ -90,31 +149,34 @@
           </div>
           <div class="error-msg" id="emailErr">Please enter a valid email address.</div>
         </div>
+
         <div class="form-group">
           <label class="form-label">Password</label>
           <div class="input-wrap">
             <span class="input-icon"><svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span>
             <input class="form-input" type="password" id="password" placeholder="Enter your password" autocomplete="current-password" />
-            <button type="button" class="input-right" onclick="togglePassword()"><svg id="eyeIcon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <button type="button" class="input-right" onclick="togglePassword()">
+              <svg id="eyeIcon" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
           </div>
           <div class="error-msg" id="pwdErr">Password must be at least 6 characters.</div>
         </div>
+
         <div class="form-row">
-          <label class="remember-label"><input type="checkbox" id="remember" /> Remember me</label>
+          <label class="remember-label">
+            <input type="checkbox" id="remember" /> Remember me
+          </label>
           <a href="#" class="forgot-link" onclick="forgotPassword(event)">Forgot password?</a>
         </div>
+
         <button type="submit" class="submit-btn" id="submitBtn">Sign In</button>
       </form>
-      <!-- <div class="divider">or continue with</div>
-      <button class="google-btn" id="googleBtn">
-        <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Continue with Google
-      </button> -->
+
       <div class="card-footer">Don't have an account? <a href="vendor_register.html">Sign up as Vendor</a></div>
     </div>
   </div>
 
-  <!-- Firebase: all logic handled by firebase-app.js -->
   <script type="module" src="./firebase-app.js"></script>
+
 </body>
 </html>

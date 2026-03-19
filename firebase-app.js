@@ -756,6 +756,11 @@ async function initProfilePage() {
       : '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-secondary);">No menu items yet.</div>';
   }
 
+  window._saveField = async function(field, value) {
+    const update = { [field]: value, updatedAt: serverTimestamp() };
+    await updateDoc(doc(db, 'vendors', user.uid), update);
+  };
+
   window.saveProfile = async function() {
     const btn = document.getElementById('saveBtn');
     if (btn) btn.disabled = true;
