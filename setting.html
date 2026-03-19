@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StreetLink – Settings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --page-bg: #F4F6F9;
+      --white: #FFFFFF;
+      --surface: #EEF1F6;
+      --blue-light: #EBF3FD;
+      --brand: #1D6AE5;
+      --brand-dark: #155BC2;
+      --sidebar: #111827;
+      --muted: #9CA3AF;
+      --text: #111827;
+      --text-sub: #5B6370;
+      --line: rgba(0,0,0,0.08);
+      --line-md: rgba(0,0,0,0.13);
+      --green: #16A34A;
+      --red: #DC2626;
+      --star: #F59E0B;
+      --r-sm: 8px;
+      --r-md: 12px;
+      --r-lg: 16px;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--page-bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .sidebar { width: 220px; min-height: 100vh; background: var(--sidebar); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 200; }
+    .sidebar-logo { display: flex; align-items: center; gap: 8px; padding: 1.1rem 1.25rem; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .logo-icon { width: 28px; height: 28px; background: var(--brand); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sidebar-nav { flex: 1; padding: 0.75rem 0.75rem 0; }
+    .nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: var(--r-sm); font-size: 13.5px; color: var(--muted); cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; margin-bottom: 2px; }
+    .nav-item:hover { background: rgba(255,255,255,0.07); color: #fff; }
+    .nav-item.active { background: var(--brand); color: #fff; }
+    .nav-item svg { flex-shrink: 0; }
+    .sidebar-bottom { padding: 0.75rem; border-top: 1px solid rgba(255,255,255,0.07); }
+    .nav-item-sm { display: flex; align-items: center; gap: 9px; padding: 8px 12px; border-radius: var(--r-sm); font-size: 13px; color: var(--muted); cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; margin-bottom: 2px; }
+    .nav-item-sm:hover { background: rgba(255,255,255,0.07); color: #fff; }
+    .user-row { display: flex; align-items: center; gap: 9px; padding: 10px 12px 4px; }
+    .user-avatar { width: 32px; height: 32px; background: var(--brand); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #fff; flex-shrink: 0; }
+    .user-info { min-width: 0; }
+    .user-name  { font-size: 13px; font-weight: 500; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-email { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .main { margin-left: 220px; flex: 1; padding: 1.75rem 2rem 3rem; min-height: 100vh; }
+    .page-title { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+    .page-sub   { font-size: 13px; color: var(--text-sub); margin-bottom: 1.75rem; }
+
+    .settings-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; align-items: start; }
+    @media (max-width: 860px) { .settings-layout { grid-template-columns: 1fr; } }
+
+    .card { background: var(--white); border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; margin-bottom: 1.25rem; }
+    .card:last-child { margin-bottom: 0; }
+    .card-header { padding: 1.1rem 1.5rem 0.85rem; border-bottom: 1px solid var(--line); }
+    .card-header h2 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .card-header p { font-size: 12.5px; color: var(--text-sub); }
+    .card-body { padding: 1.25rem 1.5rem; }
+
+    .setting-row { display: flex; align-items: center; justify-content: space-between; padding: 0.875rem 0; border-bottom: 1px solid var(--line); gap: 1rem; }
+    .setting-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .setting-row:first-child { padding-top: 0; }
+    .setting-info { flex: 1; }
+    .setting-label { font-size: 13.5px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+    .setting-desc  { font-size: 12px; color: var(--text-sub); }
+
+    .toggle-switch { position: relative; width: 40px; height: 22px; cursor: pointer; display: inline-block; flex-shrink: 0; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .t-track { position: absolute; inset: 0; background: #D1D5DB; border-radius: 22px; transition: background 0.2s; }
+    .t-thumb { position: absolute; width: 16px; height: 16px; top: 3px; left: 3px; background: #fff; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+    .toggle-switch input:checked ~ .t-track { background: var(--brand); }
+    .toggle-switch input:checked ~ .t-thumb { transform: translateX(18px); }
+
+    .form-group { margin-bottom: 1rem; }
+    .form-group:last-child { margin-bottom: 0; }
+    .form-label { display: block; font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 5px; }
+    .form-input {
+      width: 100%; height: 40px;
+      border: 1px solid var(--line-md);
+      border-radius: var(--r-sm);
+      padding: 0 0.875rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13.5px; color: var(--text);
+      background: var(--white); outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .form-input:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(29,106,229,0.1); }
+    .form-input::placeholder { color: var(--muted); }
+    .input-wrap { position: relative; display: flex; align-items: center; }
+    .input-right { position: absolute; right: 11px; background: none; border: none; cursor: pointer; color: var(--muted); display: flex; align-items: center; transition: color 0.15s; }
+    .input-right:hover { color: var(--text-sub); }
+
+    .btn { height: 38px; padding: 0 16px; border-radius: var(--r-sm); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; border: none; }
+    .btn-primary  { background: var(--brand); color: #fff; }
+    .btn-primary:hover { background: var(--brand-dark); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-outline  { background: var(--white); color: var(--text); border: 1px solid var(--line-md); }
+    .btn-outline:hover { border-color: var(--brand); color: var(--brand); }
+    .btn-danger   { background: #FEF2F2; color: var(--red); border: 1px solid #FECACA; }
+    .btn-danger:hover { background: #FEE2E2; border-color: #FCA5A5; }
+    .btn-full { width: 100%; justify-content: center; height: 40px; }
+
+    .alert { display: none; align-items: center; gap: 8px; border-radius: var(--r-sm); padding: 10px 12px; font-size: 13px; margin-bottom: 1rem; }
+    .alert.error   { background: #FEF2F2; border: 1px solid #FECACA; color: #B91C1C; display: flex; }
+    .alert.success { background: #DCFCE7; border: 1px solid #BBF7D0; color: #15803D; display: flex; }
+
+    .danger-zone { border-color: #FECACA !important; }
+    .danger-zone .card-header { background: #FFF5F5; border-bottom-color: #FECACA; }
+    .danger-zone .card-header h2 { color: var(--red); }
+
+    .confirm-box { display: none; margin-top: 1rem; padding: 1rem; background: #FFF5F5; border: 1px solid #FECACA; border-radius: var(--r-sm); }
+    .confirm-box.show { display: block; }
+    .confirm-box p { font-size: 13px; color: #7F1D1D; margin-bottom: 0.875rem; line-height: 1.55; }
+    .confirm-box input { width: 100%; height: 38px; border: 1px solid #FECACA; border-radius: var(--r-sm); padding: 0 0.875rem; font-family: 'DM Sans', sans-serif; font-size: 13.5px; color: var(--text); background: var(--white); outline: none; margin-bottom: 0.75rem; }
+    .confirm-box input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
+    .confirm-actions { display: flex; gap: 0.5rem; }
+
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #111827; color: #fff; font-size: 13.5px; padding: 10px 16px; border-radius: var(--r-md); display: flex; align-items: center; gap: 8px; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity 0.25s, transform 0.25s; z-index: 999; }
+    .toast.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <a href="vendors-dashboard.html" class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="15" height="15" viewBox="0 0 17 17" fill="none">
+          <path d="M8.5 1.5C5.74 1.5 3.5 3.74 3.5 6.5c0 1.85 1 3.46 2.5 4.33L5.25 15.5h6.5l-.75-4.67A5.01 5.01 0 0013.5 6.5c0-2.76-2.24-5-5-5z" fill="white"/>
+        </svg>
+      </div>
+      StreetLink
+    </a>
+    <nav class="sidebar-nav">
+      <a href="vendors-dashboard.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="vendors_menu.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        My Menu
+      </a>
+      <a href="vendors_add_item.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Add Menu Item
+      </a>
+      <a href="vendors_stock.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+          <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+          <line x1="12" y1="22.08" x2="12" y2="12"/>
+        </svg>
+        Stock Management
+      </a>
+      <a href="vendors_payment.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Payments
+      </a>
+      <a href="vendors_earnings.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        Earnings
+      </a>
+      <a href="vendors_profile.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        My Profile
+      </a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="vendors_settings.html" class="nav-item-sm active" style="background:rgba(255,255,255,0.07);color:#fff;">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </a>
+      <a href="#" class="nav-item-sm" id="signOutBtn">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Sign out
+      </a>
+      <div class="user-row">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <div class="user-info">
+          <div class="user-name" id="userName">Loading…</div>
+          <div class="user-email" id="userEmail"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <h1 class="page-title">Settings</h1>
+    <p class="page-sub">Manage your account preferences and security</p>
+
+    <div class="settings-layout">
+
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Change Password</h2>
+            <p>Update your login password</p>
+          </div>
+          <div class="card-body">
+            <div id="pwdAlert"></div>
+            <div class="form-group">
+              <label class="form-label">Current Password</label>
+              <div class="input-wrap">
+                <input class="form-input" type="password" id="currentPwd" placeholder="Enter current password" />
+                <button type="button" class="input-right" onclick="toggleVis('currentPwd', this)">
+                  <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">New Password</label>
+              <div class="input-wrap">
+                <input class="form-input" type="password" id="newPwd" placeholder="Min. 6 characters" />
+                <button type="button" class="input-right" onclick="toggleVis('newPwd', this)">
+                  <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm New Password</label>
+              <input class="form-input" type="password" id="confirmPwd" placeholder="Repeat new password" />
+            </div>
+            <button class="btn btn-primary btn-full" id="changePwdBtn" onclick="changePassword()">Update Password</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2>Notifications</h2>
+            <p>Choose what you want to be notified about</p>
+          </div>
+          <div class="card-body">
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Low Stock Alerts</div>
+                <div class="setting-desc">Get notified when an item falls below its minimum level (Upcoming)</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="notifLowStock" checked />
+                <div class="t-track"></div>
+                <div class="t-thumb"></div>
+              </label>
+            </div>
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">New Ratings</div>
+                <div class="setting-desc">Know when a customer leaves a rating on your stall (Upcoming)</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="notifRatings" checked />
+                <div class="t-track"></div>
+                <div class="t-thumb"></div>
+              </label>
+            </div>
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Payment Received</div>
+                <div class="setting-desc">Confirmation when a UPI payment is marked as done (Upcoming)</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="notifPayments" checked />
+                <div class="t-track"></div>
+                <div class="t-thumb"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <h2>Stall Visibility</h2>
+            <p>Control how your stall appears to customers</p>
+          </div>
+          <div class="card-body">
+            <!-- <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Show on Customer Map</div>
+                <div class="setting-desc">Customers can find your stall in the map view</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="visMap" checked />
+                <div class="t-track"></div>
+                <div class="t-thumb"></div>
+              </label>
+            </div> -->
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Show Phone Number</div>
+                <div class="setting-desc">Display your phone number on your public profile</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="visPhone" />
+                <div class="t-track"></div>
+                <div class="t-thumb"></div>
+              </label>
+            </div>
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Show UPI ID</div>
+                <div class="setting-desc">Display UPI ID on your public stall page</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="visUpi" />
+                <div class="t-track"></div>
+                <div class="t-thumb"></div>
+              </label>
+            </div>
+            <button class="btn btn-primary btn-full" style="margin-top:1rem;" onclick="saveVisibility()">Save Preferences</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2>Account</h2>
+            <p>Session and sign-out options</p>
+          </div>
+          <div class="card-body">
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Signed in as</div>
+                <div class="setting-desc" id="signedInAs">—</div>
+              </div>
+            </div>
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Sign Out</div>
+                <div class="setting-desc">Log out of your account on this device</div>
+              </div>
+              <button class="btn btn-outline" id="signOutBtn2" onclick="handleSignOut()">Sign Out</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card danger-zone">
+          <div class="card-header">
+            <h2>Danger Zone</h2>
+            <p>These actions cannot be undone</p>
+          </div>
+          <div class="card-body">
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Delete Account</div>
+                <div class="setting-desc">Permanently remove your account, stall, and all data from StreetLink</div>
+              </div>
+              <button class="btn btn-danger" onclick="showDeleteConfirm()">Delete</button>
+            </div>
+
+            <div class="confirm-box" id="deleteConfirmBox">
+              <p>This will permanently delete your account, vendor profile, entire menu, stock, and transaction history. <strong>This cannot be undone.</strong></p>
+              <p style="margin-bottom:0.75rem;margin-top:0.5rem;">Type <strong>DELETE</strong> below to confirm:</p>
+              <input type="text" id="deleteConfirmInput" placeholder='Type "DELETE" to confirm' oninput="checkDeleteInput()" />
+              <div class="confirm-actions">
+                <button class="btn btn-outline" onclick="hideDeleteConfirm()">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn" onclick="deleteAccount()" disabled>
+                  Yes, Delete My Account
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast">
+    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toastMsg">Saved!</span>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import {
+      getAuth, onAuthStateChanged, signOut,
+      updatePassword, reauthenticateWithCredential,
+      EmailAuthProvider, deleteUser
+    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import {
+      getFirestore, doc, getDoc, updateDoc, deleteDoc,
+      collection, getDocs
+    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAHAaqmBH73l-bwfsghYc2jaR_pdS7aFvg",
+      authDomain: "street-vendor-5162e.firebaseapp.com",
+      projectId: "street-vendor-5162e",
+      storageBucket: "street-vendor-5162e.firebasestorage.app",
+      messagingSenderId: "387560067719",
+      appId: "1:387560067719:web:9280a2d12e8fbfbe411e22"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    let currentUser = null;
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = 'login.html'; return; }
+      currentUser = user;
+
+      document.getElementById('signedInAs').textContent = user.email || '—';
+
+      try {
+        const snap = await getDoc(doc(db, 'vendors', user.uid));
+        if (snap.exists()) {
+          const d = snap.data();
+          const initials = (d.stallName || d.vendorName || 'V')
+            .split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+          document.getElementById('userAvatar').textContent = initials;
+          document.getElementById('userName').textContent   = d.vendorName || d.stallName || 'Vendor';
+          document.getElementById('userEmail').textContent  = d.email || '';
+
+          // Load saved visibility prefs if stored
+          if (d.settings) {
+            if (d.settings.visMap    !== undefined) document.getElementById('visMap').checked    = d.settings.visMap;
+            if (d.settings.visPhone  !== undefined) document.getElementById('visPhone').checked  = d.settings.visPhone;
+            if (d.settings.visUpi    !== undefined) document.getElementById('visUpi').checked    = d.settings.visUpi;
+          }
+        }
+      } catch (err) {
+        console.warn('settings load failed:', err.message);
+      }
+    });
+
+    document.getElementById('signOutBtn').addEventListener('click', async e => {
+      e.preventDefault();
+      await signOut(auth);
+      window.location.href = 'login.html';
+    });
+
+    window.handleSignOut = async function() {
+      await signOut(auth);
+      window.location.href = 'login.html';
+    };
+
+    window.toggleVis = function(inputId, btn) {
+      const input = document.getElementById(inputId);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    };
+
+    window.changePassword = async function() {
+      const current  = document.getElementById('currentPwd').value;
+      const newPwd   = document.getElementById('newPwd').value;
+      const confirm  = document.getElementById('confirmPwd').value;
+      const alertBox = document.getElementById('pwdAlert');
+
+      alertBox.className = '';
+      alertBox.style.display = 'none';
+
+      if (!current || !newPwd || !confirm) {
+        showInlineAlert(alertBox, 'Please fill in all fields.', 'error');
+        return;
+      }
+      if (newPwd.length < 6) {
+        showInlineAlert(alertBox, 'New password must be at least 6 characters.', 'error');
+        return;
+      }
+      if (newPwd !== confirm) {
+        showInlineAlert(alertBox, 'New passwords do not match.', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('changePwdBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner"></div> Updating…';
+
+      try {
+        const cred = EmailAuthProvider.credential(currentUser.email, current);
+        await reauthenticateWithCredential(currentUser, cred);
+        await updatePassword(currentUser, newPwd);
+
+        document.getElementById('currentPwd').value = '';
+        document.getElementById('newPwd').value     = '';
+        document.getElementById('confirmPwd').value = '';
+        showInlineAlert(alertBox, 'Password updated successfully!', 'success');
+        showToast('Password updated ✓');
+      } catch (err) {
+        const msg = err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential'
+          ? 'Current password is incorrect.'
+          : 'Error: ' + err.message;
+        showInlineAlert(alertBox, msg, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Update Password';
+      }
+    };
+
+    window.saveVisibility = async function() {
+      if (!currentUser) return;
+      try {
+        await updateDoc(doc(db, 'vendors', currentUser.uid), {
+          settings: {
+            visMap:   document.getElementById('visMap').checked,
+            visPhone: document.getElementById('visPhone').checked,
+            visUpi:   document.getElementById('visUpi').checked,
+          }
+        });
+        showToast('Preferences saved ✓');
+      } catch (err) {
+        showToast('Save failed: ' + err.message);
+      }
+    };
+
+    window.showDeleteConfirm = function() {
+      document.getElementById('deleteConfirmBox').classList.add('show');
+      document.getElementById('deleteConfirmInput').value = '';
+      document.getElementById('confirmDeleteBtn').disabled = true;
+    };
+
+    window.hideDeleteConfirm = function() {
+      document.getElementById('deleteConfirmBox').classList.remove('show');
+    };
+
+    window.checkDeleteInput = function() {
+      const val = document.getElementById('deleteConfirmInput').value.trim();
+      document.getElementById('confirmDeleteBtn').disabled = val !== 'DELETE';
+    };
+
+    window.deleteAccount = async function() {
+      if (!currentUser) return;
+
+      const btn = document.getElementById('confirmDeleteBtn');
+      btn.disabled = true;
+      btn.textContent = 'Deleting…';
+
+      try {
+        const uid = currentUser.uid;
+
+        // Delete menu items
+        const menuSnap = await getDocs(collection(db, 'vendors', uid, 'menu'));
+        await Promise.all(menuSnap.docs.map(d => deleteDoc(d.ref)));
+
+        // Delete stock items
+        const stockSnap = await getDocs(collection(db, 'vendors', uid, 'stock'));
+        await Promise.all(stockSnap.docs.map(d => deleteDoc(d.ref)));
+
+        // Delete transactions
+        const txSnap = await getDocs(collection(db, 'vendors', uid, 'transactions'));
+        await Promise.all(txSnap.docs.map(d => deleteDoc(d.ref)));
+
+        // Delete vendor doc and user doc
+        await deleteDoc(doc(db, 'vendors', uid));
+        await deleteDoc(doc(db, 'users', uid));
+
+        // Delete Firebase Auth account
+        await deleteUser(currentUser);
+
+        window.location.href = 'home_page.html';
+
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Yes, Delete My Account';
+        if (err.code === 'auth/requires-recent-login') {
+          document.getElementById('deleteConfirmBox').innerHTML =
+            `<p style="color:#B91C1C;font-size:13px;">For security, please <a href="login.html" style="color:var(--brand);">sign in again</a> before deleting your account.</p>`;
+        } else {
+          console.error('delete failed:', err.message);
+        }
+      }
+    };
+
+    function showInlineAlert(box, msg, type) {
+      box.textContent   = msg;
+      box.className     = `alert ${type}`;
+      box.style.display = 'flex';
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+  </script>
+
+</body>
+</html>
