@@ -1,132 +1,171 @@
-****StreetLink - README
-**
+🍜 StreetLink
+Bridging the gap between street food vendors and hungry customers — digitally.
 
-****What is this?
-**
-StreetLink is a web app that connects street food vendors with customers in their area. Vendors get a dashboard to manage their stall, menu, stock, payments, and earnings. Customers can browse vendors, search for food items, and view menus all without needing an app download.
-The goal is simple to make street food easier to find, trust, and pay for
+StreetLink gives every street vendor a professional digital presence: manage your menu, track stock, accept UPI payments, and log earnings — all from a browser. Customers get a clean, fast discovery experience to find vendors near them without needing an app.
 
-****What makes it different
-****
+Built with HTML · CSS · Vanilla JS · Firebase — no frameworks, no overhead.
 
-• This is not just a static listing project. It actually works like a real system
-• Vendors can add their UPI ID  
-• QR codes are generated dynamically for each payment  
-• Customer side reads live vendor data from the database
-• The entire flow feels real and usable, not just a demo
+🌍 The Problem
+Street food vendors are one of India's most vibrant micro-economies — yet they're almost completely invisible online.
 
-****The idea
-****
+Pain Point	Vendors	Customers
+Discovery	No online presence, rely on foot traffic	Find out about vendors by accident or word-of-mouth
+Payments	No digital payment system or receipts	Cash-only, no trust signals
+Operations	No way to manage menu, stock, or earnings digitally	No way to check menu or availability before visiting
+StreetLink solves all three — for both sides.
 
-•	Street vendors are everywhere but hard to find online  
-•	There is no proper system for menus, payments, or stock  
-•	Finding local vendors is tough since people usually depend on word of mouth  
-•	Without any trusted sources, customers just ask around to find local vendors
-
-StreetLink solves this by giving vendors a simple digital presence and giving customers a clean way to explore food options nearby
-
-****How it works
-****
-
-Vendor side:
-•	Create and manage stall profile  
-•	Add and update menu items  
-•	Track stock and get low stock alerts  
-•	Generate UPI QR codes for payments  
-•	Log cash payments  
-•	View earnings and transaction history
-
-Customer side:
-•	Search vendors and food items  
-•	Filter based on veg, rating, or availability  
-•	View full menus with details  
-•	Choose vendors with more clarity
-
-****Tech Stack
-****
-
-Frontend: Plain HTML, CSS, vanilla JavaScript (no frameworks)
-Backend: Firebase (Auth, Firestore, Storage)
-Fonts: Syne (headings) + DM Sans (body) via Google Fonts
-Libraries: Leaflet.js (map on profile page), QRCode.js (payment QR generation) 
-
-****Project Structure
-****
-
-├── home_page.html          - Landing page
-├── login.html              - Login (email/password + Google)
-├── vendor_register.html    - Vendor signup
-├── vendors-dashboard.html  - Vendor dashboard (menu overview, stall toggle)
-├── vendors_menu.html       - Full menu management with search
-├── vendors_add_item.html   - Add new food item with ingredient picker
-├── vendors_profile.html    - Vendor public profile + edit mode
-├── vendors_stock.html      - Stock/ingredient tracking with low-stock alerts
-├── vendors_payment.html    - UPI QR generator + cash payment logger
-├── vendors_earnings.html   - Transaction history, charts, CSV export
-├── customer.html           - Customer search (vendors + food items)
-├── firebase-app.js         - All Firebase logic, auth, and page init
-
-****Firebase Collections
-****
-
+✨ Core Features
+👨‍🍳 For Vendors
+Feature	Details
+🏪 Stall Profile	Set up name, location, food category, UPI ID, Instagram, and profile photo
+📋 Menu Management	Add / edit / delete items with price, category, veg/non-veg tag, description, ingredients, and allergy info
+📦 Stock Tracking	Monitor ingredient/item quantities with unit types and low-stock alerts
+💳 UPI Payments	Auto-generate a QR code for any amount — customers scan and pay directly to your UPI ID
+💵 Cash Logging	Record cash transactions manually to keep all earnings in one place
+📊 Earnings Dashboard	View complete transaction history, filter by method, and export as CSV
+🟢 Open / Close Toggle	Let customers know your stall is active in real time
+🧑‍💻 For Customers
+Feature	Details
+🔍 Vendor Search	Search by stall name or food item
+🎛 Smart Filters	Filter by food type (veg/non-veg), rating, open status, and category
+🍽 Full Menu View	Browse complete menus with ingredient lists and allergy tags
+📍 Location Info	See where vendors are based
+🛠 Tech Stack
+Layer	Technology	Why
+Frontend	HTML5, CSS3, Vanilla JS	Zero dependency overhead, fast loading
+Auth	Firebase Authentication	Email/Password + Google Sign-In
+Database	Cloud Firestore	Real-time updates, flexible schema
+Storage	Firebase Storage	Vendor and food item images
+Maps	Leaflet.js	Open-source, lightweight maps
+Payments	QRCode.js	Client-side UPI QR generation
+Typography	Syne + DM Sans	Modern, clean UI personality
+📁 Project Structure
+streetlink/
+│
+├── home_page.html            # Landing page
+├── login.html                # Auth — Email & Google Sign-In
+├── vendor_register.html      # New vendor onboarding
+│
+├── vendors-dashboard.html    # Main vendor control panel
+├── vendors_menu.html         # Full menu overview
+├── vendors_add_item.html     # Add / edit menu items
+├── vendors_profile.html      # Edit stall profile
+├── vendors_stock.html        # Stock management
+├── vendors_payment.html      # UPI QR + cash payment logger
+├── vendors_earnings.html     # Transaction history & analytics
+│
+├── customer.html             # Customer discovery interface
+│
+└── firebase-app.js           # Firebase init + all backend logic
+🗃 Firebase Data Model
 /users/{uid}
-  role, email, createdAt
+  ├── role: "vendor" | "customer"
+  ├── email: string
+  └── createdAt: timestamp
 
 /vendors/{uid}
-  vendorName, stallName, location, phone, email
-  category, foodType, upiId, imageUrl
-  rating, isOpen, instagram, about, createdAt
+  ├── vendorName, stallName, about
+  ├── location, phone, email, instagram
+  ├── category, foodType (veg | nonveg | both)
+  ├── upiId, imageUrl
+  ├── rating, isOpen
+  └── createdAt: timestamp
 
-/vendors/{uid}/menu/{itemId}
-  name, price, category, isVeg, foodType
-  ingredients, allergies, description
-  imageUrl, rating, createdAt
+  /menu/{itemId}
+    ├── name, description, price
+    ├── category, isVeg, foodType
+    ├── ingredients: []
+    ├── allergies: []
+    ├── imageUrl, rating
+    └── createdAt: timestamp
 
-/vendors/{uid}/stock/{itemId}
-  name, qty, unit, minLevel, category, notes
-  updatedAt, createdAt
+  /stock/{itemId}
+    ├── name, qty, unit
+    ├── minLevel  ← triggers low-stock alert
+    ├── category, notes
+    └── updatedAt, createdAt: timestamp
 
-/vendors/{uid}/transactions/{txId}
-  amount, method (upi | cash), note, status, createdAt
+  /transactions/{txId}
+    ├── amount: number
+    ├── method: "upi" | "cash"
+    ├── note: string
+    ├── status: "success" | "pending"
+    └── createdAt: timestamp
+⚙️ Getting Started
+Prerequisites
+A modern browser
+VS Code with the Live Server extension
+A free Firebase account
+1. Clone the repo
+git clone https://github.com/your-username/streetlink.git
+cd streetlink
+2. Create a Firebase project
+Go to Firebase Console → Add Project
+Enable Authentication → Sign-in methods → ✅ Email/Password + ✅ Google
+Enable Firestore Database → Start in test mode
+Enable Storage → Start in test mode
+3. Add your Firebase config
+Open firebase-app.js and replace the config object:
 
-****Features**
-**
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+4. Launch
+# In VS Code:
+Right click on home_page.html → "Open with Live Server"
+🔐 User Roles & Flow
+New User
+  │
+  ├─ Register as Vendor ──→ vendors-dashboard.html
+  │     └── Manage: Menu · Stock · Payments · Earnings · Profile
+  │
+  └─ Browse as Customer ──→ customer.html
+        └── Search · Filter · View Menus · Find Vendors
+💳 How UPI Payments Work
+Customer selects items from a vendor's menu
+Vendor enters the total amount in vendors_payment.html
+StreetLink generates a dynamic QR code using the vendor's saved UPI ID
+Customer scans with any UPI app (GPay, PhonePe, Paytm, etc.)
+Transaction is logged automatically in the vendor's earnings history
+No payment gateway. No commission. Money goes directly to the vendor.
 
-Vendor side:
-•	Register stall with name, location, phone, UPI ID, food category  
-•	Toggle stall open or closed from dashboard  
-•	Add edit delete menu items with allergy tags and ingredients from stock  
-•	Stock manager with low-stock alerts and quick quantity updates  
-•	Generate UPI QR codes for orders or log cash payments  
-•	Earnings page with weekly charts, UPI versus cash breakdown, pagination, CSV export  
-•	Profile page with inline edit for contact info, Instagram, and UPI ID
+🌟 What Makes StreetLink Stand Out
+Zero commission — unlike aggregator platforms, vendors keep 100% of their revenue
+No app required — works entirely in the browser on any device
+Real payment flow — not a mockup; actual UPI QR codes that work with any UPI app
+Complete business tool — menu + stock + payments + earnings all in one place
+Built for India — UPI-first, designed for the way street vendors actually operate
+🚧 Roadmap
+ 📍 Google Maps — live vendor location pinning
+ 🔔 Push notifications — order alerts for vendors
+ 🌐 PWA support — install on home screen, offline mode
+ 🤖 Smart recommendations — suggest vendors based on customer history
+ ⭐ Customer reviews — ratings system for vendors and items
+ 🌍 Multi-city support — city-based vendor discovery
+ 🎨 UI v2 — Figma-based redesign
+🤝 Contributing
+# 1. Fork this repo
+# 2. Create your branch
+git checkout -b feature/your-feature-name
 
+# 3. Commit your changes
+git commit -m "feat: add your feature description"
 
-Customer side:
-•	Search vendors and food items with filters veg only, rating, status, category  
-•	Slide-out menu drawer showing full vendor menu with ingredient and allergy info
+# 4. Push to your fork
+git push origin feature/your-feature-name
 
-****Getting Started
-****
+# 5. Open a Pull Request
+📜 License
+This project is licensed under the MIT License — free to use, modify, and distribute.
 
-• Clone the repo
-•	Add your own firebase-app.js with your Firebase project config or replace the config object inside the existing one
-•	Enable Email Password and Google sign-in in Firebase Auth
-•	Set up Firestore with the collection structure above
-•	Open any HTML file via a local server such as VS Code Live Server. Direct file access will not work with ES modules
+👤 Author
+Rohit Bansal , Trusha , Manvi , Ranveer Singh
 
-**Why this stands out**
-•	It solves a real problem  
-•	It is usable end to end  
-•	It shows actual payment flow  
-•	It focuses on small businesses, not just users
-Unlike traditional delivery apps, our system sends payment directly to the vendor's bank account via UPI, eliminating platform commission
+Built to give street vendors a digital identity — and customers a better way to discover them.
 
-**Future improvements**
-•	Add Google Maps for exact vendor location  
-•	Improve UI using a structured Figma design system  
-•	Turn it into a Progressive Web App for an app like experience  
-•	Add smarter search and recommendations  
-•	Expand to multiple cities
-StreetLink is a small step toward making street vendors more visible and independent  
-It is simple, practical, and ready to grow
+StreetLink — simple, practical, and built to grow. 🚀
