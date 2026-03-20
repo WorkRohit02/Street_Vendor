@@ -11,7 +11,7 @@ StreetLink gives every street vendor a professional digital presence: manage you
 
 ## 🌍 The Problem
 
-Street food vendors are one of India's most vibrant micro-economies — yet they're almost completely invisible online.
+Street food vendors are one of India's most vibrant micro-economies - yet they're almost completely invisible online.
 
 | Pain Point | Vendors | Customers |
 |---|---|---|
