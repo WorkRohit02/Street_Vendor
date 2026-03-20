@@ -1,19 +1,23 @@
-**StreetLink - README
+****StreetLink - README
+**
 
-**What is this?
+****What is this?
+**
 StreetLink is a web app that connects street food vendors with customers in their area. Vendors get a dashboard to manage their stall, menu, stock, payments, and earnings. Customers can browse vendors, search for food items, and view menus all without needing an app download.
 The goal is simple to make street food easier to find, trust, and pay for
 
-**What makes it different
-**
+****What makes it different
+****
+
 • This is not just a static listing project. It actually works like a real system
 • Vendors can add their UPI ID  
 • QR codes are generated dynamically for each payment  
 • Customer side reads live vendor data from the database
 • The entire flow feels real and usable, not just a demo
 
-**The idea
-**
+****The idea
+****
+
 •	Street vendors are everywhere but hard to find online  
 •	There is no proper system for menus, payments, or stock  
 •	Finding local vendors is tough since people usually depend on word of mouth  
@@ -21,8 +25,9 @@ The goal is simple to make street food easier to find, trust, and pay for
 
 StreetLink solves this by giving vendors a simple digital presence and giving customers a clean way to explore food options nearby
 
-**How it works
-**
+****How it works
+****
+
 Vendor side:
 •	Create and manage stall profile  
 •	Add and update menu items  
@@ -37,15 +42,17 @@ Customer side:
 •	View full menus with details  
 •	Choose vendors with more clarity
 
-**Tech Stack
-**
+****Tech Stack
+****
+
 Frontend: Plain HTML, CSS, vanilla JavaScript (no frameworks)
 Backend: Firebase (Auth, Firestore, Storage)
 Fonts: Syne (headings) + DM Sans (body) via Google Fonts
 Libraries: Leaflet.js (map on profile page), QRCode.js (payment QR generation) 
 
-**Project Structure
-**
+****Project Structure
+****
+
 ├── home_page.html          - Landing page
 ├── login.html              - Login (email/password + Google)
 ├── vendor_register.html    - Vendor signup
@@ -59,8 +66,9 @@ Libraries: Leaflet.js (map on profile page), QRCode.js (payment QR generation)
 ├── customer.html           - Customer search (vendors + food items)
 ├── firebase-app.js         - All Firebase logic, auth, and page init
 
-**Firebase Collections
-**
+****Firebase Collections
+****
+
 /users/{uid}
   role, email, createdAt
 
@@ -81,8 +89,9 @@ Libraries: Leaflet.js (map on profile page), QRCode.js (payment QR generation)
 /vendors/{uid}/transactions/{txId}
   amount, method (upi | cash), note, status, createdAt
 
-**Features
+****Features**
 **
+
 Vendor side:
 •	Register stall with name, location, phone, UPI ID, food category  
 •	Toggle stall open or closed from dashboard  
@@ -97,8 +106,9 @@ Customer side:
 •	Search vendors and food items with filters veg only, rating, status, category  
 •	Slide-out menu drawer showing full vendor menu with ingredient and allergy info
 
-**Getting Started
-**
+****Getting Started
+****
+
 • Clone the repo
 •	Add your own firebase-app.js with your Firebase project config or replace the config object inside the existing one
 •	Enable Email Password and Google sign-in in Firebase Auth
