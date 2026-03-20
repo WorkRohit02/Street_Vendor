@@ -104,9 +104,33 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.35); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+
+    body.dark { --page-bg:#13141F; --white:#1C1E2E; --surface:#252838; --blue-light:#1E2540; --brand:#6C8EF5; --brand-dark:#5A7AE8; --text:#E8EAF2; --text-sub:#8B90AA; --muted:#5C6080; --line:rgba(255,255,255,0.07); --line-md:rgba(255,255,255,0.12); --red:#F87171; --green:#34D399; }
+    body.dark nav { background:#1C1E2E; border-bottom-color:rgba(255,255,255,0.07); }
+    body.dark .card { background:#1C1E2E; border-color:rgba(255,255,255,0.07); }
+    body.dark .card-header h1 { color:#E8EAF2; }
+    body.dark .card-header p  { color:#8B90AA; }
+    body.dark .header-icon { background:#1E2540; }
+    body.dark .form-input { background:#252838; border-color:rgba(255,255,255,0.1); color:#E8EAF2; }
+    body.dark .form-input:focus { border-color:#6C8EF5; box-shadow:0 0 0 3px rgba(108,142,245,0.15); }
+    body.dark .form-input::placeholder { color:#5C6080; }
+    body.dark .form-label { color:#E8EAF2; }
+    body.dark .input-icon  { color:#5C6080; }
+    body.dark .input-right { color:#5C6080; }
+    body.dark .submit-btn { background:#6C8EF5; }
+    body.dark .submit-btn:hover { background:#5A7AE8; }
+    body.dark .forgot-link { color:#6C8EF5; }
+    body.dark .remember-label { color:#8B90AA; }
+    body.dark .card-footer { color:#8B90AA; }
+    body.dark .card-footer a { color:#6C8EF5; }
+    body.dark .error-msg { color:#F87171; }
+    body.dark .alert.error   { background:rgba(248,113,113,0.1); border-color:rgba(248,113,113,0.3); color:#F87171; }
+    body.dark .alert.success { background:rgba(52,211,153,0.1); border-color:rgba(52,211,153,0.3); color:#34D399; }
+    body.dark #themeBtn { background:#252838; border-color:rgba(255,255,255,0.12); color:#8B90AA; }
   </style>
 </head>
 <body>
+  <script>if(localStorage.getItem("theme")==="dark")document.body.classList.add("dark");</script>
 
   <nav>
     <a href="home_page.html" class="logo">
@@ -122,6 +146,9 @@
         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
         Home
       </a>
+      <button id="themeBtn" onclick="toggleTheme()" title="Toggle dark mode" style="width:32px;height:32px;border:1px solid var(--line-md);border-radius:var(--r-sm);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-sub);transition:all 0.15s;flex-shrink:0;">
+        <svg id="themeIcon" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
     </div>
   </nav>
 
@@ -177,6 +204,25 @@
   </div>
 
   <script type="module" src="./firebase-app.js"></script>
+
+  <script>
+    const SUN  = `<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+    const MOON = `<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>`;
+
+    function applyTheme(dark) {
+      document.body.classList.toggle('dark', dark);
+      const btn = document.getElementById('themeBtn');
+      if (btn) btn.innerHTML = dark ? SUN : MOON;
+    }
+
+    window.toggleTheme = function() {
+      const isDark = !document.body.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      applyTheme(isDark);
+    };
+
+    applyTheme(localStorage.getItem('theme') === 'dark');
+  </script>
 
 </body>
 </html>

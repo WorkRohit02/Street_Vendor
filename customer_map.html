@@ -42,11 +42,7 @@
 
     .layout { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 54px); }
 
-    .side-panel {
-      width: 320px; flex-shrink: 0;
-      background: var(--white); border-right: 1px solid var(--line);
-      display: flex; flex-direction: column; overflow: hidden; z-index: 10;
-    }
+    .side-panel { width: 320px; flex-shrink: 0; background: var(--white); border-right: 1px solid var(--line); display: flex; flex-direction: column; overflow: hidden; z-index: 10; }
 
     .panel-head { padding: 1rem 1.25rem 0.75rem; border-bottom: 1px solid var(--line); }
     .panel-head h2 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
@@ -62,15 +58,15 @@
     .chip.active { background: var(--brand); color: #fff; border-color: var(--brand); }
     .chip:not(.active):hover { border-color: var(--brand); color: var(--brand); }
 
+    .city-bar { display: none; margin-top: 8px; padding: 7px 10px; background: var(--blue-light); border-radius: var(--r-sm); font-size: 12.5px; color: var(--brand); align-items: center; justify-content: space-between; gap: 8px; }
+    .city-bar.show { display: flex; }
+    .city-bar button { background: none; border: none; cursor: pointer; font-size: 11px; color: var(--text-sub); text-decoration: underline; font-family: 'DM Sans', sans-serif; white-space: nowrap; }
+
     .vendor-list { flex: 1; overflow-y: auto; }
     .vendor-list::-webkit-scrollbar { width: 4px; }
     .vendor-list::-webkit-scrollbar-thumb { background: var(--line-md); border-radius: 2px; }
 
-    .vendor-row {
-      display: flex; align-items: center; gap: 10px;
-      padding: 11px 1.25rem; border-bottom: 1px solid var(--line);
-      cursor: pointer; transition: background .12s;
-    }
+    .vendor-row { display: flex; align-items: center; gap: 10px; padding: 11px 1.25rem; border-bottom: 1px solid var(--line); cursor: pointer; transition: background .12s; }
     .vendor-row:hover { background: var(--page-bg); }
     .vendor-row.active { background: var(--blue-light); border-left: 3px solid var(--brand); }
     .vendor-row.dimmed { opacity: 0.5; }
@@ -79,34 +75,22 @@
     .row-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--r-sm); }
     .row-info { flex: 1; min-width: 0; }
     .row-name { font-size: 13.5px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .row-meta { display: flex; align-items: center; gap: 6px; margin-top: 2px; font-size: 12px; color: var(--text-sub); }
+    .row-meta { display: flex; align-items: center; gap: 6px; margin-top: 2px; font-size: 12px; color: var(--text-sub); flex-wrap: wrap; }
     .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
     .dot-open   { background: var(--green); }
     .dot-closed { background: var(--muted); }
     .dist-badge { font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 20px; background: var(--blue-light); color: var(--brand); white-space: nowrap; }
     .no-loc-txt { font-size: 11px; color: var(--muted); }
 
-    .list-empty { text-align: center; padding: 2.5rem 1rem; color: var(--text-sub); font-size: 13.5px; }
+    .list-empty { text-align: center; padding: 2.5rem 1rem; color: var(--text-sub); font-size: 13.5px; line-height: 1.6; }
 
     .map-wrap { flex: 1; position: relative; }
     #map { width: 100%; height: 100%; z-index: 1; }
 
-    .locate-btn {
-      position: absolute; bottom: 20px; right: 12px; z-index: 400;
-      width: 40px; height: 40px;
-      background: var(--white); border: 1px solid var(--line-md);
-      border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center;
-      cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-      color: var(--text-sub); transition: all .15s;
-    }
+    .locate-btn { position: absolute; bottom: 20px; right: 12px; z-index: 400; width: 40px; height: 40px; background: var(--white); border: 1px solid var(--line-md); border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.12); color: var(--text-sub); transition: all .15s; }
     .locate-btn:hover { color: var(--brand); border-color: var(--brand); }
 
-    .count-pill {
-      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-      background: #111827; color: #fff; font-size: 12.5px; font-weight: 500;
-      padding: 6px 16px; border-radius: 20px; z-index: 400;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.2); pointer-events: none;
-    }
+    .count-pill { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: #111827; color: #fff; font-size: 12.5px; font-weight: 500; padding: 6px 16px; border-radius: 20px; z-index: 400; box-shadow: 0 2px 12px rgba(0,0,0,0.2); pointer-events: none; white-space: nowrap; }
 
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinner { width: 18px; height: 18px; border: 2px solid var(--line-md); border-top-color: var(--brand); border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 8px; }
@@ -116,9 +100,38 @@
       .map-wrap { height: 62vh; }
       .layout { flex-direction: column-reverse; }
     }
+
+    body.dark { --page-bg:#13141F; --white:#1C1E2E; --surface:#252838; --blue-light:#1E2540; --brand:#6C8EF5; --brand-dark:#5A7AE8; --text:#E8EAF2; --text-sub:#8B90AA; --muted:#5C6080; --line:rgba(255,255,255,0.07); --line-md:rgba(255,255,255,0.12); --red:#F87171; --green:#34D399; }
+    body.dark nav { background:#1C1E2E; border-bottom-color:rgba(255,255,255,0.07); }
+    body.dark .side-panel { background:#1C1E2E; border-right-color:rgba(255,255,255,0.07); }
+    body.dark .panel-head { background:#1C1E2E; border-bottom-color:rgba(255,255,255,0.07); }
+    body.dark .panel-head h2 { color:#E8EAF2; }
+    body.dark .search-wrap input { background:#252838; border-color:rgba(255,255,255,0.1); color:#E8EAF2; }
+    body.dark .search-wrap input:focus { border-color:#6C8EF5; background:#1C1E2E; }
+    body.dark .search-wrap input::placeholder { color:#5C6080; }
+    body.dark .chip { background:#252838; border-color:rgba(255,255,255,0.1); color:#8B90AA; }
+    body.dark .chip.active { background:rgba(108,142,245,0.2); border-color:rgba(108,142,245,0.3); color:#6C8EF5; }
+    body.dark .city-bar { background:#1E2540; color:#6C8EF5; border-color:rgba(108,142,245,0.2); }
+    body.dark .city-bar button { color:#8B90AA; }
+    body.dark .vendor-list::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); }
+    body.dark .vendor-row { border-bottom-color:rgba(255,255,255,0.05); }
+    body.dark .vendor-row:hover { background:#252838; }
+    body.dark .vendor-row.active { background:#1E2540; border-left-color:#6C8EF5; }
+    body.dark .row-avatar { background:#1E2540; color:#6C8EF5; }
+    body.dark .row-name { color:#E8EAF2; }
+    body.dark .row-meta { color:#8B90AA; }
+    body.dark .dist-badge { background:#1E2540; color:#6C8EF5; }
+    body.dark .locate-btn { background:#1C1E2E; border-color:rgba(255,255,255,0.12); color:#8B90AA; }
+    body.dark .locate-btn:hover { color:#6C8EF5; border-color:#6C8EF5; }
+    body.dark .count-pill { background:#252838; color:#E8EAF2; }
+    body.dark .list-empty { color:#8B90AA; }
+    body.dark #themeBtn { background:#252838; border-color:rgba(255,255,255,0.12); color:#8B90AA; }
+    body.dark .nav-active { color:#6C8EF5 !important; }
+    body.dark .nav-login  { color:#E8EAF2 !important; }
   </style>
 </head>
 <body>
+  <script>if(localStorage.getItem('theme')==='dark')document.body.classList.add('dark');</script>
 
   <nav>
     <a href="home_page.html" class="logo">
@@ -141,6 +154,9 @@
         Map View
       </a>
       <a href="login.html" class="nav-login">Login</a>
+      <button id="themeBtn" onclick="toggleTheme()" title="Toggle dark mode" style="width:32px;height:32px;border:1px solid var(--line-md);border-radius:var(--r-sm);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-sub);transition:all 0.15s;flex-shrink:0;">
+        <svg id="themeIcon" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+      </button>
     </div>
   </nav>
 
@@ -151,12 +167,16 @@
         <h2>Vendors Near You</h2>
         <div class="search-wrap">
           <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-          <input type="text" id="searchInput" placeholder="Search vendors…" oninput="renderList()" />
+          <input type="text" id="searchInput" placeholder="Search vendors or city…" oninput="renderList(); renderMarkers();" />
         </div>
         <div class="filter-row">
           <span class="chip active" onclick="setFilter(this,'all')">All</span>
           <span class="chip" onclick="setFilter(this,'open')">Open Now</span>
           <span class="chip" onclick="setFilter(this,'location')">On Map</span>
+        </div>
+        <div class="city-bar" id="cityBar">
+          <span id="cityBarLabel">Detecting city…</span>
+          <button onclick="clearCityFilter()">Show all cities</button>
         </div>
       </div>
       <div class="vendor-list" id="vendorList">
@@ -207,12 +227,13 @@
 
   <script>
     window._vendors = [];
-    let map = null;
-    let markers = [];
+    let map        = null;
+    let markers    = [];
     let userMarker = null;
-    let userPos = null;
+    let userPos    = null;
+    let userCity   = null;
     let activeFilter = 'all';
-    let selectedId = null;
+    let selectedId   = null;
 
     map = L.map('map').setView([30.7333, 76.7794], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -231,13 +252,21 @@
     function fmtDist(m) { return m < 1000 ? `${Math.round(m)}m` : `${(m/1000).toFixed(1)}km`; }
 
     function getFiltered() {
-      const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
+      const q = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
       return window._vendors.filter(v => {
-        const name = (v.stallName || v.name || '').toLowerCase();
-        const cat  = (v.category || '').toLowerCase();
-        if (q && !name.includes(q) && !cat.includes(q)) return false;
+        const name    = (v.stallName || v.name || '').toLowerCase();
+        const cat     = (v.category  || '').toLowerCase();
+        const cityStr = (v.city || v.location || '').toLowerCase();
+
+        if (q && !name.includes(q) && !cat.includes(q) && !cityStr.includes(q)) return false;
         if (activeFilter === 'open'     && v.isOpen === false) return false;
         if (activeFilter === 'location' && !v.liveLocation)    return false;
+
+        if (userCity && v.city) {
+          const vc = v.city.toLowerCase();
+          if (!vc.includes(userCity) && !userCity.includes(vc)) return false;
+        }
+
         return true;
       }).sort((a, b) => {
         const aL = !!a.liveLocation, bL = !!b.liveLocation;
@@ -252,13 +281,14 @@
 
     window.renderList = function() {
       const filtered = getFiltered();
-      const list = document.getElementById('vendorList');
-      const withLoc = filtered.filter(v => v.liveLocation).length;
+      const list     = document.getElementById('vendorList');
+      const withLoc  = filtered.filter(v => v.liveLocation).length;
+
       document.getElementById('countPill').textContent =
         `${filtered.length} vendor${filtered.length !== 1 ? 's' : ''} · ${withLoc} on map`;
 
       if (!filtered.length) {
-        list.innerHTML = `<div class="list-empty">No vendors match your filters.</div>`;
+        list.innerHTML = `<div class="list-empty">No vendors found${userCity ? ` in ${userCity}` : ''}.<br><small style="color:var(--muted);">Try a different city or tap "Show all cities".</small></div>`;
         return;
       }
 
@@ -284,7 +314,7 @@
               <div class="row-meta">
                 <span class="status-dot ${isOpen ? 'dot-open' : 'dot-closed'}"></span>
                 <span>${isOpen ? 'Open' : 'Closed'}</span>
-                ${v.category ? `<span>·</span><span>${v.category}</span>` : ''}
+                ${v.city ? `<span>·</span><span>${v.city}</span>` : v.category ? `<span>·</span><span>${v.category}</span>` : ''}
                 ${rating > 0 ? `<span>·</span><span>★ ${rating.toFixed(1)}</span>` : ''}
               </div>
             </div>
@@ -315,7 +345,7 @@
         const popup = `
           <div style="font-family:'DM Sans',sans-serif;min-width:180px;">
             <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;margin-bottom:4px;">${name}</div>
-            <div style="font-size:12px;color:#5B6370;margin-bottom:6px;">${v.category || 'Street Food'}</div>
+            <div style="font-size:12px;color:#5B6370;margin-bottom:6px;">${v.category || 'Street Food'}${v.city ? ' · ' + v.city : ''}</div>
             <div style="font-size:12px;display:flex;align-items:center;gap:6px;margin-bottom:4px;">
               <span style="width:8px;height:8px;border-radius:50%;background:${isOpen ? '#16A34A' : '#9CA3AF'};display:inline-block;"></span>
               ${isOpen ? 'Open Now' : 'Closed'}
@@ -342,9 +372,7 @@
       const vendor = window._vendors.find(v => v.id === id);
       if (!vendor?.liveLocation) return;
 
-      if (panToMap) {
-        map.setView([vendor.liveLocation.lat, vendor.liveLocation.lng], 17);
-      }
+      if (panToMap) map.setView([vendor.liveLocation.lat, vendor.liveLocation.lng], 17);
 
       const m = markers.find(m => m._vendorId === id);
       if (m) m.openPopup();
@@ -361,11 +389,18 @@
       renderMarkers();
     };
 
-    window.locateMe = function() {
+    window.clearCityFilter = function() {
+      userCity = null;
+      document.getElementById('cityBar').classList.remove('show');
+      renderList();
+      renderMarkers();
+    };
+
+    window.locateMe = async function() {
       if (!navigator.geolocation) return;
-      navigator.geolocation.getCurrentPosition(pos => {
+      navigator.geolocation.getCurrentPosition(async pos => {
         userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-        map.setView([userPos.lat, userPos.lng], 15);
+        map.setView([userPos.lat, userPos.lng], 14);
 
         if (userMarker) map.removeLayer(userMarker);
         userMarker = L.marker([userPos.lat, userPos.lng], {
@@ -375,15 +410,54 @@
             iconSize: [14, 14],
             iconAnchor: [7, 7]
           })
-        }).addTo(map).bindPopup('You are here');
+        }).addTo(map).bindPopup('You are here').openPopup();
+
+        try {
+          const res  = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${userPos.lat}&lon=${userPos.lng}&format=json`);
+          const data = await res.json();
+          const city = data.address?.city
+                    || data.address?.town
+                    || data.address?.village
+                    || data.address?.county
+                    || '';
+
+          if (city) {
+            userCity = city.toLowerCase();
+            document.getElementById('cityBarLabel').textContent = `📍 Showing vendors in: ${city}`;
+            document.getElementById('cityBar').classList.add('show');
+          }
+        } catch (e) {
+          console.warn('reverse geocode failed:', e.message);
+        }
 
         renderList();
+        renderMarkers();
+
       }, () => {
         alert('Could not get your location. Please allow location access in your browser.');
       });
     };
 
     locateMe();
+  </script>
+
+  <script>
+    const SUN = `<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+    const MOON = `<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>`;
+
+    function applyTheme(dark) {
+      document.body.classList.toggle('dark', dark);
+      const btn = document.getElementById('themeIcon');
+      if (btn) btn.parentElement.innerHTML = dark ? SUN : MOON;
+    }
+
+    window.toggleTheme = function() {
+      const isDark = !document.body.classList.contains('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      applyTheme(isDark);
+    };
+
+    applyTheme(localStorage.getItem('theme') === 'dark');
   </script>
 
 </body>

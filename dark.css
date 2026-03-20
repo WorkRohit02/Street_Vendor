@@ -1,12 +1,234 @@
 body.dark {
-    --page-bg: #0F1117;
-    --white: #1A1D27;
-    --surface: #22263A;
-    --blue-light: #1a2744;
-    --text: #F3F4F6;
-    --text-sub: #9CA3AF;
-    --muted: #6B7280;
-    --line: rgba(255,255,255,0.08);
-    --line-md: rgba(255,255,255,0.13);
-    --sidebar: #0A0C12;
-  }
+  --page-bg: #13141F;
+  --white: #1C1E2E;
+  --surface: #252838;
+  --blue-light: #1E2540;
+  --brand: #6C8EF5;
+  --brand-dark: #5A7AE8;
+  --sidebar: #0D0E1A;
+  --muted: #5C6080;
+  --text: #E8EAF2;
+  --text-sub: #8B90AA;
+  --line: rgba(255,255,255,0.07);
+  --line-md: rgba(255,255,255,0.12);
+  --green: #34D399;
+  --red: #F87171;
+  --star: #FBBF24;
+}
+
+body.dark .sidebar {
+  background: #0D0E1A;
+  border-right: 1px solid rgba(255,255,255,0.05);
+}
+
+body.dark .sidebar-logo {
+  border-bottom-color: rgba(255,255,255,0.06);
+}
+
+body.dark .logo-icon {
+  background: #6C8EF5;
+}
+
+body.dark .nav-item:hover {
+  background: rgba(108,142,245,0.12);
+  color: #E8EAF2;
+}
+
+body.dark .nav-item.active {
+  background: rgba(108,142,245,0.2);
+  color: #6C8EF5;
+}
+
+body.dark .user-avatar {
+  background: rgba(108,142,245,0.25);
+  color: #6C8EF5;
+}
+
+body.dark nav {
+  background: #1C1E2E;
+  border-bottom-color: rgba(255,255,255,0.07);
+}
+
+body.dark .card,
+body.dark .section-card,
+body.dark .stat-card,
+body.dark .chart-card,
+body.dark .side-panel,
+body.dark .panel-head {
+  background: #1C1E2E;
+  border-color: rgba(255,255,255,0.07);
+}
+
+body.dark .form-input,
+body.dark .form-select,
+body.dark .form-textarea,
+body.dark .filter-select,
+body.dark .search-wrap input,
+body.dark .drawer-search-wrap input {
+  background: #252838;
+  border-color: rgba(255,255,255,0.1);
+  color: #E8EAF2;
+}
+
+body.dark .form-input:focus,
+body.dark .form-select:focus,
+body.dark .form-textarea:focus,
+body.dark .search-wrap input:focus,
+body.dark .drawer-search-wrap input:focus {
+  border-color: #6C8EF5;
+  box-shadow: 0 0 0 3px rgba(108,142,245,0.15);
+}
+
+body.dark .form-input::placeholder,
+body.dark .search-wrap input::placeholder { color: #5C6080; }
+
+body.dark .submit-btn,
+body.dark .save-btn,
+body.dark .btn-primary { background: #6C8EF5; }
+body.dark .submit-btn:hover,
+body.dark .save-btn:hover,
+body.dark .btn-primary:hover { background: #5A7AE8; }
+
+body.dark .btn-outline {
+  background: #252838;
+  border-color: rgba(255,255,255,0.12);
+  color: #E8EAF2;
+}
+body.dark .btn-outline:hover { border-color: #6C8EF5; color: #6C8EF5; }
+
+body.dark .icon-btn {
+  background: #252838;
+  border-color: rgba(255,255,255,0.1);
+  color: #8B90AA;
+}
+body.dark .icon-btn:hover {
+  background: #1E2540;
+  border-color: #6C8EF5;
+  color: #6C8EF5;
+}
+body.dark .icon-btn.del:hover {
+  background: rgba(248,113,113,0.1);
+  border-color: rgba(248,113,113,0.4);
+  color: #F87171;
+}
+
+body.dark table thead th {
+  background: #13141F;
+  color: #5C6080;
+  border-bottom-color: rgba(255,255,255,0.07);
+}
+body.dark table tbody tr { border-bottom-color: rgba(255,255,255,0.05); }
+body.dark table tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+body.dark .modal,
+body.dark .drawer {
+  background: #1C1E2E;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+body.dark .modal-overlay { background: rgba(0,0,0,0.6); }
+body.dark .drawer-overlay { background: rgba(0,0,0,0.6); }
+
+body.dark .toast {
+  background: #252838;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #E8EAF2;
+}
+
+body.dark .status-open {
+  background: rgba(52,211,153,0.1);
+  color: #34D399;
+  border-color: rgba(52,211,153,0.25);
+}
+body.dark .status-closed {
+  background: rgba(248,113,113,0.1);
+  color: #F87171;
+  border-color: rgba(248,113,113,0.25);
+}
+
+body.dark .cat-badge {
+  background: #1E2540;
+  color: #6C8EF5;
+  border-color: rgba(108,142,245,0.2);
+}
+
+body.dark .chip {
+  background: #252838;
+  border-color: rgba(255,255,255,0.1);
+  color: #8B90AA;
+}
+body.dark .chip.active {
+  background: rgba(108,142,245,0.2);
+  color: #6C8EF5;
+  border-color: rgba(108,142,245,0.3);
+}
+
+body.dark .filter-bar,
+body.dark .upi-banner {
+  background: #1C1E2E;
+  border-color: rgba(255,255,255,0.07);
+}
+
+body.dark .vendor-card,
+body.dark .food-card,
+body.dark .gs-card,
+body.dark .why-item,
+body.dark .info-card,
+body.dark .map-card {
+  background: #1C1E2E;
+  border-color: rgba(255,255,255,0.07);
+}
+
+body.dark .vendor-row:hover { background: #252838; }
+body.dark .vendor-row.active { background: #1E2540; border-left-color: #6C8EF5; }
+
+body.dark .city-bar {
+  background: #1E2540;
+  color: #6C8EF5;
+  border-color: rgba(108,142,245,0.2);
+}
+
+body.dark .alert.error   { background: rgba(248,113,113,0.1); border-color: rgba(248,113,113,0.3); color: #F87171; }
+body.dark .alert.success { background: rgba(52,211,153,0.1);  border-color: rgba(52,211,153,0.3);  color: #34D399; }
+
+body.dark .drawer-cat { color: #5C6080; border-bottom-color: rgba(255,255,255,0.07); }
+body.dark .menu-row   { border-bottom-color: rgba(255,255,255,0.05); }
+
+body.dark .allergy-tag { background: rgba(251,191,36,0.1); color: #FBBF24; border-color: rgba(251,191,36,0.2); }
+
+body.dark footer {
+  background: #1C1E2E;
+  border-top-color: rgba(255,255,255,0.07);
+}
+
+body.dark .category-card { background: #1C1E2E; border-color: rgba(255,255,255,0.07); }
+body.dark .cat-icon { background: #252838; border-color: rgba(255,255,255,0.1); }
+body.dark .cat-item.active .cat-icon { background: #1E2540; border-color: #6C8EF5; }
+
+body.dark .locate-btn {
+  background: #1C1E2E;
+  border-color: rgba(255,255,255,0.12);
+  color: #8B90AA;
+}
+body.dark .locate-btn:hover { color: #6C8EF5; border-color: #6C8EF5; }
+
+body.dark .save-banner {
+  background: #1E2540;
+  border-color: rgba(108,142,245,0.2);
+  color: #6C8EF5;
+}
+
+body.dark .confirm-box {
+  background: rgba(248,113,113,0.08);
+  border-color: rgba(248,113,113,0.25);
+}
+body.dark .confirm-box p { color: #F87171; }
+body.dark .confirm-box input {
+  background: #252838;
+  border-color: rgba(248,113,113,0.3);
+  color: #E8EAF2;
+}
+
+body.dark .danger-zone { border-color: rgba(248,113,113,0.3) !important; }
+body.dark .danger-zone .card-header { background: rgba(248,113,113,0.05); border-bottom-color: rgba(248,113,113,0.2); }
+
+body.dark .t-track { background: #3A3D52; }

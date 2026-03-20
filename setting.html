@@ -132,8 +132,10 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .spinner { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
   </style>
+  <link rel="stylesheet" href="dark.css" />
 </head>
 <body>
+  <script>if(localStorage.getItem("theme")==="dark")document.body.classList.add("dark");</script>
 
   <aside class="sidebar">
     <a href="vendors-dashboard.html" class="sidebar-logo">
@@ -172,10 +174,6 @@
       <a href="vendors_earnings.html" class="nav-item">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
         Earnings
-      </a>
-      <a href="vendors_location.html" class="nav-item active">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-        My Location
       </a>
       <a href="vendors_profile.html" class="nav-item">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -250,7 +248,7 @@
             <div class="setting-row">
               <div class="setting-info">
                 <div class="setting-label">Low Stock Alerts</div>
-                <div class="setting-desc">Get notified when an item falls below its minimum level (Upcoming)</div>
+                <div class="setting-desc">Get notified when an item falls below its minimum level</div>
               </div>
               <label class="toggle-switch">
                 <input type="checkbox" id="notifLowStock" checked />
@@ -261,7 +259,7 @@
             <div class="setting-row">
               <div class="setting-info">
                 <div class="setting-label">New Ratings</div>
-                <div class="setting-desc">Know when a customer leaves a rating on your stall (Upcoming)</div>
+                <div class="setting-desc">Know when a customer leaves a rating on your stall</div>
               </div>
               <label class="toggle-switch">
                 <input type="checkbox" id="notifRatings" checked />
@@ -272,7 +270,7 @@
             <div class="setting-row">
               <div class="setting-info">
                 <div class="setting-label">Payment Received</div>
-                <div class="setting-desc">Confirmation when a UPI payment is marked as done (Upcoming)</div>
+                <div class="setting-desc">Confirmation when a UPI payment is marked as done</div>
               </div>
               <label class="toggle-switch">
                 <input type="checkbox" id="notifPayments" checked />
@@ -287,11 +285,31 @@
       <div>
         <div class="card">
           <div class="card-header">
+            <h2>Appearance</h2>
+            <p>Customize how the app looks for you</p>
+          </div>
+          <div class="card-body">
+            <div class="setting-row" style="border-bottom:none;padding-bottom:0;">
+              <div class="setting-info">
+                <div class="setting-label">Dark Mode</div>
+                <div class="setting-desc">Switch to a darker interface easier on the eyes</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode(this.checked)" />
+                <div class="t-track"></div>
+                <div class="t-thumb"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
             <h2>Stall Visibility</h2>
             <p>Control how your stall appears to customers</p>
           </div>
           <div class="card-body">
-            <!-- <div class="setting-row">
+            <div class="setting-row">
               <div class="setting-info">
                 <div class="setting-label">Show on Customer Map</div>
                 <div class="setting-desc">Customers can find your stall in the map view</div>
@@ -301,7 +319,7 @@
                 <div class="t-track"></div>
                 <div class="t-thumb"></div>
               </label>
-            </div> -->
+            </div>
             <div class="setting-row">
               <div class="setting-info">
                 <div class="setting-label">Show Phone Number</div>
@@ -325,26 +343,6 @@
               </label>
             </div>
             <button class="btn btn-primary btn-full" style="margin-top:1rem;" onclick="saveVisibility()">Save Preferences</button>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <h2>Appearance</h2>
-            <p>Customize how the app looks for you</p>
-          </div>
-          <div class="card-body">
-            <div class="setting-row">
-              <div class="setting-info">
-                <div class="setting-label">Dark Mode</div>
-                <div class="setting-desc">Switch to a darker interface that's easier on the eyes</div>
-              </div>
-              <label class="toggle-switch">
-                <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode(this.checked)" />
-                <div class="t-track"></div>
-                <div class="t-thumb"></div>
-              </label>
-            </div>
           </div>
         </div>
 
@@ -433,6 +431,21 @@
     const db   = getFirestore(app);
 
     let currentUser = null;
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.getElementById('darkModeToggle').checked = true;
+    }
+
+    window.toggleDarkMode = function(enabled) {
+      if (enabled) {
+        document.body.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.body.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
+    };
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) { window.location.href = 'login.html'; return; }
@@ -596,23 +609,6 @@
         } else {
           console.error('delete failed:', err.message);
         }
-      }
-    };
-
-    
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-      document.getElementById('darkModeToggle').checked = true;
-    }
-
-    window.toggleDarkMode = function(enabled) {
-      if (enabled) {
-        document.body.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      } else {
-        document.body.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
       }
     };
 

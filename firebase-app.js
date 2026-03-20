@@ -277,6 +277,7 @@ function initVendorRegisterPage() {
     const category = document.getElementById('category').value;
     const foodType = document.querySelector('input[name="foodType"]:checked')?.value || 'veg';
     const upiId = document.getElementById('upiId')?.value.trim() || '';
+    const city = document.getElementById('city')?.value.trim() || '';
     const imageFile = document.getElementById('imageInput')?.files[0];
 
     try {
@@ -289,7 +290,7 @@ function initVendorRegisterPage() {
       await Promise.all([
         setDoc(doc(db, 'users', uid), { uid, email, role: 'vendor', createdAt: serverTimestamp() }),
         setDoc(doc(db, 'vendors', uid), {
-          uid, vendorName, stallName, location, phone, email,
+          uid, vendorName, stallName, location, city,phone, email,
           category, foodType, upiId, imageUrl,
           rating: 0, isOpen: true, createdAt: serverTimestamp()
         })
