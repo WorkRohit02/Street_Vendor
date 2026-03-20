@@ -181,12 +181,12 @@ Right click on home_page.html → "Open with Live Server"
 
 ```
 New User
-  │
-  ├─ Register as Vendor ──→ vendors-dashboard.html
-  │     └── Manage: Menu · Stock · Payments · Earnings · Profile
-  │
-  └─ Browse as Customer ──→ customer.html
-        └── Search · Filter · View Menus · Find Vendors
+  |
+  |- Register as Vendor ──→ vendors-dashboard.html
+  |     |- Manage: Menu · Stock · Payments · Earnings · Profile
+  |
+  |- Browse as Customer ──→ customer.html
+        |-Search · Filter · View Menus · Find Vendors
 ```
 
 ---
