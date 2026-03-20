@@ -69,22 +69,22 @@ Street food vendors are one of India's most vibrant micro-economies — yet they
 
 ```
 streetlink/
-│
-├── home_page.html            # Landing page
-├── login.html                # Auth — Email & Google Sign-In
-├── vendor_register.html      # New vendor onboarding
-│
-├── vendors-dashboard.html    # Main vendor control panel
-├── vendors_menu.html         # Full menu overview
-├── vendors_add_item.html     # Add / edit menu items
-├── vendors_profile.html      # Edit stall profile
-├── vendors_stock.html        # Stock management
-├── vendors_payment.html      # UPI QR + cash payment logger
-├── vendors_earnings.html     # Transaction history & analytics
-│
-├── customer.html             # Customer discovery interface
-│
-└── firebase-app.js           # Firebase init + all backend logic
+|
+|--- home_page.html            # Landing page
+|--- login.html                # Auth — Email & Google Sign-In
+|--- vendor_register.html      # New vendor onboarding
+|
+|--- vendors-dashboard.html    # Main vendor control panel
+|--- vendors_menu.html         # Full menu overview
+|--- vendors_add_item.html     # Add / edit menu items
+|--- vendors_profile.html      # Edit stall profile
+|--- vendors_stock.html        # Stock management
+|--- vendors_payment.html      # UPI QR + cash payment logger
+|--- vendors_earnings.html     # Transaction history & analytics
+|
+|--- customer.html             # Customer discovery interface
+|
+|--- firebase-app.js           # Firebase init + all backend logic
 ```
 
 ---
@@ -94,38 +94,38 @@ streetlink/
 
 ```
 /users/{uid}
-  ├── role: "vendor" | "customer"
-  ├── email: string
-  └── createdAt: timestamp
+  |--- role: "vendor" | "customer"
+  |--- email: string
+  |--- createdAt: timestamp
 
 /vendors/{uid}
-  ├── vendorName, stallName, about
-  ├── location, phone, email, instagram
-  ├── category, foodType (veg | nonveg | both)
-  ├── upiId, imageUrl
-  ├── rating, isOpen
-  └── createdAt: timestamp
+  |--- vendorName, stallName, about
+  |--- location, phone, email, instagram
+  |--- category, foodType (veg | nonveg | both)
+  |--- upiId, imageUrl
+  |--- rating, isOpen
+  |--- createdAt: timestamp
 
   /menu/{itemId}
-    ├── name, description, price
-    ├── category, isVeg, foodType
-    ├── ingredients: []
-    ├── allergies: []
-    ├── imageUrl, rating
-    └── createdAt: timestamp
+    |--- name, description, price
+    |--- category, isVeg, foodType
+    |--- ingredients: []
+    |--- allergies: []
+    |--- imageUrl, rating
+    |--- createdAt: timestamp
 
   /stock/{itemId}
-    ├── name, qty, unit
-    ├── minLevel  ← triggers low-stock alert
-    ├── category, notes
-    └── updatedAt, createdAt: timestamp
+    |--- name, qty, unit
+    |--- minLevel  ← triggers low-stock alert
+    |--- category, notes
+    |--- updatedAt, createdAt: timestamp
 
   /transactions/{txId}
-    ├── amount: number
-    ├── method: "upi" | "cash"
-    ├── note: string
-    ├── status: "success" | "pending"
-    └── createdAt: timestamp
+    |--- amount: number
+    |--- method: "upi" | "cash"
+    |--- note: string
+    |--- status: "success" | "pending"
+    |--- createdAt: timestamp
 ```
 
 ---
