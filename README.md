@@ -8,6 +8,7 @@ StreetLink gives every street vendor a professional digital presence: manage you
 
 ---
 
+
 ## 🌍 The Problem
 
 Street food vendors are one of India's most vibrant micro-economies — yet they're almost completely invisible online.
@@ -21,6 +22,7 @@ Street food vendors are one of India's most vibrant micro-economies — yet they
 **StreetLink solves all three — for both sides.**
 
 ---
+
 
 ## ✨ Core Features
 
@@ -47,6 +49,7 @@ Street food vendors are one of India's most vibrant micro-economies — yet they
 
 ---
 
+
 ## 🛠 Tech Stack
 
 | Layer | Technology | Why |
@@ -60,6 +63,7 @@ Street food vendors are one of India's most vibrant micro-economies — yet they
 | Typography | Syne + DM Sans | Modern, clean UI personality |
 
 ---
+
 
 ## 📁 Project Structure
 
@@ -84,6 +88,7 @@ streetlink/
 ```
 
 ---
+
 
 ## 🗃 Firebase Data Model
 
@@ -124,6 +129,7 @@ streetlink/
 ```
 
 ---
+
 
 ## ⚙️ Getting Started
 
@@ -170,6 +176,7 @@ Right click on home_page.html → "Open with Live Server"
 
 ---
 
+
 ## 🔐 User Roles & Flow
 
 ```
@@ -184,6 +191,7 @@ New User
 
 ---
 
+
 ## 💳 How UPI Payments Work
 
 1. Customer selects items from a vendor's menu
@@ -196,6 +204,7 @@ New User
 
 ---
 
+
 ## 🌟 What Makes StreetLink Stand Out
 
 - **Zero commission** — unlike aggregator platforms, vendors keep 100% of their revenue
@@ -205,6 +214,7 @@ New User
 - **Built for India** — UPI-first, designed for the way street vendors actually operate
 
 ---
+
 
 ## 🚧 Roadmap
 
@@ -217,6 +227,7 @@ New User
 - [ ] 🎨 UI v2 — Figma-based redesign
 
 ---
+
 
 ## 🤝 Contributing
 
@@ -236,11 +247,13 @@ git push origin feature/your-feature-name
 
 ---
 
+
 ## 📜 License
 
 This project is licensed under the **MIT License** — free to use, modify, and distribute.
 
 ---
+
 
 ## 👤 Author
 
