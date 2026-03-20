@@ -372,6 +372,19 @@
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
     }
+
+    body.dark {
+    --page-bg: #0F1117;
+    --white: #1A1D27;
+    --surface: #22263A;
+    --blue-light: #1a2744;
+    --text: #F3F4F6;
+    --text-sub: #9CA3AF;
+    --muted: #6B7280;
+    --line: rgba(255,255,255,0.08);
+    --line-md: rgba(255,255,255,0.13);
+    --sidebar: #0A0C12;
+  }
   </style>
 </head>
 <body>
@@ -420,6 +433,10 @@
           <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
         </svg>
         Earnings
+      </a>
+      <a href="vendors_location.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        My Location
       </a>
       <a href="vendors_profile.html" class="nav-item">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -567,6 +584,12 @@
   </div>
 
   <script type="module" src="./firebase-app.js"></script>
+
+  <script>
+  if (localStorage.getItem('theme') === 'dark') {
+    document.body.classList.add('dark');
+  }
+</script>
 
 </body>
 </html>

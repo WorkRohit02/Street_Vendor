@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StreetLink – My Location</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --page-bg: #F4F6F9;
+      --white: #FFFFFF;
+      --surface: #EEF1F6;
+      --blue-light: #EBF3FD;
+      --brand: #1D6AE5;
+      --brand-dark: #155BC2;
+      --sidebar: #111827;
+      --muted: #9CA3AF;
+      --text: #111827;
+      --text-sub: #5B6370;
+      --line: rgba(0,0,0,0.08);
+      --line-md: rgba(0,0,0,0.13);
+      --green: #16A34A;
+      --red: #DC2626;
+      --r-sm: 8px;
+      --r-md: 12px;
+      --r-lg: 16px;
+    }
+    html, body { height: 100%; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: var(--text); display: flex; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+    .sidebar { width: 220px; min-height: 100vh; background: var(--sidebar); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 200; }
+    .sidebar-logo { display: flex; align-items: center; gap: 8px; padding: 1.1rem 1.25rem; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px; color: #fff; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .logo-icon { width: 28px; height: 28px; background: var(--brand); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sidebar-nav { flex: 1; padding: 0.75rem 0.75rem 0; }
+    .nav-item { display: flex; align-items: center; gap: 9px; padding: 9px 12px; border-radius: var(--r-sm); font-size: 13.5px; color: var(--muted); cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; margin-bottom: 2px; }
+    .nav-item:hover { background: rgba(255,255,255,0.07); color: #fff; }
+    .nav-item.active { background: var(--brand); color: #fff; }
+    .nav-item svg { flex-shrink: 0; }
+    .sidebar-bottom { padding: 0.75rem; border-top: 1px solid rgba(255,255,255,0.07); }
+    .nav-item-sm { display: flex; align-items: center; gap: 9px; padding: 8px 12px; border-radius: var(--r-sm); font-size: 13px; color: var(--muted); cursor: pointer; text-decoration: none; transition: background 0.15s, color 0.15s; margin-bottom: 2px; }
+    .nav-item-sm:hover { background: rgba(255,255,255,0.07); color: #fff; }
+    .user-row { display: flex; align-items: center; gap: 9px; padding: 10px 12px 4px; }
+    .user-avatar { width: 32px; height: 32px; background: var(--brand); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: #fff; flex-shrink: 0; }
+    .user-info { min-width: 0; }
+    .user-name  { font-size: 13px; font-weight: 500; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-email { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .main { margin-left: 220px; flex: 1; padding: 1.75rem 2rem 2rem; min-height: 100vh; display: flex; flex-direction: column; }
+
+    .top-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+    .top-row-left h1 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+    .top-row-left p  { font-size: 13px; color: var(--text-sub); }
+    .top-row-right   { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+
+    .btn { height: 38px; padding: 0 16px; border-radius: var(--r-sm); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s; border: none; white-space: nowrap; }
+    .btn-primary { background: var(--brand); color: #fff; }
+    .btn-primary:hover { background: var(--brand-dark); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-danger  { background: #FEF2F2; color: var(--red); border: 1px solid #FECACA; }
+    .btn-danger:hover { background: #FEE2E2; }
+    .btn-outline { background: var(--white); color: var(--text); border: 1px solid var(--line-md); }
+    .btn-outline:hover { border-color: var(--brand); color: var(--brand); }
+
+    .status-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 500; padding: 4px 12px; border-radius: 20px; }
+    .pill-tracking { background: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; }
+    .pill-stopped  { background: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
+    .pill-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .pill-tracking .pill-dot { background: #16A34A; animation: pulse 1.5s infinite; }
+    .pill-stopped  .pill-dot { background: #DC2626; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+    .info-strip { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .info-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.75rem; flex: 1; min-width: 160px; }
+    .info-icon { width: 36px; height: 36px; border-radius: var(--r-sm); background: var(--blue-light); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .info-label { font-size: 11.5px; color: var(--text-sub); margin-bottom: 2px; }
+    .info-val   { font-size: 13px; font-weight: 500; color: var(--text); }
+
+    .save-banner { display: none; background: var(--blue-light); border: 1px solid rgba(29,106,229,0.2); border-radius: var(--r-sm); padding: 10px 14px; font-size: 13px; color: var(--brand); margin-bottom: 1rem; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .save-banner.show { display: flex; }
+
+    .map-card { background: var(--white); border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; flex: 1; display: flex; flex-direction: column; min-height: 460px; }
+    .map-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .map-header h2 { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+    .map-header p  { font-size: 12.5px; color: var(--text-sub); }
+    .map-btns { display: flex; gap: 0.5rem; }
+
+    #map { flex: 1; min-height: 400px; width: 100%; z-index: 1; }
+
+    .no-location { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem; text-align: center; color: var(--text-sub); min-height: 400px; }
+    .no-location .ico { font-size: 48px; margin-bottom: 1rem; }
+    .no-location h3   { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .no-location p    { font-size: 13.5px; line-height: 1.6; max-width: 320px; }
+
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #111827; color: #fff; font-size: 13.5px; padding: 10px 16px; border-radius: var(--r-md); display: flex; align-items: center; gap: 8px; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity 0.25s, transform 0.25s; z-index: 999; }
+    .toast.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner-sm { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+  </style>
+</head>
+<body>
+
+  <aside class="sidebar">
+    <a href="vendors-dashboard.html" class="sidebar-logo">
+      <div class="logo-icon">
+        <svg width="15" height="15" viewBox="0 0 17 17" fill="none"><path d="M8.5 1.5C5.74 1.5 3.5 3.74 3.5 6.5c0 1.85 1 3.46 2.5 4.33L5.25 15.5h6.5l-.75-4.67A5.01 5.01 0 0013.5 6.5c0-2.76-2.24-5-5-5z" fill="white"/></svg>
+      </div>
+      StreetLink
+    </a>
+    <nav class="sidebar-nav">
+      <a href="vendors-dashboard.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </a>
+      <a href="vendors_menu.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        My Menu
+      </a>
+      <a href="vendors_add_item.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Add Menu Item
+      </a>
+      <a href="vendors_stock.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+        Stock Management
+      </a>
+      <a href="vendors_payment.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Payments
+      </a>
+      <a href="vendors_earnings.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        Earnings
+      </a>
+      <a href="vendors_location.html" class="nav-item active">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        My Location
+      </a>
+      <a href="vendors_profile.html" class="nav-item">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        My Profile
+      </a>
+      
+    </nav>
+    <div class="sidebar-bottom">
+      <a href="vendors_settings.html" class="nav-item-sm">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </a>
+      <a href="#" class="nav-item-sm" id="signOutBtn">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        Sign out
+      </a>
+      <div class="user-row">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <div class="user-info">
+          <div class="user-name" id="userName">Loading…</div>
+          <div class="user-email" id="userEmail"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top-row">
+      <div class="top-row-left">
+        <h1>My Location</h1>
+        <p>Share your real-time position so customers can find you on the map</p>
+      </div>
+      <div class="top-row-right">
+        <span class="status-pill pill-stopped" id="statusPill">
+          <span class="pill-dot"></span> Not Tracking
+        </span>
+        <button class="btn btn-primary" id="startBtn" onclick="startTracking()">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Start Sharing
+        </button>
+        <button class="btn btn-danger" id="stopBtn" onclick="stopTracking()" style="display:none;">
+          Stop Sharing
+        </button>
+      </div>
+    </div>
+
+    <div class="info-strip">
+      <div class="info-card">
+        <div class="info-icon"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div><div class="info-label">Last Updated</div><div class="info-val" id="lastUpdated">—</div></div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><div class="info-label">Coordinates</div><div class="info-val" id="coordsDisplay">—</div></div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div><div class="info-label">Accuracy</div><div class="info-val" id="accuracyDisplay">—</div></div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon"><svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#1D6AE5" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div><div class="info-label">Saved in Profile</div><div class="info-val" id="savedStatus">—</div></div>
+      </div>
+    </div>
+
+    <div class="save-banner" id="saveBanner">
+      <span>📍 Location updated — save it so customers can find you?</span>
+      <div style="display:flex;gap:0.5rem;">
+        <button class="btn btn-primary" onclick="saveLocationToProfile()">Save to Profile</button>
+        <button class="btn btn-outline" onclick="document.getElementById('saveBanner').classList.remove('show')">Dismiss</button>
+      </div>
+    </div>
+
+    <div class="map-card">
+      <div class="map-header">
+        <div>
+          <h2>Live Map</h2>
+          <p>Updates every time you move while sharing is on</p>
+        </div>
+        <div class="map-btns">
+          <button class="btn btn-outline" onclick="centerMap()">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+            Center
+          </button>
+        </div>
+      </div>
+      <div id="mapContainer">
+        <div class="no-location" id="noLocationMsg">
+          <div class="ico">📍</div>
+          <h3>Location not shared yet</h3>
+          <p>Click "Start Sharing" above to see your real-time position on the map. Allow location access when the browser asks.</p>
+        </div>
+        <div id="map" style="display:none;height:420px;width:100%;"></div>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast">
+    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toastMsg">Done!</span>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAHAaqmBH73l-bwfsghYc2jaR_pdS7aFvg",
+      authDomain: "street-vendor-5162e.firebaseapp.com",
+      projectId: "street-vendor-5162e",
+      storageBucket: "street-vendor-5162e.firebasestorage.app",
+      messagingSenderId: "387560067719",
+      appId: "1:387560067719:web:9280a2d12e8fbfbe411e22"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+    let currentUser = null;
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) { window.location.href = 'login.html'; return; }
+      currentUser = user;
+      try {
+        const snap = await getDoc(doc(db, 'vendors', user.uid));
+        if (snap.exists()) {
+          const d = snap.data();
+          const initials = (d.stallName || d.vendorName || 'V').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+          document.getElementById('userAvatar').textContent = initials;
+          document.getElementById('userName').textContent   = d.vendorName || d.stallName || 'Vendor';
+          document.getElementById('userEmail').textContent  = d.email || '';
+          document.getElementById('savedStatus').textContent = d.liveLocation ? 'Yes ✓' : 'Not saved';
+        }
+      } catch (e) { console.warn(e.message); }
+    });
+
+    document.getElementById('signOutBtn').addEventListener('click', async e => {
+      e.preventDefault();
+      await signOut(auth);
+      window.location.href = 'login.html';
+    });
+
+    window._saveLocation = async function(lat, lng) {
+      if (!currentUser) return;
+      try {
+        await updateDoc(doc(db, 'vendors', currentUser.uid), {
+          liveLocation: { lat, lng, updatedAt: serverTimestamp() }
+        });
+        document.getElementById('savedStatus').textContent = 'Just saved ✓';
+        document.getElementById('saveBanner').classList.remove('show');
+        showToast('Location saved to profile ✓');
+      } catch (err) {
+        showToast('Save failed: ' + err.message);
+      }
+    };
+
+    function showToast(msg) {
+      document.getElementById('toastMsg').textContent = msg;
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    window._showToast = showToast;
+  </script>
+
+  <script>
+    let map = null;
+    let marker = null;
+    let circle = null;
+    let watchId = null;
+    let currentPos = null;
+
+    window.saveLocationToProfile = function() {
+      if (!currentPos) return;
+      window._saveLocation(currentPos.lat, currentPos.lng);
+    };
+
+    function initMap(lat, lng, accuracy) {
+      document.getElementById('noLocationMsg').style.display = 'none';
+      document.getElementById('map').style.display = 'block';
+
+      if (!map) {
+        map = L.map('map').setView([lat, lng], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+          maxZoom: 19
+        }).addTo(map);
+
+        const icon = L.divIcon({
+          className: '',
+          html: `<div style="width:18px;height:18px;background:#1D6AE5;border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(29,106,229,0.5);"></div>`,
+          iconSize: [18, 18],
+          iconAnchor: [9, 9]
+        });
+
+        marker = L.marker([lat, lng], { icon }).addTo(map);
+        marker.bindPopup('<b>Your Stall</b><br>Live location').openPopup();
+
+        circle = L.circle([lat, lng], {
+          radius: Math.min(accuracy, 200),
+          color: '#1D6AE5',
+          fillColor: '#1D6AE5',
+          fillOpacity: 0.1,
+          weight: 1
+        }).addTo(map);
+
+      } else {
+        marker.setLatLng([lat, lng]);
+        circle.setLatLng([lat, lng]);
+        circle.setRadius(Math.min(accuracy, 200));
+      }
+    }
+
+    function onPosition(pos) {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      const acc = Math.round(pos.coords.accuracy);
+
+      currentPos = { lat, lng };
+
+      initMap(lat, lng, acc);
+
+      document.getElementById('coordsDisplay').textContent  = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+      document.getElementById('accuracyDisplay').textContent = `±${acc}m`;
+      document.getElementById('lastUpdated').textContent    = new Date().toLocaleTimeString();
+      document.getElementById('saveBanner').classList.add('show');
+    }
+
+    function onError(err) {
+      let msg = 'Could not get your location.';
+      if (err.code === 1) msg = 'Location permission denied. Please allow access in browser settings.';
+      if (err.code === 2) msg = 'Location unavailable. Check your GPS.';
+      if (err.code === 3) msg = 'Location timed out. Try again.';
+      window._showToast?.(msg);
+      stopTracking();
+    }
+
+    window.startTracking = function() {
+      if (!navigator.geolocation) {
+        window._showToast?.('Browser does not support location.');
+        return;
+      }
+      const btn = document.getElementById('startBtn');
+      btn.innerHTML = '<div class="spinner-sm"></div> Getting location…';
+      btn.disabled  = true;
+
+      watchId = navigator.geolocation.watchPosition(onPosition, onError, {
+        enableHighAccuracy: true,
+        maximumAge: 10000,
+        timeout: 15000
+      });
+
+      setTimeout(() => {
+        document.getElementById('startBtn').style.display = 'none';
+        document.getElementById('stopBtn').style.display  = 'flex';
+        const pill = document.getElementById('statusPill');
+        pill.className = 'status-pill pill-tracking';
+        pill.innerHTML = '<span class="pill-dot"></span> Live Tracking';
+      }, 800);
+    };
+
+    window.stopTracking = function() {
+      if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+      document.getElementById('startBtn').style.display  = 'flex';
+      document.getElementById('startBtn').innerHTML = '<svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Start Sharing';
+      document.getElementById('startBtn').disabled = false;
+      document.getElementById('stopBtn').style.display = 'none';
+      const pill = document.getElementById('statusPill');
+      pill.className = 'status-pill pill-stopped';
+      pill.innerHTML = '<span class="pill-dot"></span> Not Tracking';
+    };
+
+    window.centerMap = function() {
+      if (map && currentPos) map.setView([currentPos.lat, currentPos.lng], 17);
+    };
+  </script>
+
+</body>
+</html>

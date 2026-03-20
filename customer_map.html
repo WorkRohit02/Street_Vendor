@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StreetLink – Find Vendors Near You</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --page-bg: #F4F6F9;
+      --white: #FFFFFF;
+      --surface: #EEF1F6;
+      --blue-light: #EBF3FD;
+      --brand: #1D6AE5;
+      --brand-dark: #155BC2;
+      --text: #111827;
+      --text-sub: #5B6370;
+      --muted: #9CA3AF;
+      --line: rgba(0,0,0,0.08);
+      --line-md: rgba(0,0,0,0.14);
+      --green: #16A34A;
+      --red: #DC2626;
+      --star: #F59E0B;
+      --r-sm: 8px;
+      --r-md: 12px;
+      --r-lg: 16px;
+    }
+    html, body { height: 100%; margin: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--page-bg); color: var(--text); display: flex; flex-direction: column; min-height: 100vh; -webkit-font-smoothing: antialiased; }
+
+    nav { background: var(--white); border-bottom: 1px solid var(--line); height: 54px; display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; position: sticky; top: 0; z-index: 300; flex-shrink: 0; }
+    .logo { display: flex; align-items: center; gap: 8px; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 17px; color: var(--text); text-decoration: none; }
+    .logo-icon { width: 30px; height: 30px; background: var(--brand); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .nav-links { display: flex; align-items: center; gap: 1.25rem; font-size: 14px; color: var(--text-sub); }
+    .nav-links a { text-decoration: none; color: var(--text-sub); display: flex; align-items: center; gap: 5px; transition: color .15s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-login  { color: var(--text) !important; font-weight: 500; }
+    .nav-active { color: var(--brand) !important; font-weight: 500; }
+
+    .layout { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 54px); }
+
+    .side-panel {
+      width: 320px; flex-shrink: 0;
+      background: var(--white); border-right: 1px solid var(--line);
+      display: flex; flex-direction: column; overflow: hidden; z-index: 10;
+    }
+
+    .panel-head { padding: 1rem 1.25rem 0.75rem; border-bottom: 1px solid var(--line); }
+    .panel-head h2 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+
+    .search-wrap { position: relative; }
+    .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+    .search-wrap input { width: 100%; height: 36px; border: 1px solid var(--line-md); border-radius: var(--r-sm); padding: 0 0.75rem 0 2.25rem; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--text); outline: none; background: var(--surface); transition: border-color .15s; }
+    .search-wrap input:focus { border-color: var(--brand); background: var(--white); }
+    .search-wrap input::placeholder { color: var(--muted); }
+
+    .filter-row { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .chip { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--line-md); background: var(--white); color: var(--text-sub); transition: all .15s; }
+    .chip.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+    .chip:not(.active):hover { border-color: var(--brand); color: var(--brand); }
+
+    .vendor-list { flex: 1; overflow-y: auto; }
+    .vendor-list::-webkit-scrollbar { width: 4px; }
+    .vendor-list::-webkit-scrollbar-thumb { background: var(--line-md); border-radius: 2px; }
+
+    .vendor-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 1.25rem; border-bottom: 1px solid var(--line);
+      cursor: pointer; transition: background .12s;
+    }
+    .vendor-row:hover { background: var(--page-bg); }
+    .vendor-row.active { background: var(--blue-light); border-left: 3px solid var(--brand); }
+    .vendor-row.dimmed { opacity: 0.5; }
+
+    .row-avatar { width: 38px; height: 38px; border-radius: var(--r-sm); background: var(--blue-light); display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: var(--brand); flex-shrink: 0; overflow: hidden; }
+    .row-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--r-sm); }
+    .row-info { flex: 1; min-width: 0; }
+    .row-name { font-size: 13.5px; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .row-meta { display: flex; align-items: center; gap: 6px; margin-top: 2px; font-size: 12px; color: var(--text-sub); }
+    .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .dot-open   { background: var(--green); }
+    .dot-closed { background: var(--muted); }
+    .dist-badge { font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 20px; background: var(--blue-light); color: var(--brand); white-space: nowrap; }
+    .no-loc-txt { font-size: 11px; color: var(--muted); }
+
+    .list-empty { text-align: center; padding: 2.5rem 1rem; color: var(--text-sub); font-size: 13.5px; }
+
+    .map-wrap { flex: 1; position: relative; }
+    #map { width: 100%; height: 100%; z-index: 1; }
+
+    .locate-btn {
+      position: absolute; bottom: 20px; right: 12px; z-index: 400;
+      width: 40px; height: 40px;
+      background: var(--white); border: 1px solid var(--line-md);
+      border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      color: var(--text-sub); transition: all .15s;
+    }
+    .locate-btn:hover { color: var(--brand); border-color: var(--brand); }
+
+    .count-pill {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: #111827; color: #fff; font-size: 12.5px; font-weight: 500;
+      padding: 6px 16px; border-radius: 20px; z-index: 400;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2); pointer-events: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { width: 18px; height: 18px; border: 2px solid var(--line-md); border-top-color: var(--brand); border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 8px; }
+
+    @media (max-width: 680px) {
+      .side-panel { width: 100%; position: absolute; bottom: 0; left: 0; right: 0; height: 38vh; border-right: none; border-top: 1px solid var(--line); z-index: 200; }
+      .map-wrap { height: 62vh; }
+      .layout { flex-direction: column-reverse; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="home_page.html" class="logo">
+      <div class="logo-icon">
+        <svg width="16" height="16" viewBox="0 0 17 17" fill="none"><path d="M8.5 1.5C5.74 1.5 3.5 3.74 3.5 6.5c0 1.85 1 3.46 2.5 4.33L5.25 15.5h6.5l-.75-4.67A5.01 5.01 0 0013.5 6.5c0-2.76-2.24-5-5-5z" fill="white"/></svg>
+      </div>
+      StreetLink
+    </a>
+    <div class="nav-links">
+      <a href="home_page.html">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
+        Home
+      </a>
+      <a href="customer.html">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        Search
+      </a>
+      <a href="customer_map.html" class="nav-active">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Map View
+      </a>
+      <a href="login.html" class="nav-login">Login</a>
+    </div>
+  </nav>
+
+  <div class="layout">
+
+    <div class="side-panel">
+      <div class="panel-head">
+        <h2>Vendors Near You</h2>
+        <div class="search-wrap">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" id="searchInput" placeholder="Search vendors…" oninput="renderList()" />
+        </div>
+        <div class="filter-row">
+          <span class="chip active" onclick="setFilter(this,'all')">All</span>
+          <span class="chip" onclick="setFilter(this,'open')">Open Now</span>
+          <span class="chip" onclick="setFilter(this,'location')">On Map</span>
+        </div>
+      </div>
+      <div class="vendor-list" id="vendorList">
+        <div class="list-empty"><div class="spinner"></div>Loading vendors…</div>
+      </div>
+    </div>
+
+    <div class="map-wrap">
+      <div id="map"></div>
+      <button class="locate-btn" onclick="locateMe()" title="My location">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+      </button>
+      <div class="count-pill" id="countPill">Loading…</div>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAHAaqmBH73l-bwfsghYc2jaR_pdS7aFvg",
+      authDomain: "street-vendor-5162e.firebaseapp.com",
+      projectId: "street-vendor-5162e",
+      storageBucket: "street-vendor-5162e.firebasestorage.app",
+      messagingSenderId: "387560067719",
+      appId: "1:387560067719:web:9280a2d12e8fbfbe411e22"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    async function loadVendors() {
+      try {
+        const snap = await getDocs(collection(db, 'vendors'));
+        window._vendors = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderList();
+        renderMarkers();
+      } catch (err) {
+        document.getElementById('vendorList').innerHTML =
+          `<div class="list-empty">Failed to load vendors.<br><small>${err.message}</small></div>`;
+      }
+    }
+
+    loadVendors();
+  </script>
+
+  <script>
+    window._vendors = [];
+    let map = null;
+    let markers = [];
+    let userMarker = null;
+    let userPos = null;
+    let activeFilter = 'all';
+    let selectedId = null;
+
+    map = L.map('map').setView([30.7333, 76.7794], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19
+    }).addTo(map);
+
+    function dist(lat1, lng1, lat2, lng2) {
+      const R = 6371000;
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLng = (lng2 - lng1) * Math.PI / 180;
+      const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLng/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    }
+
+    function fmtDist(m) { return m < 1000 ? `${Math.round(m)}m` : `${(m/1000).toFixed(1)}km`; }
+
+    function getFiltered() {
+      const q = (document.getElementById('searchInput')?.value || '').toLowerCase();
+      return window._vendors.filter(v => {
+        const name = (v.stallName || v.name || '').toLowerCase();
+        const cat  = (v.category || '').toLowerCase();
+        if (q && !name.includes(q) && !cat.includes(q)) return false;
+        if (activeFilter === 'open'     && v.isOpen === false) return false;
+        if (activeFilter === 'location' && !v.liveLocation)    return false;
+        return true;
+      }).sort((a, b) => {
+        const aL = !!a.liveLocation, bL = !!b.liveLocation;
+        if (aL !== bL) return bL - aL;
+        if (userPos && aL && bL) {
+          return dist(userPos.lat, userPos.lng, a.liveLocation.lat, a.liveLocation.lng)
+               - dist(userPos.lat, userPos.lng, b.liveLocation.lat, b.liveLocation.lng);
+        }
+        return 0;
+      });
+    }
+
+    window.renderList = function() {
+      const filtered = getFiltered();
+      const list = document.getElementById('vendorList');
+      const withLoc = filtered.filter(v => v.liveLocation).length;
+      document.getElementById('countPill').textContent =
+        `${filtered.length} vendor${filtered.length !== 1 ? 's' : ''} · ${withLoc} on map`;
+
+      if (!filtered.length) {
+        list.innerHTML = `<div class="list-empty">No vendors match your filters.</div>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(v => {
+        const name     = v.stallName || v.name || 'Vendor';
+        const initials = name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+        const isOpen   = v.isOpen !== false;
+        const rating   = Number(v.rating || 0);
+        const hasLoc   = !!v.liveLocation;
+
+        let rightHtml = hasLoc && userPos
+          ? `<span class="dist-badge">${fmtDist(dist(userPos.lat, userPos.lng, v.liveLocation.lat, v.liveLocation.lng))}</span>`
+          : !hasLoc ? `<span class="no-loc-txt">No location</span>` : '';
+
+        return `
+          <div class="vendor-row ${!hasLoc ? 'dimmed' : ''} ${selectedId === v.id ? 'active' : ''}"
+               data-id="${v.id}" onclick="selectVendor('${v.id}')">
+            <div class="row-avatar">
+              ${v.imageUrl ? `<img src="${v.imageUrl}" alt="${name}" />` : initials}
+            </div>
+            <div class="row-info">
+              <div class="row-name">${name}</div>
+              <div class="row-meta">
+                <span class="status-dot ${isOpen ? 'dot-open' : 'dot-closed'}"></span>
+                <span>${isOpen ? 'Open' : 'Closed'}</span>
+                ${v.category ? `<span>·</span><span>${v.category}</span>` : ''}
+                ${rating > 0 ? `<span>·</span><span>★ ${rating.toFixed(1)}</span>` : ''}
+              </div>
+            </div>
+            <div>${rightHtml}</div>
+          </div>`;
+      }).join('');
+    };
+
+    function renderMarkers() {
+      markers.forEach(m => map.removeLayer(m));
+      markers = [];
+
+      getFiltered().filter(v => v.liveLocation).forEach(v => {
+        const name   = v.stallName || v.name || 'Vendor';
+        const isOpen = v.isOpen !== false;
+        const rating = Number(v.rating || 0);
+        const color  = isOpen ? '#1D6AE5' : '#9CA3AF';
+
+        const icon = L.divIcon({
+          className: '',
+          html: `<div style="width:16px;height:16px;background:${color};border:3px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(0,0,0,0.25);cursor:pointer;"></div>`,
+          iconSize: [16, 16],
+          iconAnchor: [8, 8]
+        });
+
+        const m = L.marker([v.liveLocation.lat, v.liveLocation.lng], { icon }).addTo(map);
+
+        const popup = `
+          <div style="font-family:'DM Sans',sans-serif;min-width:180px;">
+            <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;margin-bottom:4px;">${name}</div>
+            <div style="font-size:12px;color:#5B6370;margin-bottom:6px;">${v.category || 'Street Food'}</div>
+            <div style="font-size:12px;display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+              <span style="width:8px;height:8px;border-radius:50%;background:${isOpen ? '#16A34A' : '#9CA3AF'};display:inline-block;"></span>
+              ${isOpen ? 'Open Now' : 'Closed'}
+              ${rating > 0 ? `&nbsp;· ★ ${rating.toFixed(1)}` : ''}
+            </div>
+            ${v.location ? `<div style="font-size:12px;color:#5B6370;">📍 ${v.location}</div>` : ''}
+            ${v.phone ? `<div style="font-size:12px;color:#5B6370;margin-top:2px;">📞 ${v.phone}</div>` : ''}
+            <a href="customer.html" style="display:block;margin-top:10px;text-align:center;background:#1D6AE5;color:#fff;padding:6px 0;border-radius:6px;font-size:13px;font-weight:500;text-decoration:none;">View Menu</a>
+          </div>`;
+
+        m.bindPopup(popup, { maxWidth: 240 });
+        m.on('click', () => selectVendor(v.id, false));
+        m._vendorId = v.id;
+        markers.push(m);
+      });
+    }
+
+    window.selectVendor = function(id, panToMap = true) {
+      selectedId = id;
+      document.querySelectorAll('.vendor-row').forEach(el => {
+        el.classList.toggle('active', el.dataset.id === id);
+      });
+
+      const vendor = window._vendors.find(v => v.id === id);
+      if (!vendor?.liveLocation) return;
+
+      if (panToMap) {
+        map.setView([vendor.liveLocation.lat, vendor.liveLocation.lng], 17);
+      }
+
+      const m = markers.find(m => m._vendorId === id);
+      if (m) m.openPopup();
+
+      const el = document.querySelector(`.vendor-row[data-id="${id}"]`);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    };
+
+    window.setFilter = function(el, filter) {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      activeFilter = filter;
+      renderList();
+      renderMarkers();
+    };
+
+    window.locateMe = function() {
+      if (!navigator.geolocation) return;
+      navigator.geolocation.getCurrentPosition(pos => {
+        userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        map.setView([userPos.lat, userPos.lng], 15);
+
+        if (userMarker) map.removeLayer(userMarker);
+        userMarker = L.marker([userPos.lat, userPos.lng], {
+          icon: L.divIcon({
+            className: '',
+            html: `<div style="width:14px;height:14px;background:#16A34A;border:3px solid #fff;border-radius:50%;box-shadow:0 2px 6px rgba(22,163,74,0.4);"></div>`,
+            iconSize: [14, 14],
+            iconAnchor: [7, 7]
+          })
+        }).addTo(map).bindPopup('You are here');
+
+        renderList();
+      }, () => {
+        alert('Could not get your location. Please allow location access in your browser.');
+      });
+    };
+
+    locateMe();
+  </script>
+
+</body>
+</html>

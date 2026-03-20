@@ -173,6 +173,10 @@
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
         Earnings
       </a>
+      <a href="vendors_location.html" class="nav-item active">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        My Location
+      </a>
       <a href="vendors_profile.html" class="nav-item">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         My Profile
@@ -321,6 +325,26 @@
               </label>
             </div>
             <button class="btn btn-primary btn-full" style="margin-top:1rem;" onclick="saveVisibility()">Save Preferences</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h2>Appearance</h2>
+            <p>Customize how the app looks for you</p>
+          </div>
+          <div class="card-body">
+            <div class="setting-row">
+              <div class="setting-info">
+                <div class="setting-label">Dark Mode</div>
+                <div class="setting-desc">Switch to a darker interface that's easier on the eyes</div>
+              </div>
+              <label class="toggle-switch">
+                <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode(this.checked)" />
+                <div class="t-track"></div>
+                <div class="t-thumb"></div>
+              </label>
+            </div>
           </div>
         </div>
 
@@ -572,6 +596,23 @@
         } else {
           console.error('delete failed:', err.message);
         }
+      }
+    };
+
+    
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark');
+      document.getElementById('darkModeToggle').checked = true;
+    }
+
+    window.toggleDarkMode = function(enabled) {
+      if (enabled) {
+        document.body.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        document.body.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
       }
     };
 

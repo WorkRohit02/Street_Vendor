@@ -1,0 +1,12 @@
+body.dark {
+    --page-bg: #0F1117;
+    --white: #1A1D27;
+    --surface: #22263A;
+    --blue-light: #1a2744;
+    --text: #F3F4F6;
+    --text-sub: #9CA3AF;
+    --muted: #6B7280;
+    --line: rgba(255,255,255,0.08);
+    --line-md: rgba(255,255,255,0.13);
+    --sidebar: #0A0C12;
+  }
