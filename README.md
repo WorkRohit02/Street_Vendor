@@ -141,7 +141,7 @@ streetlink/
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/your-username/streetlink.git
+git clone https://github.com/WorkRohit17/streetlink.git
 cd streetlink
 ```
 
