@@ -1,10 +1,10 @@
 # 🍜 StreetLink
 
-**Bridging the gap between street food vendors and hungry customers — digitally.**
+**Bridging the gap between street food vendors and hungry customers - digitally.**
 
 StreetLink gives every street vendor a professional digital presence: manage your menu, track stock, accept UPI payments, and log earnings — all from a browser. Customers get a clean, fast discovery experience to find vendors near them without needing an app.
 
-> Built with HTML · CSS · Vanilla JS · Firebase — no frameworks, no overhead.
+> Built with HTML · CSS · Vanilla JS · Firebase - no frameworks, no overhead.
 
 ---
 
@@ -19,7 +19,7 @@ Street food vendors are one of India's most vibrant micro-economies — yet they
 | Payments | No digital payment system or receipts | Cash-only, no trust signals |
 | Operations | No way to manage menu, stock, or earnings digitally | No way to check menu or availability before visiting |
 
-**StreetLink solves all three — for both sides.**
+**StreetLink solves all three - for both sides.**
 
 ---
 
@@ -33,7 +33,7 @@ Street food vendors are one of India's most vibrant micro-economies — yet they
 | 🏪 Stall Profile | Set up name, location, food category, UPI ID, Instagram, and profile photo |
 | 📋 Menu Management | Add / edit / delete items with price, category, veg/non-veg tag, description, ingredients, and allergy info |
 | 📦 Stock Tracking | Monitor ingredient/item quantities with unit types and **low-stock alerts** |
-| 💳 UPI Payments | Auto-generate a QR code for any amount — customers scan and pay directly to your UPI ID |
+| 💳 UPI Payments | Auto-generate a QR code for any amount - customers scan and pay directly to your UPI ID |
 | 💵 Cash Logging | Record cash transactions manually to keep all earnings in one place |
 | 📊 Earnings Dashboard | View complete transaction history, filter by method, and export as CSV |
 | 🟢 Open / Close Toggle | Let customers know your stall is active in real time |
@@ -207,24 +207,24 @@ New User
 
 ## 🌟 What Makes StreetLink Stand Out
 
-- **Zero commission** — unlike aggregator platforms, vendors keep 100% of their revenue
-- **No app required** — works entirely in the browser on any device
-- **Real payment flow** — not a mockup; actual UPI QR codes that work with any UPI app
-- **Complete business tool** — menu + stock + payments + earnings all in one place
-- **Built for India** — UPI-first, designed for the way street vendors actually operate
+- **Zero commission** - unlike aggregator platforms, vendors keep 100% of their revenue
+- **No app required** - works entirely in the browser on any device
+- **Real payment flow** - not a mockup; actual UPI QR codes that work with any UPI app
+- **Complete business tool** - menu + stock + payments + earnings all in one place
+- **Built for India** - UPI-first, designed for the way street vendors actually operate
 
 ---
 
 
 ## 🚧 Roadmap
 
-- [ ] 📍 Google Maps — live vendor location pinning
-- [ ] 🔔 Push notifications — order alerts for vendors
-- [ ] 🌐 PWA support — install on home screen, offline mode
-- [ ] 🤖 Smart recommendations — suggest vendors based on customer history
-- [ ] ⭐ Customer reviews — ratings system for vendors and items
-- [ ] 🌍 Multi-city support — city-based vendor discovery
-- [ ] 🎨 UI v2 — Figma-based redesign
+- [ ] 📍 Google Maps - live vendor location pinning
+- [ ] 🔔 Push notifications - order alerts for vendors
+- [ ] 🌐 PWA support - install on home screen, offline mode
+- [ ] 🤖 Smart recommendations - suggest vendors based on customer history
+- [ ] ⭐ Customer reviews - ratings system for vendors and items
+- [ ] 🌍 Multi-city support - city-based vendor discovery
+- [ ] 🎨 UI v2 - Figma-based redesign
 
 ---
 
@@ -250,7 +250,7 @@ git push origin feature/your-feature-name
 
 ## 📜 License
 
-This project is licensed under the **MIT License** — free to use, modify, and distribute.
+This project is licensed under the **MIT License** - free to use, modify, and distribute.
 
 ---
 
@@ -259,8 +259,8 @@ This project is licensed under the **MIT License** — free to use, modify, and 
 
 **Rohit Bansal , Trusha , Manvi , Ranveer Singh**
 
-Built to give street vendors a digital identity — and customers a better way to discover them.
+Built to give street vendors a digital identity - and customers a better way to discover them.
 
 ---
 
-*StreetLink — simple, practical, and built to grow.* 🚀
+*StreetLink - simple, practical, and built to grow.* 🚀
