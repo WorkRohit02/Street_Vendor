@@ -3,27 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StreetLink – Discover the Best Street Food Around You</title>
+<title>StreetLink – Discover Your Next Bite</title>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --page-bg: #F4F6F9;
-      --white: #FFFFFF;
-      --surface: #EEF1F6;
-      --blue-light: #EBF3FD;
-      --brand: #1D6AE5;
-      --brand-dark: #155BC2;
-      --text: #111827;
-      --text-sub: #5B6370;
-      --muted: #9CA3AF;
-      --line: rgba(0,0,0,0.08);
-      --line-md: rgba(0,0,0,0.14);
-      --r-sm: 8px;
-      --r-md: 12px;
-      --r-lg: 16px;
-    }
+  --page-bg: #FFF7ED;
+  --white: #FFFFFF;
+  --surface: #FFF1E6;
+  --brand: #FF6B35;
+  --brand-dark: #E85A2A;
+  --accent: #FFD166;
+  --text: #1F2937;
+  --text-sub: #6B7280;
+  --muted: #9CA3AF;
+  --line: rgba(0,0,0,0.08);
+  --line-md: rgba(0,0,0,0.14);
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+}
 
     html { scroll-behavior: smooth; }
 
@@ -299,6 +299,105 @@
       nav        { padding: 0 1rem; }
       .hero      { padding: 3rem 1rem 2rem; }
     }
+    .hero {
+  padding: 5rem 2rem;
+  background: linear-gradient(135deg, #FFF7ED, #FFE4D6);
+}
+
+.hero-container {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.hero-left {
+  flex: 1;
+  min-width: 280px;
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 16px;
+  color: var(--text-sub);
+  max-width: 450px;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--brand);
+  color: white;
+  padding: 0.9rem 1.6rem;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.btn-primary:hover {
+  background: var(--brand-dark);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  border: 2px solid var(--brand);
+  color: var(--brand);
+  padding: 0.9rem 1.6rem;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.btn-secondary:hover {
+  background: var(--brand);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.hero-right {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.phone-mock {
+  background: white;
+  padding: 2rem;
+  border-radius: 30px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 220px;
+}
+
+.mock-card {
+  background: var(--surface);
+  padding: 0.8rem 1rem;
+  border-radius: 14px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.mock-card:hover {
+  background: var(--accent);
+}
   </style>
   <link rel="stylesheet" href="dark.css" />
 </head>
@@ -321,7 +420,7 @@
         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v9a1 1 0 001 1h4v-5h4v5h4a1 1 0 001-1v-9"/></svg>
         Home
       </a>
-      <a href="login.html" class="nav-login">Login</a>
+<a href="login.html" class="btn-secondary" style="padding:6px 14px;font-size:13px;">Login</a>
       <button id="themeBtn" onclick="toggleTheme()" title="Toggle dark mode" style="width:32px;height:32px;border:1px solid var(--line-md);border-radius:var(--r-sm);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-sub);transition:all 0.15s;flex-shrink:0;">
         <svg id="themeIcon" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
       </button>
@@ -330,29 +429,32 @@
     </div>
   </nav>
 
-  <section class="hero">
-    <h1>Discover the Best<br>Street Food Around You</h1>
-    <p>Connect with local street vendors, explore their menus, and find authentic flavors in your neighborhood.</p>
+<section class="hero">
+  <div class="hero-container">
+    
+    <div class="hero-left">
+      <h1>Discover Your<br>Next Bite</h1>
+      <p>
+        Explore authentic street vendors near you. 
+        Search menus, locate stalls instantly, and support local food heroes.
+      </p>
 
-    <div class="category-card">
-      <div class="cat-dot tl"></div>
-      <div class="cat-dot br"></div>
-      <span class="cat-star">&#9734;</span>
-
-      <div class="cat-item">
-        <div class="cat-icon">☕</div>
-        <span class="cat-label">Chai Stall</span>
-      </div>
-      <div class="cat-item active">
-        <div class="cat-icon">🍴</div>
-        <span class="cat-label">Street Food</span>
-      </div>
-      <div class="cat-item">
-        <div class="cat-icon">🍕</div>
-        <span class="cat-label">Snacks</span>
+      <div class="hero-buttons">
+        <a href="customer.html" class="btn-primary">Explore Vendors</a>
+        <a href="vendor_register.html" class="btn-secondary">List Your Stall</a>
       </div>
     </div>
-  </section>
+
+    <div class="hero-right">
+      <div class="phone-mock">
+        <div class="mock-card">🍜 Momos ₹60</div>
+        <div class="mock-card">🌮 Tacos ₹80</div>
+        <div class="mock-card">☕ Cutting Chai ₹15</div>
+      </div>
+    </div>
+
+  </div>
+</section>
 
   <section class="get-started">
     <p class="section-title">Get Started</p>
